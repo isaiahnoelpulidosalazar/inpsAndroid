@@ -1,4 +1,4 @@
-package com.isaiahnoelpulidosalazar.inpsandroid;
+package com.isaiahnoelpulidosalazar.inpsAndroid;
 
 import android.view.View;
 

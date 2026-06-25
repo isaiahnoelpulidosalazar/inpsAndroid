@@ -1,6 +1,9 @@
-package com.isaiahnoelpulidosalazar.inpsandroid;
+package com.isaiahnoelpulidosalazar.inpsAndroid;
 
 import android.os.AsyncTask;
+
+import com.isaiahnoelpulidosalazar.inpsAndroid.Actions;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;

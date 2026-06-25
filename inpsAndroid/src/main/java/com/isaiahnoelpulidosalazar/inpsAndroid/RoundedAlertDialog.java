@@ -1,4 +1,4 @@
-package com.isaiahnoelpulidosalazar.inpsandroid;
+package com.isaiahnoelpulidosalazar.inpsAndroid;
 
 import static android.view.View.GONE;
 
@@ -10,6 +10,9 @@ import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
+
+import com.isaiahnoelpulidosalazar.inpsandroid.R;
+
 import java.util.Objects;
 
 /**

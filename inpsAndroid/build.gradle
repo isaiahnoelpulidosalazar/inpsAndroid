@@ -39,9 +39,9 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.isaiahnoelpulidosalazar'
                 artifactId = 'inpsAndroid'
-                version = '1.0.0'
+                version = '1.0.1'
                 // changes:
-                // - add main system
+                // - add LocalUnitTest.java
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.isaiahnoelpulidosalazar.inpsandroid;
+package com.isaiahnoelpulidosalazar.inpsAndroid;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -49,8 +49,8 @@ public class LocalUnitTest {
 
     @Test
     public void testCheckTimeCalculations() {
-        Date now = new Date(1000000); // 1000 seconds
-        Date until = new Date(2000000); // 2000 seconds (1000s difference)
+        Date now = new Date(1000000);
+        Date until = new Date(2000000);
 
         assertEquals(1000.0, Check.howManySecondsLeft(now, until), 0.001);
         assertEquals(1000.0 / 60.0, Check.howManyMinutesLeft(now, until), 0.001);
@@ -62,19 +62,15 @@ public class LocalUnitTest {
 
     @Test
     public void testCipherCiphers() {
-        // Transposition Cipher: "HELLO" -> "HLOEL"
         assertEquals("HLOEL", Cipher.transpositionCipher("HELLO"));
         assertEquals("HLOEL", Cipher.transpositionCipher("HE L LO"));
 
-        // Caesar Cipher: "ABC", shift 3 -> "DEF"
         assertEquals("DEF", Cipher.caesarCipher("ABC", 3));
-        assertEquals("DEF", Cipher.caesarCipher("abc", 3)); 
-        assertEquals("A B C", Cipher.caesarCipher("x y z", 3)); // wrap-around and spaces
+        assertEquals("DEF", Cipher.caesarCipher("abc", 3));
+        assertEquals("A B C", Cipher.caesarCipher("x y z", 3));
 
-        // Keyword Cipher: "HELLO", "KEY" -> "FBJJN"
         assertEquals("FBJJN", Cipher.keywordCipher("HELLO", "KEY"));
 
-        // Giovanni Cipher: "HELLO", "KEY", "C" -> "CYHHL"
         assertEquals("CYHHL", Cipher.giovanniCipher("HELLO", "KEY", "C"));
     }
 
@@ -98,7 +94,7 @@ public class LocalUnitTest {
 
     @Test
     public void testConvertDates() {
-        Date date = new Date(126, 4, 4); // Year 126 = 2026, Month 4 = May, Date 4
+        Date date = new Date(126, 4, 4);
         assertEquals("5/4/2026", Convert.dateToMMDDYY(date));
         assertEquals("4/5/2026", Convert.dateToDDMMYY(date));
         assertEquals("2026/5/4", Convert.dateToYYMMDD(date));
@@ -124,7 +120,7 @@ public class LocalUnitTest {
         assertFalse(memory.contains("B"));
         assertEquals("C", memory.get(1));
 
-        memory.removeAt(0); // removes "A"
+        memory.removeAt(0);
         assertEquals(1, memory.count());
         assertEquals("C", memory.get(0));
 
@@ -143,6 +139,7 @@ public class LocalUnitTest {
         assertArrayEquals(expected, Sort.selectionSort(unsorted.clone()));
         assertArrayEquals(expected, Sort.insertionSort(unsorted.clone()));
         assertArrayEquals(expected, Sort.shellsort(unsorted.clone()));
+        assertArrayEquals(expected, Sort.quicksort(unsorted.clone()));
         assertArrayEquals(expected, Sort.mergeSort(unsorted.clone()));
         assertArrayEquals(expected, Sort.heapsort(unsorted.clone()));
         assertArrayEquals(expected, Sort.introsort(unsorted.clone()));
@@ -151,20 +148,63 @@ public class LocalUnitTest {
         assertArrayEquals(expected, Sort.treeSort(unsorted.clone()));
         assertArrayEquals(expected, Sort.patienceSorting(unsorted.clone()));
 
-        // Verification for broken quicksort implementation (missing self-recursive calls)
-        int[] quicksortOutput = Sort.quicksort(unsorted.clone());
-        assertArrayEquals(new int[]{5, 1, 4, 2, -2, 0, 4, 8}, quicksortOutput);
-
-        // Positive-only sorting algorithms
         int[] unsortedPositives = {5, 1, 4, 2, 8, 0, 4};
         int[] expectedPositives = {0, 1, 2, 4, 4, 5, 8};
         assertArrayEquals(expectedPositives, Sort.countingSort(unsortedPositives.clone()));
         assertArrayEquals(expectedPositives, Sort.beadSort(unsortedPositives.clone()));
 
-        // Uniform double sorting
         double[] unsortedDoubles = {0.5, 0.1, 0.4, 0.2, 0.8, 0.0, 0.4};
         double[] expectedDoubles = {0.0, 0.1, 0.2, 0.4, 0.4, 0.5, 0.8};
         assertArrayEquals(expectedDoubles, Sort.bucketSortUniform(unsortedDoubles.clone()), 0.0001);
+    }
+
+    @Test
+    public void testSortEdgeCasesAndExceptions() {
+        assertNull(Sort.quicksort(null));
+        assertArrayEquals(new int[]{}, Sort.quicksort(new int[]{}));
+        assertArrayEquals(new int[]{42}, Sort.quicksort(new int[]{42}));
+
+        try {
+            Sort.countingSort(new int[]{-1, 2, 3});
+            fail("Expected IllegalArgumentException for negative elements in countingSort");
+        } catch (IllegalArgumentException e) {
+            // Test passed
+        }
+
+        try {
+            Sort.countingSort(new int[]{10_000_001});
+            fail("Expected IllegalArgumentException for excessively large elements in countingSort");
+        } catch (IllegalArgumentException e) {
+            // Test passed
+        }
+
+        try {
+            Sort.beadSort(new int[]{-5, 2, 3});
+            fail("Expected IllegalArgumentException for negative elements in beadSort");
+        } catch (IllegalArgumentException e) {
+            // Test passed
+        }
+
+        try {
+            Sort.bucketSortUniform(new double[]{-0.1, 0.5});
+            fail("Expected IllegalArgumentException for elements < 0.0 in bucketSortUniform");
+        } catch (IllegalArgumentException e) {
+            // Test passed
+        }
+
+        try {
+            Sort.bucketSortUniform(new double[]{1.0, 0.5});
+            fail("Expected IllegalArgumentException for elements >= 1.0 in bucketSortUniform");
+        } catch (IllegalArgumentException e) {
+            // Test passed
+        }
+
+        try {
+            Sort.pigeonholeSort(new int[]{1, 10_000_002});
+            fail("Expected IllegalArgumentException for excessively large range in pigeonholeSort");
+        } catch (IllegalArgumentException e) {
+            // Test passed
+        }
     }
 
     @Test

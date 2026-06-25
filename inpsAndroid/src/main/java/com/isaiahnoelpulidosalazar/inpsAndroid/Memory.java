@@ -1,4 +1,4 @@
-package com.isaiahnoelpulidosalazar.inpsandroid;
+package com.isaiahnoelpulidosalazar.inpsAndroid;
 
 /**
  * A generic, dynamically resizable storage container backed by a plain array.

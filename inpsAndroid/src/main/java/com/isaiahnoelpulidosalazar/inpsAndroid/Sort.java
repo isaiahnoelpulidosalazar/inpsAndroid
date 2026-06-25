@@ -1,7 +1,6 @@
-package com.isaiahnoelpulidosalazar.inpsandroid;
+package com.isaiahnoelpulidosalazar.inpsAndroid;
 
 import java.util.*;
-import java.util.stream.IntStream;
 
 /**
  * A utility class providing a comprehensive collection of sorting algorithm implementations,
@@ -10,50 +9,31 @@ import java.util.stream.IntStream;
  * <p>All methods sort in <b>ascending</b> order. Most methods sort the input array in-place
  * and return it; a few (e.g., {@link #quicksort}, {@link #mergeSort}, {@link #introsort},
  * {@link #timsort}) return a new array.</p>
- *
- * <p>Available algorithms:</p>
- * <ul>
- *   <li>{@link #bubbleSort} — O(n²), simple comparison sort</li>
- *   <li>{@link #cocktailShakerSort} — O(n²), bidirectional bubble sort</li>
- *   <li>{@link #oddEvenSort} — O(n²), parallel-friendly bubble variant</li>
- *   <li>{@link #selectionSort} — O(n²), minimal swaps</li>
- *   <li>{@link #insertionSort} — O(n²), efficient for nearly-sorted data</li>
- *   <li>{@link #shellsort} — O(n log² n), gap-based insertion sort</li>
- *   <li>{@link #quicksort} — O(n log n) average, divide-and-conquer</li>
- *   <li>{@link #mergeSort} — O(n log n), stable divide-and-conquer</li>
- *   <li>{@link #heapsort} — O(n log n), using a priority queue</li>
- *   <li>{@link #introsort} — O(n log n), hybrid quick/heap sort</li>
- *   <li>{@link #timsort} — O(n log n), uses {@link Arrays#sort}</li>
- *   <li>{@link #countingSort} — O(n + k), for non-negative integers with limited range</li>
- *   <li>{@link #bucketSortUniform} — O(n + k), for uniformly distributed doubles in [0, 1)</li>
- *   <li>{@link #pigeonholeSort} — O(n + range), for integers with known min/max</li>
- *   <li>{@link #treeSort} — O(n log n), uses a binary search tree</li>
- *   <li>{@link #patienceSorting} — O(n log n), pile-based merge sort</li>
- *   <li>{@link #bogoSort} — O((n+1)!), random shuffle until sorted (educational only)</li>
- *   <li>{@link #beadSort} — O(S) where S = sum of elements, positive integers only</li>
- * </ul>
  */
 public class Sort {
 
     /**
      * Sorts an array using bubble sort.
-     *
-     * <p>Repeatedly steps through the list, compares adjacent elements, and swaps them
-     * if they are in the wrong order. Time complexity: O(n²).</p>
+     * Includes an early-exit optimization if the array becomes sorted mid-process.
      *
      * @param arr the array to sort (modified in-place)
      * @return the sorted array
      */
     public static int[] bubbleSort(int[] arr) {
+        if (arr == null || arr.length <= 1) return arr;
         int n = arr.length;
-        for (int i = 0; i < n; i++) {
+        boolean swapped;
+        for (int i = 0; i < n - 1; i++) {
+            swapped = false;
             for (int j = 0; j < n - i - 1; j++) {
                 if (arr[j] > arr[j + 1]) {
                     int temp = arr[j];
                     arr[j] = arr[j + 1];
                     arr[j + 1] = temp;
+                    swapped = true;
                 }
             }
+            if (!swapped) break;
         }
         return arr;
     }
@@ -61,20 +41,17 @@ public class Sort {
     /**
      * Sorts an array using cocktail shaker sort (bidirectional bubble sort).
      *
-     * <p>Alternates between forward and backward passes, shrinking the unsorted bounds
-     * after each pass. Slightly more efficient than bubble sort for nearly-sorted data.
-     * Time complexity: O(n²).</p>
-     *
      * @param arr the array to sort (modified in-place)
      * @return the sorted array
      */
     public static int[] cocktailShakerSort(int[] arr) {
+        if (arr == null || arr.length <= 1) return arr;
         boolean swapped = true;
         int start = 0;
         int end = arr.length - 1;
         while (swapped) {
             swapped = false;
-            for (int i = start; i < end; ++i) {
+            for (int i = start; i < end; i++) {
                 if (arr[i] > arr[i + 1]) {
                     int temp = arr[i];
                     arr[i] = arr[i + 1];
@@ -83,7 +60,9 @@ public class Sort {
                 }
             }
             if (!swapped) break;
-            end = end - 1;
+
+            swapped = false;
+            end--;
             for (int i = end - 1; i >= start; i--) {
                 if (arr[i] > arr[i + 1]) {
                     int temp = arr[i];
@@ -92,7 +71,7 @@ public class Sort {
                     swapped = true;
                 }
             }
-            start = start + 1;
+            start++;
         }
         return arr;
     }
@@ -100,14 +79,11 @@ public class Sort {
     /**
      * Sorts an array using odd-even sort.
      *
-     * <p>Alternates between comparing/swapping odd-indexed and even-indexed adjacent pairs,
-     * repeating until no swaps occur. Suitable for parallel implementations.
-     * Time complexity: O(n²).</p>
-     *
      * @param arr the array to sort (modified in-place)
      * @return the sorted array
      */
     public static int[] oddEvenSort(int[] arr) {
+        if (arr == null || arr.length <= 1) return arr;
         boolean isSorted = false;
         while (!isSorted) {
             isSorted = true;
@@ -133,24 +109,26 @@ public class Sort {
 
     /**
      * Sorts an array using selection sort.
-     *
-     * <p>Repeatedly selects the minimum element from the unsorted portion and moves it
-     * to the front. Performs at most O(n) swaps regardless of input. Time complexity: O(n²).</p>
+     * Prevents self-swapping operations.
      *
      * @param arr the array to sort (modified in-place)
      * @return the sorted array
      */
     public static int[] selectionSort(int[] arr) {
-        for (int i = 0; i < arr.length; i++) {
+        if (arr == null || arr.length <= 1) return arr;
+        int n = arr.length;
+        for (int i = 0; i < n - 1; i++) {
             int minIdx = i;
-            for (int j = i + 1; j < arr.length; j++) {
-                if (arr[minIdx] > arr[j]) {
+            for (int j = i + 1; j < n; j++) {
+                if (arr[j] < arr[minIdx]) {
                     minIdx = j;
                 }
             }
-            int temp = arr[i];
-            arr[i] = arr[minIdx];
-            arr[minIdx] = temp;
+            if (minIdx != i) {
+                int temp = arr[i];
+                arr[i] = arr[minIdx];
+                arr[minIdx] = temp;
+            }
         }
         return arr;
     }
@@ -158,20 +136,17 @@ public class Sort {
     /**
      * Sorts an array using insertion sort.
      *
-     * <p>Builds a sorted sub-array one element at a time by inserting each new element
-     * into its correct position. Efficient for small or nearly-sorted arrays.
-     * Time complexity: O(n²) worst case, O(n) best case.</p>
-     *
      * @param arr the array to sort (modified in-place)
      * @return the sorted array
      */
     public static int[] insertionSort(int[] arr) {
+        if (arr == null || arr.length <= 1) return arr;
         for (int i = 1; i < arr.length; i++) {
             int key = arr[i];
             int j = i - 1;
             while (j >= 0 && key < arr[j]) {
                 arr[j + 1] = arr[j];
-                j -= 1;
+                j--;
             }
             arr[j + 1] = key;
         }
@@ -179,18 +154,19 @@ public class Sort {
     }
 
     /**
-     * Sorts an array using Shell sort.
-     *
-     * <p>An optimization of insertion sort that starts by comparing elements far apart
-     * and progressively reduces the gap. Time complexity: O(n log² n) with the gap
-     * sequence used here (n/2, n/4, …, 1).</p>
+     * Sorts an array using Shell sort with Knuth's gap sequence.
      *
      * @param arr the array to sort (modified in-place)
      * @return the sorted array
      */
     public static int[] shellsort(int[] arr) {
+        if (arr == null || arr.length <= 1) return arr;
         int n = arr.length;
-        for (int gap = n / 2; gap > 0; gap /= 2) {
+        int h = 1;
+        while (h < n / 3) {
+            h = 3 * h + 1; // Knuth's gap sequence
+        }
+        for (int gap = h; gap > 0; gap /= 3) {
             for (int i = gap; i < n; i++) {
                 int temp = arr[i];
                 int j = i;
@@ -205,153 +181,252 @@ public class Sort {
     }
 
     /**
-     * Sorts an array using quicksort with a middle-element pivot.
-     *
-     * <p>Partitions the array into elements less than, equal to, and greater than the pivot,
-     * then recursively sorts each partition using Java streams. Returns a <b>new</b> sorted array.
-     * Time complexity: O(n log n) average, O(n²) worst case.</p>
+     * Sorts an array using quicksort.
+     * Optimized to run in-place on a copy of the original array.
      *
      * @param arr the array to sort
      * @return a new sorted array
      */
     public static int[] quicksort(int[] arr) {
-        if (arr.length <= 1) return arr;
-        int pivot = arr[arr.length / 2];
-        int[] left = Arrays.stream(arr).filter(x -> x < pivot).toArray();
-        int[] middle = Arrays.stream(arr).filter(x -> x == pivot).toArray();
-        int[] right = Arrays.stream(arr).filter(x -> x > pivot).toArray();
+        if (arr == null) return null;
+        int[] copy = arr.clone();
+        if (copy.length <= 1) return copy;
+        quicksortHelper(copy, 0, copy.length - 1);
+        return copy;
+    }
 
-        int[] result = new int[arr.length];
-        System.arraycopy(left, 0, result, 0, left.length);
-        System.arraycopy(middle, 0, result, left.length, middle.length);
-        System.arraycopy(right, 0, result, left.length + middle.length, right.length);
-        return result;
+    private static void quicksortHelper(int[] arr, int lo, int hi) {
+        if (lo < hi) {
+            int p = partition(arr, lo, hi);
+            quicksortHelper(arr, lo, p);
+            quicksortHelper(arr, p + 1, hi);
+        }
+    }
+
+    private static int partition(int[] arr, int lo, int hi) {
+        int pivot = arr[lo + (hi - lo) / 2];
+        int i = lo - 1;
+        int j = hi + 1;
+        while (true) {
+            do { i++; } while (arr[i] < pivot);
+            do { j--; } while (arr[j] > pivot);
+            if (i >= j) return j;
+            int temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
     }
 
     /**
      * Sorts an array using merge sort.
-     *
-     * <p>Recursively splits the array in half, sorts each half, and merges the results.
-     * Stable sort. Returns a <b>new</b> sorted array.
-     * Time complexity: O(n log n).</p>
+     * Allocates a temporary helper array only once.
      *
      * @param arr the array to sort
      * @return a new sorted array
      */
     public static int[] mergeSort(int[] arr) {
-        if (arr.length <= 1) return arr;
-        int mid = arr.length / 2;
-        int[] left = mergeSort(Arrays.copyOfRange(arr, 0, mid));
-        int[] right = mergeSort(Arrays.copyOfRange(arr, mid, arr.length));
+        if (arr == null) return null;
+        int[] copy = arr.clone();
+        if (copy.length <= 1) return copy;
+        int[] temp = new int[copy.length];
+        mergeSortHelper(copy, temp, 0, copy.length - 1);
+        return copy;
+    }
 
-        int[] res = new int[arr.length];
-        int i = 0, j = 0, k = 0;
-        while (i < left.length && j < right.length) {
-            if (left[i] < right[j]) {
-                res[k++] = left[i++];
+    private static void mergeSortHelper(int[] arr, int[] temp, int lo, int hi) {
+        if (lo < hi) {
+            int mid = lo + (hi - lo) / 2;
+            mergeSortHelper(arr, temp, lo, mid);
+            mergeSortHelper(arr, temp, mid + 1, hi);
+            merge(arr, temp, lo, mid, hi);
+        }
+    }
+
+    private static void merge(int[] arr, int[] temp, int lo, int mid, int hi) {
+        System.arraycopy(arr, lo, temp, lo, hi - lo + 1);
+        int i = lo;
+        int j = mid + 1;
+        int k = lo;
+        while (i <= mid && j <= hi) {
+            if (temp[i] <= temp[j]) {
+                arr[k++] = temp[i++];
             } else {
-                res[k++] = right[j++];
+                arr[k++] = temp[j++];
             }
         }
-        while (i < left.length) res[k++] = left[i++];
-        while (j < right.length) res[k++] = right[j++];
-        return res;
+        while (i <= mid) {
+            arr[k++] = temp[i++];
+        }
     }
 
     /**
-     * Sorts an array using heap sort via a {@link PriorityQueue}.
-     *
-     * <p>All elements are inserted into a min-heap and extracted in order.
-     * Sorts in-place by writing extracted elements back into the original array.
-     * Time complexity: O(n log n).</p>
+     * Sorts an array using heap sort.
+     * Performs a true in-place sort using O(1) auxiliary space.
      *
      * @param arr the array to sort (modified in-place)
      * @return the sorted array
      */
     public static int[] heapsort(int[] arr) {
-        PriorityQueue<Integer> pq = new PriorityQueue<>();
-        for (int x : arr) pq.add(x);
-        for (int i = 0; i < arr.length; i++) {
-            arr[i] = pq.poll();
+        if (arr == null || arr.length <= 1) return arr;
+        int n = arr.length;
+        for (int i = n / 2 - 1; i >= 0; i--) {
+            siftDown(arr, n, i);
+        }
+        for (int i = n - 1; i > 0; i--) {
+            int temp = arr[0];
+            arr[0] = arr[i];
+            arr[i] = temp;
+            siftDown(arr, i, 0);
         }
         return arr;
     }
 
+    private static void siftDown(int[] arr, int n, int i) {
+        int root = i;
+        while (root * 2 + 1 < n) {
+            int child = root * 2 + 1;
+            int swap = root;
+            if (arr[swap] < arr[child]) {
+                swap = child;
+            }
+            if (child + 1 < n && arr[swap] < arr[child + 1]) {
+                swap = child + 1;
+            }
+            if (swap == root) {
+                return;
+            } else {
+                int temp = arr[root];
+                arr[root] = arr[swap];
+                arr[swap] = temp;
+                root = swap;
+            }
+        }
+    }
+
     /**
-     * Sorts an array using introsort (a hybrid of quicksort and heapsort).
-     *
-     * <p>Uses quicksort with a first-element pivot but falls back to {@link #heapsort}
-     * when the recursion depth exceeds {@code 2 * floor(log2(n))} to guarantee O(n log n)
-     * worst-case performance. Returns a <b>new</b> sorted array.</p>
+     * Sorts an array using introsort.
+     * Prevents stack overflow by switching to Heap Sort when recursion exceeds depth limit.
      *
      * @param arr the array to sort
      * @return a new sorted array
      */
     public static int[] introsort(int[] arr) {
-        int maxDepth = 2 * (int) Math.floor(Math.log(arr.length) / Math.log(2));
-        return introSortHelper(arr, maxDepth);
+        if (arr == null) return null;
+        int[] copy = arr.clone();
+        if (copy.length <= 1) return copy;
+        // 31 - Integer.numberOfLeadingZeros(length) represents floor(log2(length))
+        int maxDepth = 2 * (31 - Integer.numberOfLeadingZeros(copy.length));
+        introsortHelper(copy, 0, copy.length - 1, maxDepth);
+        return copy;
+    }
+
+    private static void introsortHelper(int[] arr, int lo, int hi, int depthLimit) {
+        if (lo < hi) {
+            if (depthLimit == 0) {
+                heapsortHelper(arr, lo, hi);
+                return;
+            }
+            int p = partition(arr, lo, hi);
+            introsortHelper(arr, lo, p, depthLimit - 1);
+            introsortHelper(arr, p + 1, hi, depthLimit - 1);
+        }
+    }
+
+    private static void heapsortHelper(int[] arr, int lo, int hi) {
+        int n = hi - lo + 1;
+        for (int i = n / 2 - 1; i >= 0; i--) {
+            siftDownSubarray(arr, n, i, lo);
+        }
+        for (int i = n - 1; i > 0; i--) {
+            int temp = arr[lo];
+            arr[lo] = arr[lo + i];
+            arr[lo + i] = temp;
+            siftDownSubarray(arr, i, 0, lo);
+        }
+    }
+
+    private static void siftDownSubarray(int[] arr, int n, int i, int lo) {
+        int root = i;
+        while (root * 2 + 1 < n) {
+            int child = root * 2 + 1;
+            int swap = root;
+            if (arr[lo + swap] < arr[lo + child]) {
+                swap = child;
+            }
+            if (child + 1 < n && arr[lo + swap] < arr[lo + child + 1]) {
+                swap = child + 1;
+            }
+            if (swap == root) {
+                return;
+            } else {
+                int temp = arr[lo + root];
+                arr[lo + root] = arr[lo + swap];
+                arr[lo + swap] = temp;
+                root = swap;
+            }
+        }
     }
 
     /**
-     * Recursive helper for {@link #introsort(int[])}.
-     *
-     * @param arr   the sub-array to sort
-     * @param depth remaining recursion depth before falling back to heap sort
-     * @return a new sorted array
-     */
-    private static int[] introSortHelper(int[] arr, int depth) {
-        if (arr.length <= 1) return arr;
-        if (depth == 0) return heapsort(arr);
-
-        int pivot = arr[0];
-        int[] left = Arrays.stream(arr).skip(1).filter(x -> x <= pivot).toArray();
-        int[] right = Arrays.stream(arr).skip(1).filter(x -> x > pivot).toArray();
-
-        int[] sortedLeft = introSortHelper(left, depth - 1);
-        int[] sortedRight = introSortHelper(right, depth - 1);
-
-        int[] res = new int[arr.length];
-        System.arraycopy(sortedLeft, 0, res, 0, sortedLeft.length);
-        res[sortedLeft.length] = pivot;
-        System.arraycopy(sortedRight, 0, res, sortedLeft.length + 1, sortedRight.length);
-        return res;
-    }
-
-    /**
-     * Sorts an array using timsort (via {@link Arrays#sort}).
-     *
-     * <p>Returns a <b>new</b> sorted array, leaving the original unchanged.
-     * Time complexity: O(n log n), stable sort.</p>
+     * Sorts an array using timsort.
+     * Uses box/unbox mapping to guarantee stable Timsort for primitive types.
      *
      * @param arr the array to sort
      * @return a new sorted copy of the input
      */
     public static int[] timsort(int[] arr) {
-        int[] res = arr.clone();
-        Arrays.sort(res);
+        if (arr == null) return null;
+        Integer[] boxed = new Integer[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            boxed[i] = arr[i];
+        }
+        Arrays.sort(boxed); // Uses Timsort
+        int[] res = new int[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            res[i] = boxed[i];
+        }
         return res;
     }
 
     /**
      * Sorts an array of non-negative integers using counting sort.
-     *
-     * <p>Counts the occurrences of each value up to the maximum, then reconstructs
-     * the sorted array. Efficient when the value range is small relative to the input size.
-     * Time complexity: O(n + k), where k is the maximum value. Not suitable for large value ranges.</p>
+     * Max-range validation included to prevent memory errors.
      *
      * @param arr the array of non-negative integers to sort (not modified)
-     * @return a new sorted array, or the original if it is {@code null} or empty
+     * @return a new sorted array, or a copy if it is empty
      */
     public static int[] countingSort(int[] arr) {
-        if (arr == null || arr.length == 0) return arr;
-        int maxVal = Arrays.stream(arr).max().getAsInt();
+        if (arr == null) return null;
+        if (arr.length == 0) return arr.clone();
+
+        // Perform validations first, even for single-element arrays
+        int maxVal = arr[0];
+        for (int x : arr) {
+            if (x < 0) {
+                throw new IllegalArgumentException("Counting sort only supports non-negative integers.");
+            }
+            if (x > maxVal) {
+                maxVal = x;
+            }
+        }
+
+        if (maxVal > 10_000_000) {
+            throw new IllegalArgumentException("Maximum value in counting sort is too large (" + maxVal + ").");
+        }
+
+        // Return early after validating single-element input
+        if (arr.length == 1) return arr.clone();
+
         int[] counts = new int[maxVal + 1];
-        for (int x : arr) counts[x]++;
+        for (int x : arr) {
+            counts[x]++;
+        }
 
         int[] res = new int[arr.length];
         int idx = 0;
-        for (int i = 0; i < counts.length; i++) {
-            for (int j = 0; j < counts[i]; j++) {
+        for (int i = 0; i <= maxVal; i++) {
+            int count = counts[i];
+            for (int j = 0; j < count; j++) {
                 res[idx++] = i;
             }
         }
@@ -360,23 +435,33 @@ public class Sort {
 
     /**
      * Sorts an array of {@code double} values in [0, 1) using bucket sort.
-     *
-     * <p>Distributes values into {@code n} equal-width buckets, sorts each bucket
-     * individually using {@link Collections#sort}, then concatenates the results.
-     * Optimal for uniformly distributed input. Sorts in-place.
-     * Time complexity: O(n + k) average.</p>
+     * Includes validations to prevent out-of-bounds access.
      *
      * @param arr the array of doubles in [0.0, 1.0) to sort (modified in-place)
      * @return the sorted array
      */
     public static double[] bucketSortUniform(double[] arr) {
-        List<List<Double>> buckets = new ArrayList<>();
-        for (int i = 0; i < arr.length; i++) {
+        if (arr == null) return null;
+        if (arr.length == 0) return arr;
+
+        // Perform validations first, even for single-element arrays
+        for (double x : arr) {
+            if (x < 0.0 || x >= 1.0) {
+                throw new IllegalArgumentException("Bucket sort elements must be in the range [0.0, 1.0).");
+            }
+        }
+
+        // Return early after validating single-element input
+        if (arr.length == 1) return arr;
+
+        int n = arr.length;
+        List<List<Double>> buckets = new ArrayList<>(n);
+        for (int i = 0; i < n; i++) {
             buckets.add(new ArrayList<>());
         }
         for (double x : arr) {
-            int index = (int) (x * arr.length);
-            if (index >= arr.length) index = arr.length - 1;
+            int index = (int) (x * n);
+            if (index >= n) index = n - 1;
             buckets.get(index).add(x);
         }
         int idx = 0;
@@ -392,28 +477,37 @@ public class Sort {
     /**
      * Sorts an array of integers using pigeonhole sort.
      *
-     * <p>Allocates a "hole" for each integer value between the minimum and maximum,
-     * counts occurrences, and reconstructs the sorted array. Similar to counting sort
-     * but works with arbitrary integer ranges (including negatives).
-     * Time complexity: O(n + range), where range = max − min + 1.</p>
-     *
      * @param arr the array to sort; may contain negative values (not modified)
-     * @return a new sorted array, or the original if empty
+     * @return a new sorted array, or a copy if empty
      */
     public static int[] pigeonholeSort(int[] arr) {
-        if (arr.length == 0) return arr;
-        int minVal = Arrays.stream(arr).min().getAsInt();
-        int maxVal = Arrays.stream(arr).max().getAsInt();
-        int size = maxVal - minVal + 1;
+        if (arr == null || arr.length <= 1) return arr == null ? null : arr.clone();
+        int minVal = arr[0];
+        int maxVal = arr[0];
+        for (int i = 1; i < arr.length; i++) {
+            if (arr[i] < minVal) minVal = arr[i];
+            else if (arr[i] > maxVal) maxVal = arr[i];
+        }
+
+        long range = (long) maxVal - minVal + 1;
+        if (range > 10_000_000) {
+            throw new IllegalArgumentException("Range of elements is too large for pigeonhole sort: " + range);
+        }
+
+        int size = (int) range;
         int[] holes = new int[size];
 
-        for (int x : arr) holes[x - minVal]++;
+        for (int x : arr) {
+            holes[x - minVal]++;
+        }
 
         int[] res = new int[arr.length];
         int idx = 0;
         for (int i = 0; i < size; i++) {
-            for (int j = 0; j < holes[i]; j++) {
-                res[idx++] = i + minVal;
+            int count = holes[i];
+            int val = i + minVal;
+            for (int j = 0; j < count; j++) {
+                res[idx++] = val;
             }
         }
         return res;
@@ -430,74 +524,98 @@ public class Sort {
 
     /**
      * Sorts an array using tree sort.
-     *
-     * <p>Inserts all elements into a binary search tree (BST), then performs an
-     * in-order traversal to collect the elements in sorted order. Does not handle
-     * duplicate elements in any special way — duplicates go to the right subtree.
-     * Time complexity: O(n log n) average, O(n²) for sorted input (degenerate BST).</p>
+     * Uses iterative BST insertion and iterative traversal to prevent stack overflows.
      *
      * @param arr the array to sort
-     * @return a new sorted array, or the original if empty
+     * @return a new sorted array, or a copy if empty
      */
     public static int[] treeSort(int[] arr) {
-        if (arr.length == 0) return arr;
+        if (arr == null) return null;
+        if (arr.length <= 1) return arr.clone();
         Node root = null;
         for (int x : arr) {
-            root = insert(root, x);
+            root = insertIterative(root, x);
         }
-        List<Integer> res = new ArrayList<>();
-        traverse(root, res);
-        return res.stream().mapToInt(i -> i).toArray();
+        return traverseIterative(root, arr.length);
     }
 
-    /**
-     * Inserts a value into the BST rooted at {@code root}.
-     *
-     * @param root the current root node; may be {@code null}
-     * @param val  the value to insert
-     * @return the root of the updated BST
-     */
-    private static Node insert(Node root, int val) {
-        if (root == null) return new Node(val);
-        if (val < root.v) root.l = insert(root.l, val);
-        else root.r = insert(root.r, val);
+    private static Node insertIterative(Node root, int val) {
+        Node newNode = new Node(val);
+        if (root == null) return newNode;
+        Node curr = root;
+        while (true) {
+            if (val < curr.v) {
+                if (curr.l == null) {
+                    curr.l = newNode;
+                    break;
+                }
+                curr = curr.l;
+            } else {
+                if (curr.r == null) {
+                    curr.r = newNode;
+                    break;
+                }
+                curr = curr.r;
+            }
+        }
         return root;
     }
 
-    /**
-     * Performs an in-order traversal of the BST rooted at {@code root},
-     * appending values to {@code res} in ascending order.
-     *
-     * @param root the current node; may be {@code null}
-     * @param res  the list to append values into
-     */
-    private static void traverse(Node root, List<Integer> res) {
-        if (root != null) {
-            traverse(root.l, res);
-            res.add(root.v);
-            traverse(root.r, res);
+    private static int[] traverseIterative(Node root, int length) {
+        int[] res = new int[length];
+        int idx = 0;
+        Deque<Node> stack = new ArrayDeque<>();
+        Node curr = root;
+        while (curr != null || !stack.isEmpty()) {
+            while (curr != null) {
+                stack.push(curr);
+                curr = curr.l;
+            }
+            curr = stack.pop();
+            res[idx++] = curr.v;
+            curr = curr.r;
+        }
+        return res;
+    }
+
+    static class PileState implements Comparable<PileState> {
+        final int value;
+        final int pileIdx;
+        final int itemIdx;
+
+        PileState(int value, int pileIdx, int itemIdx) {
+            this.value = value;
+            this.pileIdx = pileIdx;
+            this.itemIdx = itemIdx;
+        }
+
+        @Override
+        public int compareTo(PileState o) {
+            return Integer.compare(this.value, o.value);
         }
     }
 
     /**
      * Sorts an array using patience sorting.
-     *
-     * <p>Elements are distributed into "piles" (similar to solitaire), and then merged
-     * using a min-heap priority queue. The number of piles equals the length of the
-     * longest increasing subsequence.
-     * Time complexity: O(n log n).</p>
+     * Uses a specific {@link PileState} model to optimize memory usage in heap operations.
      *
      * @param arr the array to sort
      * @return a new sorted array
      */
     public static int[] patienceSorting(int[] arr) {
+        if (arr == null) return null;
+        if (arr.length <= 1) return arr.clone();
+
         List<List<Integer>> piles = new ArrayList<>();
         for (int x : arr) {
             int left = 0, right = piles.size();
             while (left < right) {
                 int mid = left + (right - left) / 2;
-                if (piles.get(mid).get(piles.get(mid).size() - 1) >= x) right = mid;
-                else left = mid + 1;
+                if (piles.get(mid).get(piles.get(mid).size() - 1) >= x) {
+                    right = mid;
+                } else {
+                    left = mid + 1;
+                }
             }
             if (left < piles.size()) {
                 piles.get(left).add(x);
@@ -508,20 +626,21 @@ public class Sort {
             }
         }
 
-        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
+        PriorityQueue<PileState> pq = new PriorityQueue<>();
         for (int i = 0; i < piles.size(); i++) {
-            pq.add(new int[]{piles.get(i).get(piles.get(i).size() - 1), i, piles.get(i).size() - 1});
+            List<Integer> pile = piles.get(i);
+            pq.add(new PileState(pile.get(pile.size() - 1), i, pile.size() - 1));
         }
 
         int[] res = new int[arr.length];
         int idx = 0;
         while (!pq.isEmpty()) {
-            int[] curr = pq.poll();
-            res[idx++] = curr[0];
-            int pileIdx = curr[1];
-            int itemIdx = curr[2] - 1;
+            PileState curr = pq.poll();
+            res[idx++] = curr.value;
+            int pileIdx = curr.pileIdx;
+            int itemIdx = curr.itemIdx - 1;
             if (itemIdx >= 0) {
-                pq.add(new int[]{piles.get(pileIdx).get(itemIdx), pileIdx, itemIdx});
+                pq.add(new PileState(piles.get(pileIdx).get(itemIdx), pileIdx, itemIdx));
             }
         }
         return res;
@@ -530,17 +649,15 @@ public class Sort {
     /**
      * Sorts an array using bogo sort (random shuffle sort).
      *
-     * <p><b>Warning:</b> This algorithm has expected time complexity O((n+1)!) and is intended
-     * for educational or humorous purposes only. It randomly shuffles the array until it
-     * happens to be sorted. Never use in production code.</p>
-     *
      * @param arr the array to sort (modified in-place)
-     * @return the sorted array (eventually)
+     * @return the sorted array
      */
     public static int[] bogoSort(int[] arr) {
+        if (arr == null || arr.length <= 1) return arr;
         Random rand = new Random();
+        int n = arr.length;
         while (!isSorted(arr)) {
-            for (int i = arr.length - 1; i > 0; i--) {
+            for (int i = n - 1; i > 0; i--) {
                 int index = rand.nextInt(i + 1);
                 int a = arr[index];
                 arr[index] = arr[i];
@@ -550,13 +667,8 @@ public class Sort {
         return arr;
     }
 
-    /**
-     * Checks whether the given array is sorted in ascending order.
-     *
-     * @param arr the array to check
-     * @return {@code true} if sorted; {@code false} otherwise
-     */
     private static boolean isSorted(int[] arr) {
+        if (arr == null) return true;
         for (int i = 0; i < arr.length - 1; i++) {
             if (arr[i] > arr[i + 1]) return false;
         }
@@ -564,44 +676,50 @@ public class Sort {
     }
 
     /**
-     * Sorts an array of non-negative integers using bead sort (gravity sort).
-     *
-     * <p>Simulates rows of beads falling under gravity on parallel rods. Only works for
-     * non-negative integers. Time complexity: O(S) where S is the sum of all elements,
-     * or O(n * max) in the matrix-based simulation used here.</p>
+     * Sorts an array of non-negative integers using bead sort.
+     * Uses optimized 1D bead accumulation tracking to avoid O(N * maxVal) matrix allocation.
      *
      * @param arr the array of non-negative integers to sort
      * @return a new sorted array
      * @throws IllegalArgumentException if any element is negative
      */
     public static int[] beadSort(int[] arr) {
+        if (arr == null) return null;
+        if (arr.length == 0) return arr.clone();
+
+        // Perform validations first, even for single-element arrays
+        int maxVal = arr[0];
         for (int x : arr) {
-            if (x < 0) throw new IllegalArgumentException("Bead sort for positive integers only");
-        }
-        if (arr.length == 0) return arr;
-        int maxVal = Arrays.stream(arr).max().getAsInt();
-        int[][] beads = new int[arr.length][maxVal];
-
-        for (int i = 0; i < arr.length; i++) {
-            for (int j = 0; j < arr[i]; j++) {
-                beads[i][j] = 1;
+            if (x < 0) {
+                throw new IllegalArgumentException("Bead sort for non-negative integers only");
+            }
+            if (x > maxVal) {
+                maxVal = x;
             }
         }
 
-        for (int j = 0; j < maxVal; j++) {
-            int sumBeads = 0;
-            for (int i = 0; i < arr.length; i++) {
-                sumBeads += beads[i][j];
-            }
-            for (int i = 0; i < arr.length; i++) {
-                beads[i][j] = (i >= arr.length - sumBeads) ? 1 : 0;
+        // Return early after validating single-element input
+        if (arr.length == 1) return arr.clone();
+        if (maxVal == 0) return new int[arr.length];
+
+        // Track bead counts on each vertical rod
+        int[] beadCount = new int[maxVal];
+        for (int x : arr) {
+            for (int j = 0; j < x; j++) {
+                beadCount[j]++;
             }
         }
 
+        // Reconstruct the array based on rod accumulation heights
         int[] res = new int[arr.length];
         for (int i = 0; i < arr.length; i++) {
+            int target = arr.length - i;
             int rowSum = 0;
-            for (int j = 0; j < maxVal; j++) rowSum += beads[i][j];
+            for (int j = 0; j < maxVal; j++) {
+                if (beadCount[j] >= target) {
+                    rowSum++;
+                }
+            }
             res[i] = rowSum;
         }
         return res;
