@@ -39,9 +39,9 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.isaiahnoelpulidosalazar'
                 artifactId = 'inpsAndroid'
-                version = '1.0.2'
+                version = '1.0.3'
                 // changes:
-                // - fix build error
+                // - add RoundedButton
             }
         }
     }
