@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="cornerRadius" format="dimension" />
+    <attr name="isTranslucent" format="boolean" />
+
     <declare-styleable name="RoundedButton">
-        <attr name="cornerRadius" format="dimension" />
+        <attr name="cornerRadius" />
     </declare-styleable>
+
     <declare-styleable name="RoundedEditText">
-        <attr name="cornerRadius" format="dimension" />
+        <attr name="cornerRadius" />
     </declare-styleable>
 
     <declare-styleable name="RoundedConstraintLayout">
-        <attr name="cornerRadius" format="dimension" />
-        <attr name="isTranslucent" format="boolean" />
+        <attr name="cornerRadius" />
+        <attr name="isTranslucent" />
     </declare-styleable>
+
     <declare-styleable name="RoundedLinearLayout">
-        <attr name="cornerRadius" format="dimension" />
-        <attr name="isTranslucent" format="boolean" />
+        <attr name="cornerRadius" />
+        <attr name="isTranslucent" />
     </declare-styleable>
 </resources>
