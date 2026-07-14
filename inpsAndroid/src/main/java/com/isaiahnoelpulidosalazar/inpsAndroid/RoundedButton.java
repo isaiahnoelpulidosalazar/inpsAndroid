@@ -1,9 +1,13 @@
 package com.isaiahnoelpulidosalazar.inpsAndroid;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.RippleDrawable;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
@@ -43,6 +47,20 @@ public class RoundedButton extends AppCompatButton {
             a.recycle();
         }
 
-        setBackground(background);
+        GradientDrawable mask = (GradientDrawable) background.getConstantState().newDrawable().mutate();
+
+        int rippleColor = Color.LTGRAY;
+        TypedValue value = new TypedValue();
+        if (context.getTheme().resolveAttribute(android.R.attr.colorControlHighlight, value, true)) {
+            rippleColor = value.data;
+        }
+
+        RippleDrawable rippleDrawable = new RippleDrawable(
+                ColorStateList.valueOf(rippleColor),
+                background,
+                mask
+        );
+
+        setBackground(rippleDrawable);
     }
 }

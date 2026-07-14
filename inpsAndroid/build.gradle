@@ -39,9 +39,9 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.isaiahnoelpulidosalazar'
                 artifactId = 'inpsAndroid'
-                version = '1.0.4'
+                version = '1.0.5'
                 // changes:
-                // - add RoundedEditText, RoundedLinearLayout, RoundedConstraintLayout
+                // - add ripple effect to RoundedButton
             }
         }
     }
