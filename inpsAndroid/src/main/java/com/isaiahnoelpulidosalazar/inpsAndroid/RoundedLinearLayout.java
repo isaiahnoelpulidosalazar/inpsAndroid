@@ -48,10 +48,8 @@ public class RoundedLinearLayout extends LinearLayout {
                         isTranslucent ? R.drawable.generic_rounded_translucent_background : R.drawable.generic_rounded_primary_background
                 ).mutate();
             }
-            if (a.hasValue(R.styleable.RoundedLinearLayout_cornerRadius)) {
-                float radius = a.getDimension(R.styleable.RoundedLinearLayout_cornerRadius, 0f);
-                background.setCornerRadius(radius);
-            }
+            float radius = a.getDimension(R.styleable.RoundedLinearLayout_cornerRadius, 8f);
+            background.setCornerRadius(radius);
             a.recycle();
         }
 

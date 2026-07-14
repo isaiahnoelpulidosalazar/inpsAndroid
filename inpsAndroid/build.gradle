@@ -39,9 +39,9 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.isaiahnoelpulidosalazar'
                 artifactId = 'inpsAndroid'
-                version = '1.0.6'
+                version = '1.0.7'
                 // changes:
-                // - update ripple effect to adapt to the background color of the button
+                // - lowered default corner radius for RoundedLinearLayout and RoundedConstraintLayout
             }
         }
     }
