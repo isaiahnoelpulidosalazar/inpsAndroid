@@ -7,11 +7,11 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.ColorUtils;
 
 import com.isaiahnoelpulidosalazar.inpsandroid.R;
 
@@ -47,13 +47,20 @@ public class RoundedButton extends AppCompatButton {
             a.recycle();
         }
 
-        GradientDrawable mask = (GradientDrawable) background.getConstantState().newDrawable().mutate();
-
-        int rippleColor = Color.LTGRAY;
-        TypedValue value = new TypedValue();
-        if (context.getTheme().resolveAttribute(android.R.attr.colorControlHighlight, value, true)) {
-            rippleColor = value.data;
+        int backgroundColor = Color.BLACK;
+        ColorStateList colorStateList = background.getColor();
+        if (colorStateList != null) {
+            backgroundColor = colorStateList.getDefaultColor();
         }
+
+        int rippleColor;
+        if (ColorUtils.calculateLuminance(backgroundColor) < 0.5) {
+            rippleColor = Color.argb(64, 255, 255, 255);
+        } else {
+            rippleColor = Color.argb(31, 0, 0, 0);
+        }
+
+        GradientDrawable mask = (GradientDrawable) background.getConstantState().newDrawable().mutate();
 
         RippleDrawable rippleDrawable = new RippleDrawable(
                 ColorStateList.valueOf(rippleColor),
