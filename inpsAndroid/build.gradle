@@ -39,9 +39,9 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.isaiahnoelpulidosalazar'
                 artifactId = 'inpsAndroid'
-                version = '1.0.7'
+                version = '1.0.8'
                 // changes:
-                // - lowered default corner radius for RoundedLinearLayout and RoundedConstraintLayout
+                // - add documentation for RoundedButton, RoundedConstraintLayout, RoundedEditText, and RoundedLinearLayout
             }
         }
     }

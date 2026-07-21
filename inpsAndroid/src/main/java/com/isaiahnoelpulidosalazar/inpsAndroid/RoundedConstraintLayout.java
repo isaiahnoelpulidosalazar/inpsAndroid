@@ -12,27 +12,66 @@ import androidx.core.content.ContextCompat;
 
 import com.isaiahnoelpulidosalazar.inpsandroid.R;
 
+/**
+ * A custom {@link ConstraintLayout} that supports rounded corners.
+ * Allows configuration of corner radius and background opacity (solid vs translucent)
+ * via custom styleable attributes.
+ */
 public class RoundedConstraintLayout extends ConstraintLayout {
+
+    /**
+     * Simple constructor to use when creating a view from code.
+     *
+     * @param context The Context the view is running in.
+     */
     public RoundedConstraintLayout(Context context) {
         super(context);
         init(context, null);
     }
 
+    /**
+     * Constructor that is called when inflating a view from XML.
+     *
+     * @param context The Context the view is running in.
+     * @param attrs   The attributes of the XML tag that is inflating the view.
+     */
     public RoundedConstraintLayout(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
+    /**
+     * Perform inflation from XML and apply a class-specific base style from a theme attribute.
+     *
+     * @param context      The Context the view is running in.
+     * @param attrs        The attributes of the XML tag that is inflating the view.
+     * @param defStyleAttr An attribute in the current theme that contains a reference to a style resource.
+     */
     public RoundedConstraintLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
 
+    /**
+     * Perform inflation from XML and apply a class-specific base style from a theme attribute or style resource.
+     *
+     * @param context      The Context the view is running in.
+     * @param attrs        The attributes of the XML tag that is inflating the view.
+     * @param defStyleAttr An attribute in the current theme that contains a reference to a style resource.
+     * @param defStyleRes  A resource identifier of a style resource that supplies default values for the view.
+     */
     public RoundedConstraintLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context, attrs);
     }
 
+    /**
+     * Initializes the layout's background, applying rounded corners and translucency settings
+     * based on the XML attributes.
+     *
+     * @param context The Context the view is running in.
+     * @param attrs   The attributes of the XML tag, or null.
+     */
     void init(@NonNull Context context, @Nullable AttributeSet attrs) {
         GradientDrawable background = (GradientDrawable) ContextCompat.getDrawable(
                 context,
