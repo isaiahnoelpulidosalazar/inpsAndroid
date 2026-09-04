@@ -39,9 +39,9 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.isaiahnoelpulidosalazar'
                 artifactId = 'inpsAndroid'
-                version = '1.0.8'
+                version = '1.0.9'
                 // changes:
-                // - add documentation for RoundedButton, RoundedConstraintLayout, RoundedEditText, and RoundedLinearLayout
+                // - add SoundSynthesizer test class
             }
         }
     }

@@ -46,10 +46,10 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         # Check if the tag already exists so the workflow doesn't fail on multiple pushes to the same version
-        if gh release view "inpsAndroid-v${{ env.VERSION }}" > /dev/null 2>&1; then
-          echo "Release inpsAndroid-v${{ env.VERSION }} already exists. Skipping release creation."
+        if gh release view "${{ env.VERSION }}" > /dev/null 2>&1; then
+          echo "Release ${{ env.VERSION }} already exists. Skipping release creation."
         else
-          echo "Creating new release inpsAndroid-v${{ env.VERSION }}"
+          echo "Creating new release ${{ env.VERSION }}"
           
           RELEASE_NOTES="Auto-generated release.
 
@@ -60,9 +60,9 @@ jobs:
           ${{ env.CHANGES }}"
           
           # Creates the Tag, the Release page, and uploads the .aar file to it!
-          gh release create "inpsAndroid-v${{ env.VERSION }}" \
+          gh release create "${{ env.VERSION }}" \
             inpsAndroid/build/outputs/aar/inpsAndroid-release.aar \
-            --title "inpsAndroid-v${{ env.VERSION }}" \
+            --title "${{ env.VERSION }}" \
             --notes "$RELEASE_NOTES" \
             --target ${{ github.sha }}
         fi
