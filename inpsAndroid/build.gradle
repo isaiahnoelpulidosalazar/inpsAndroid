@@ -39,9 +39,9 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.isaiahnoelpulidosalazar'
                 artifactId = 'inpsAndroid'
-                version = '1.0.9'
+                version = '1.0.10'
                 // changes:
-                // - add SoundSynthesizer test class
+                // - add AreaCalculator
             }
         }
     }

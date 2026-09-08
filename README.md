@@ -17,9 +17,10 @@
   - [EasySQL](#easysql)
   - [Memory](#memory)
 - [Algorithms & Cryptography](#algorithms--cryptography)
-  - [Sort](#sort)
   - [Cipher](#cipher)
+  - [Sort](#sort)
 - [Utilities & Helpers](#utilities--helpers)
+  - [AreaCalculator](#area-calculator)
   - [Check](#check)
   - [Convert](#convert)
   - [Actions](#actions)
@@ -247,6 +248,28 @@ cache.clear();                       // Resets container
 
 ## Algorithms & Cryptography
 
+### Cipher
+
+Classical text encryption ciphers operating on uppercase Latin alphabetic characters. Non-alphabetic characters and spaces are preserved.
+
+```java
+// 1. Caesar Cipher (shifts letters by fixed offset)
+String caesar = Cipher.caesarCipher("HELLO WORLD", 3);
+// Output: "KHOOR ZRUOG"
+
+// 2. Keyword Substitution Cipher
+String keyword = Cipher.keywordCipher("HELLO WORLD", "KEYWORD");
+
+// 3. Giovanni Cipher (keyword cipher rotated by a key letter)
+String giovanni = Cipher.giovanniCipher("HELLO WORLD", "KEYWORD", "M");
+
+// 4. Transposition Cipher (interleaves even and odd index characters, strips spaces)
+String transposed = Cipher.transpositionCipher("HELLO");
+// Output: "HLELO"
+```
+
+---
+
 ### Sort
 
 A comprehensive collection of sorting algorithms implemented for `int[]` (and `double[]` for bucket sort).
@@ -282,29 +305,33 @@ Sort.bucketSortUniform(uniformData);
 
 ---
 
-### Cipher
+## Utilities & Helpers
 
-Classical text encryption ciphers operating on uppercase Latin alphabetic characters. Non-alphabetic characters and spaces are preserved.
+### AreaCalculator
+
+Geometric calculations for 2D shapes and 3D surface areas.
 
 ```java
-// 1. Caesar Cipher (shifts letters by fixed offset)
-String caesar = Cipher.caesarCipher("HELLO WORLD", 3);
-// Output: "KHOOR ZRUOG"
+// --- 2D Shapes ---
+AreaCalculator.squareArea(4.0);                   // 16.0
+AreaCalculator.rectangleArea(4.0, 5.0);           // 20.0
+AreaCalculator.triangleArea(10.0, 4.0);           // 20.0
+AreaCalculator.circleArea(5.0);                   // 78.54
+AreaCalculator.sectorArea(5.0, 60.0);             // 13.09
+AreaCalculator.segmentArea(5.0, 60.0);            // 2.26
 
-// 2. Keyword Substitution Cipher
-String keyword = Cipher.keywordCipher("HELLO WORLD", "KEYWORD");
+// Polygon (Shoelace Formula)
+List<Point> vertices = List.of(new Point(0,0), new Point(4,0), new Point(4,3), new Point(0,3));
+AreaCalculator.polygonShoelaceArea(vertices);    // 12.0
 
-// 3. Giovanni Cipher (keyword cipher rotated by a key letter)
-String giovanni = Cipher.giovanniCipher("HELLO WORLD", "KEYWORD", "M");
+// --- 3D Surface Areas ---
+AreaCalculator.cubeSurfaceArea(3.0);              // 54.0
+AreaCalculator.cylinderSurfaceArea(3.0, 10.0);   // 245.04
+AreaCalculator.sphereSurfaceArea(3.0);            // 113.10
 
-// 4. Transposition Cipher (interleaves even and odd index characters, strips spaces)
-String transposed = Cipher.transpositionCipher("HELLO");
-// Output: "HLELO"
 ```
 
 ---
-
-## Utilities & Helpers
 
 ### Check
 
