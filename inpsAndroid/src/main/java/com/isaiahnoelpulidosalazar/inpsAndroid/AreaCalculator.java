@@ -2,14 +2,20 @@ package com.isaiahnoelpulidosalazar.inpsAndroid;
 
 import java.util.List;
 
-public class AreaCalculator {
+/**
+ * Closed-form area and surface-area formulas. Inputs are not range-checked: callers are
+ * responsible for passing non-negative dimensions.
+ */
+public final class AreaCalculator {
 
-    /**
-     * Inner class representing a 2D coordinate point for polygon calculation.
-     */
-    public static class Point {
-        public double x;
-        public double y;
+    private AreaCalculator() {
+        throw new UnsupportedOperationException("AreaCalculator cannot be instantiated");
+    }
+
+    /** Immutable 2D point (v1 exposed mutable fields). */
+    public static final class Point {
+        public final double x;
+        public final double y;
 
         public Point(double x, double y) {
             this.x = x;
@@ -17,126 +23,59 @@ public class AreaCalculator {
         }
     }
 
-    // --- 2D Shapes ---
+    private static double sq(double v) { return v * v; } // cheaper and exact vs Math.pow(v, 2)
 
-    /** Calculates the area of a square (S = a^2). */
-    public static double squareArea(double a) {
-        return Math.pow(a, 2);
-    }
+    // --- 2D shapes ---
 
-    /** Calculates the area of a rectangle (S = a * b). */
-    public static double rectangleArea(double a, double b) {
-        return a * b;
-    }
+    public static double squareArea(double a) { return sq(a); }
+    public static double rectangleArea(double a, double b) { return a * b; }
+    public static double parallelogramArea(double a, double h) { return a * h; }
+    public static double triangleArea(double a, double h) { return 0.5 * a * h; }
+    public static double rightTriangleArea(double a, double b) { return 0.5 * a * b; }
+    public static double equilateralTriangleArea(double a) { return Math.sqrt(3) / 4.0 * sq(a); }
+    public static double trapezoidArea(double a, double b, double h) { return (a + b) / 2.0 * h; }
+    public static double rhombusArea(double d1, double d2) { return d1 * d2 / 2.0; }
+    public static double squareAsRhombusArea(double d) { return sq(d) / 2.0; }
+    public static double circleArea(double r) { return Math.PI * sq(r); }
+    public static double annulusArea(double R, double r) { return Math.PI * (sq(R) - sq(r)); }
+    public static double ellipseArea(double a, double b) { return Math.PI * a * b; }
 
-    /** Calculates the area of a parallelogram (S = a * h). */
-    public static double parallelogramArea(double a, double h) {
-        return a * h;
-    }
-
-    /** Calculates the area of a triangle (S = 1/2 * a * h). */
-    public static double triangleArea(double a, double h) {
-        return 0.5 * a * h;
-    }
-
-    /** Calculates the area of a right triangle (S = 1/2 * a * b). */
-    public static double rightTriangleArea(double a, double b) {
-        return 0.5 * a * b;
-    }
-
-    /** Calculates the area of an equilateral triangle (S = (sqrt(3)/4) * a^2). */
-    public static double equilateralTriangleArea(double a) {
-        return (Math.sqrt(3) / 4.0) * Math.pow(a, 2);
-    }
-
-    /** Calculates the area of a trapezoid (S = ((a + b) / 2) * h). */
-    public static double trapezoidArea(double a, double b, double h) {
-        return ((a + b) / 2.0) * h;
-    }
-
-    /** Calculates the area of a rhombus given diagonals (S = (d1 * d2) / 2). */
-    public static double rhombusArea(double d1, double d2) {
-        return (d1 * d2) / 2.0;
-    }
-
-    /** Calculates square area using its diagonal (S = d^2 / 2). */
-    public static double squareAsRhombusArea(double d) {
-        return Math.pow(d, 2) / 2.0;
-    }
-
-    /** Calculates the area of a circle (S = pi * r^2). */
-    public static double circleArea(double r) {
-        return Math.PI * Math.pow(r, 2);
-    }
-
-    /** Calculates the area of an annulus / ring (S = pi * (R^2 - r^2)). */
-    public static double annulusArea(double R, double r) {
-        return Math.PI * (Math.pow(R, 2) - Math.pow(r, 2));
-    }
-
-    /** Calculates the area of a circular sector. */
+    /** Circular sector with central angle in degrees. */
     public static double sectorArea(double r, double alphaDegrees) {
-        return (alphaDegrees / 360.0) * Math.PI * Math.pow(r, 2);
+        return alphaDegrees / 360.0 * Math.PI * sq(r);
     }
 
-    /** Calculates the area of a circular segment. */
+    /** Circular segment (sector minus triangle) with central angle in degrees. */
     public static double segmentArea(double r, double alphaDegrees) {
-        double alphaRadians = Math.toRadians(alphaDegrees);
-        double sectorPart = (alphaDegrees / 360.0) * Math.PI * Math.pow(r, 2);
-        double trianglePart = 0.5 * Math.pow(r, 2) * Math.sin(alphaRadians);
-        return sectorPart - trianglePart;
+        double sector = sectorArea(r, alphaDegrees);
+        double triangle = 0.5 * sq(r) * Math.sin(Math.toRadians(alphaDegrees));
+        return sector - triangle;
     }
 
-    /** Calculates the area of an ellipse (S = pi * a * b). */
-    public static double ellipseArea(double a, double b) {
-        return Math.PI * a * b;
-    }
-
-    /** Calculates the area of an arbitrary polygon using the Shoelace formula. */
+    /** Simple polygon area by the shoelace formula; fewer than 3 vertices (or null) gives 0. */
     public static double polygonShoelaceArea(List<Point> vertices) {
+        if (vertices == null || vertices.size() < 3) return 0.0;
         int n = vertices.size();
-        if (n < 3) return 0.0;
-
-        double area = 0.0;
+        double sum = 0.0;
+        Point prev = vertices.get(n - 1);
         for (int i = 0; i < n; i++) {
-            int j = (i + 1) % n;
-            area += vertices.get(i).x * vertices.get(j).y;
-            area -= vertices.get(j).x * vertices.get(i).y;
+            Point cur = vertices.get(i);
+            sum += prev.x * cur.y - cur.x * prev.y;
+            prev = cur;
         }
-        return Math.abs(area) / 2.0;
+        return Math.abs(sum) / 2.0;
     }
 
-    // --- 3D Surface Areas ---
+    // --- 3D surface areas ---
 
-    /** Calculates total surface area of a cube (S = 6 * a^2). */
-    public static double cubeSurfaceArea(double a) {
-        return 6.0 * Math.pow(a, 2);
-    }
+    public static double cubeSurfaceArea(double a) { return 6.0 * sq(a); }
+    public static double rectangularParallelepipedSurfaceArea(double a, double b, double c) { return 2.0 * (a * b + a * c + b * c); }
+    public static double cylinderSurfaceArea(double r, double h) { return 2.0 * Math.PI * r * (r + h); }
+    public static double coneSurfaceArea(double r, double l) { return Math.PI * r * (r + l); }
+    public static double sphereSurfaceArea(double r) { return 4.0 * Math.PI * sq(r); }
 
-    /** Calculates surface area of a rectangular parallelepiped. */
-    public static double rectangularParallelepipedSurfaceArea(double a, double b, double c) {
-        return 2.0 * (a * b + a * c + b * c);
-    }
-
-    /** Calculates surface area of a cylinder (S = 2 * pi * r * (r + h)). */
-    public static double cylinderSurfaceArea(double r, double h) {
-        return 2.0 * Math.PI * r * (r + h);
-    }
-
-    /** Calculates surface area of a cone (S = pi * r * (r + l)). */
-    public static double coneSurfaceArea(double r, double l) {
-        return Math.PI * r * (r + l);
-    }
-
-    /** Calculates surface area of a frustum of a cone. */
+    /** Frustum of a cone: lateral area plus both bases ({@code l} is the slant height). */
     public static double frustumSurfaceArea(double R, double r, double l) {
-        double lateralArea = Math.PI * (R + r) * l;
-        double baseAreas = Math.PI * (Math.pow(R, 2) + Math.pow(r, 2));
-        return lateralArea + baseAreas;
-    }
-
-    /** Calculates total surface area of a sphere (S = 4 * pi * r^2). */
-    public static double sphereSurfaceArea(double r) {
-        return 4.0 * Math.PI * Math.pow(r, 2);
+        return Math.PI * ((R + r) * l + sq(R) + sq(r));
     }
 }

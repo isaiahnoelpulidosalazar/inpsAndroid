@@ -20,4 +20,14 @@
         <attr name="cornerRadius" />
         <attr name="isTranslucent" />
     </declare-styleable>
+
+    <!-- New in 2.0.0 -->
+    <declare-styleable name="FlippableImageView">
+        <attr name="reverseBackImage" format="boolean" />
+        <attr name="flipSpeed" format="enum">
+            <enum name="slow" value="0" />
+            <enum name="normal" value="1" />
+            <enum name="fast" value="2" />
+        </attr>
+    </declare-styleable>
 </resources>

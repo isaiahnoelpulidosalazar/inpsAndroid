@@ -1,186 +1,124 @@
 package com.isaiahnoelpulidosalazar.inpsAndroid;
 
-import static android.view.View.GONE;
-
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AlertDialog;
 
 import com.isaiahnoelpulidosalazar.inpsandroid.R;
 
-import java.util.Objects;
-
 /**
- * A builder-style wrapper around {@link AlertDialog} that displays a rounded, customizable dialog.
+ * Builder-style rounded dialog with a title, optional scrollable content and two buttons.
  *
- * <p>The dialog is inflated from {@code R.layout.rounded_alert_dialog_layout} and supports
- * a title, an optional scrollable content area, and up to two buttons (left and right)
- * with configurable labels, text colors, and click listeners.</p>
+ * <p>All configuration methods may be called in any order (v1 threw NPE if a click listener was set
+ * before its button was set up).</p>
  *
- * <p>Example usage:</p>
  * <pre>{@code
- * new RoundedAlertDialog(context)
- *     .setTitle("Confirm")
- *     .setupLeftButton("Cancel", Color.GRAY)
- *     .setupRightButton("OK", Color.RED)
- *     .setupLeftButtonOnClick(v -> dialog.hide())
- *     .setupRightButtonOnClick(v -> performAction())
- *     .show();
+ * RoundedAlertDialog dialog = new RoundedAlertDialog(context).setTitle("Confirm");
+ * dialog.setupLeftButton("Cancel").setupLeftButtonOnClick(v -> dialog.dismiss());
+ * dialog.setupRightButton("OK", Color.RED).setupRightButtonOnClick(v -> doIt());
+ * dialog.show();
  * }</pre>
  */
 public class RoundedAlertDialog {
-    Context context;
-    LayoutInflater layoutInflater;
-    View dialogView;
-    AlertDialog.Builder builder;
-    AlertDialog alertDialog;
-    Button leftButton, rightButton;
-    ScrollView scrollView;
 
-    /**
-     * Constructs and inflates a new {@code RoundedAlertDialog} for the given context.
-     *
-     * <p>The scrollable content area is hidden by default until {@link #addView(View)} is called.</p>
-     *
-     * @param context the Android {@link Context} used to inflate the dialog layout
-     */
-    public RoundedAlertDialog(Context context){
-        this.context = context;
-        layoutInflater = LayoutInflater.from(context);
-        dialogView = layoutInflater.inflate(R.layout.rounded_alert_dialog_layout, null);
-        builder = new AlertDialog.Builder(context)
-                .setView(dialogView);
+    private final AlertDialog.Builder builder;
+    private final TextView titleView;
+    private final ScrollView scrollView;
+    private final Button leftButton;
+    private final Button rightButton;
+    private AlertDialog alertDialog;
+
+    public RoundedAlertDialog(Context context) {
+        View dialogView = LayoutInflater.from(context).inflate(R.layout.rounded_alert_dialog_layout, null);
+        titleView = dialogView.findViewById(R.id.rounded_alert_dialog_title);
         scrollView = dialogView.findViewById(R.id.rounded_alert_dialog_view);
-        scrollView.setVisibility(GONE);
+        leftButton = dialogView.findViewById(R.id.rounded_alert_dialog_left_button);
+        rightButton = dialogView.findViewById(R.id.rounded_alert_dialog_right_button);
+        scrollView.setVisibility(View.GONE);
+        builder = new AlertDialog.Builder(context).setView(dialogView);
     }
 
-    /**
-     * Adds a custom {@link View} to the dialog's scrollable content area and makes it visible.
-     *
-     * @param view the view to add inside the scroll container
-     * @return this {@code RoundedAlertDialog} instance, for chaining
-     */
-    public RoundedAlertDialog addView(View view){
-        scrollView.setVisibility(View.VISIBLE);
+    /** Sets the scrollable content, replacing any previously added view (a ScrollView holds one child). */
+    public RoundedAlertDialog addView(View view) {
+        scrollView.removeAllViews();
         scrollView.addView(view);
+        scrollView.setVisibility(View.VISIBLE);
         return this;
     }
 
-    /**
-     * Sets the title text displayed at the top of the dialog.
-     *
-     * @param title the title string to display
-     * @return this {@code RoundedAlertDialog} instance, for chaining
-     */
-    public RoundedAlertDialog setTitle(String title){
-        final TextView textView = dialogView.findViewById(R.id.rounded_alert_dialog_title);
-        textView.setText(title);
+    public RoundedAlertDialog setTitle(CharSequence title) {
+        titleView.setText(title);
         return this;
     }
 
-    /**
-     * Sets up the left button with the specified label, making it visible.
-     *
-     * @param text the label text for the left button
-     * @return this {@code RoundedAlertDialog} instance, for chaining
-     */
-    public RoundedAlertDialog setupLeftButton(String text){
-        leftButton = dialogView.findViewById(R.id.rounded_alert_dialog_left_button);
-        leftButton.setText(text);
-        leftButton.setVisibility(View.VISIBLE);
+    public RoundedAlertDialog setCancelable(boolean cancelable) {
+        builder.setCancelable(cancelable);
         return this;
     }
 
-    /**
-     * Sets up the right button with the specified label, making it visible.
-     *
-     * @param text the label text for the right button
-     * @return this {@code RoundedAlertDialog} instance, for chaining
-     */
-    public RoundedAlertDialog setupRightButton(String text){
-        rightButton = dialogView.findViewById(R.id.rounded_alert_dialog_right_button);
-        rightButton.setText(text);
-        rightButton.setVisibility(View.VISIBLE);
+    public RoundedAlertDialog setupLeftButton(String text) { return setup(leftButton, text, null); }
+
+    public RoundedAlertDialog setupLeftButton(String text, int color) { return setup(leftButton, text, color); }
+
+    public RoundedAlertDialog setupRightButton(String text) { return setup(rightButton, text, null); }
+
+    public RoundedAlertDialog setupRightButton(String text, int color) { return setup(rightButton, text, color); }
+
+    public RoundedAlertDialog setupLeftButtonOnClick(View.OnClickListener listener) {
+        leftButton.setOnClickListener(listener);
         return this;
     }
 
-    /**
-     * Sets up the right button with the specified label and text color, making it visible.
-     *
-     * @param text  the label text for the right button
-     * @param color the text color as a packed ARGB integer (e.g., {@link Color#RED})
-     * @return this {@code RoundedAlertDialog} instance, for chaining
-     */
-    public RoundedAlertDialog setupRightButton(String text, int color){
-        rightButton = dialogView.findViewById(R.id.rounded_alert_dialog_right_button);
-        rightButton.setText(text);
-        rightButton.setTextColor(color);
-        rightButton.setVisibility(View.VISIBLE);
+    public RoundedAlertDialog setupRightButtonOnClick(View.OnClickListener listener) {
+        rightButton.setOnClickListener(listener);
         return this;
     }
 
-    /**
-     * Sets up the left button with the specified label and text color, making it visible.
-     *
-     * @param text  the label text for the left button
-     * @param color the text color as a packed ARGB integer (e.g., {@link Color#GRAY})
-     * @return this {@code RoundedAlertDialog} instance, for chaining
-     */
-    public RoundedAlertDialog setupLeftButton(String text, int color){
-        leftButton = dialogView.findViewById(R.id.rounded_alert_dialog_left_button);
-        leftButton.setText(text);
-        leftButton.setTextColor(color);
-        leftButton.setVisibility(View.VISIBLE);
+    private RoundedAlertDialog setup(Button button, String text, Integer color) {
+        button.setText(text);
+        if (color != null) button.setTextColor(color);
+        button.setVisibility(View.VISIBLE);
         return this;
     }
 
-    /**
-     * Assigns a click listener to the left button.
-     *
-     * <p>Must be called after {@link #setupLeftButton(String)} or
-     * {@link #setupLeftButton(String, int)}.</p>
-     *
-     * @param onClickListener the listener to attach to the left button
-     * @return this {@code RoundedAlertDialog} instance, for chaining
-     */
-    public RoundedAlertDialog setupLeftButtonOnClick(View.OnClickListener onClickListener){
-        leftButton.setOnClickListener(onClickListener);
-        return this;
+    /** Builds (once) and shows the dialog with a transparent window so the rounded shape is visible. */
+    public void show() {
+        if (alertDialog == null) {
+            alertDialog = builder.create();
+            Window window = alertDialog.getWindow();
+            if (window != null) {
+                window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            }
+        }
+        if (!alertDialog.isShowing()) {
+            alertDialog.show();
+        }
+    }
+
+    public boolean isShowing() {
+        return alertDialog != null && alertDialog.isShowing();
+    }
+
+    /** Dismisses the dialog; safe to call before {@link #show()}. */
+    public void dismiss() {
+        if (alertDialog != null) alertDialog.dismiss();
     }
 
     /**
-     * Assigns a click listener to the right button.
+     * Cancels the dialog (fires cancel listeners). Safe to call before {@link #show()}.
      *
-     * <p>Must be called after {@link #setupRightButton(String)} or
-     * {@link #setupRightButton(String, int)}.</p>
-     *
-     * @param onClickListener the listener to attach to the right button
-     * @return this {@code RoundedAlertDialog} instance, for chaining
+     * @deprecated Use {@link #dismiss()}.
      */
-    public RoundedAlertDialog setupRightButtonOnClick(View.OnClickListener onClickListener){
-        rightButton.setOnClickListener(onClickListener);
-        return this;
-    }
-
-    /**
-     * Builds and displays the dialog with a transparent window background (required for
-     * the rounded corner shape to render correctly).
-     */
-    public void show(){
-        alertDialog = builder.create();
-        Objects.requireNonNull(alertDialog.getWindow()).getDecorView().setBackgroundColor(Color.TRANSPARENT);
-        alertDialog.show();
-    }
-
-    /**
-     * Dismisses (cancels) the dialog if it is currently showing.
-     */
-    public void hide(){
-        alertDialog.cancel();
+    @Deprecated
+    public void hide() {
+        if (alertDialog != null) alertDialog.cancel();
     }
 }

@@ -2,18 +2,23 @@ package com.isaiahnoelpulidosalazar.inpsAndroid;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import androidx.appcompat.content.res.AppCompatResources;
+
+import com.isaiahnoelpulidosalazar.inpsAndroid.graphics.Drawables;
+import com.isaiahnoelpulidosalazar.inpsAndroid.time.TimeLeft;
+import com.isaiahnoelpulidosalazar.inpsAndroid.validation.EmailValidator;
+import com.isaiahnoelpulidosalazar.inpsAndroid.validation.StringChecks;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- * A utility class providing static helper methods for common validation and comparison tasks,
- * such as email validation, string analysis, drawable comparison, and time-difference calculations.
+ * Legacy validation helpers, kept as thin delegating wrappers.
+ *
+ * @deprecated Since 2.0.0. Use {@link EmailValidator}, {@link StringChecks}, {@link TimeLeft}
+ *             and {@link Drawables}. See {@code migrating_to_v2.md}.
  */
+@Deprecated
 public final class Check {
 
     private Check() {
@@ -21,266 +26,75 @@ public final class Check {
     }
 
     /**
-     * A nested utility class for validating email addresses against configurable allowed domains.
+     * Legacy global-state e-mail validator.
      *
-     * <p>Supports two modes of validation:</p>
-     * <ul>
-     *   <li><b>Full domain mode</b>: validates the entire domain (e.g., {@code gmail.com})</li>
-     *   <li><b>Split mode</b>: validates the domain name and extension separately
-     *       (e.g., name = {@code gmail}, extension = {@code com})</li>
-     * </ul>
-     *
-     * <p>Example usage (split mode):</p>
-     * <pre>{@code
-     * Check.Email.addValidDomainName("gmail");
-     * Check.Email.addValidDomainExtension("com");
-     * boolean valid = Check.Email.isValid("user@gmail.com"); // true
-     * }</pre>
-     *
-     * <p>Example usage (full domain mode):</p>
-     * <pre>{@code
-     * Check.Email.addValidDomain("gmail.com");
-     * Check.Email.shouldUseFullDomain(true);
-     * boolean valid = Check.Email.isValid("user@gmail.com"); // true
-     * }</pre>
+     * @deprecated Use an {@link EmailValidator} instance instead of mutable static state.
      */
+    @Deprecated
     public static final class Email {
 
-        private static final Set<String> validDomainNames = new HashSet<>();
-        private static final Set<String> validDomainExtensions = new HashSet<>();
-        private static final Set<String> validDomains = new HashSet<>();
-        private static volatile boolean shouldUseFullDomain = false;
+        private static final Set<String> names = new HashSet<>();
+        private static final Set<String> extensions = new HashSet<>();
+        private static final Set<String> domains = new HashSet<>();
+        private static boolean fullDomainMode = false;
+        private static EmailValidator cached;
 
         private Email() {
             throw new UnsupportedOperationException("Check.Email class cannot be instantiated");
         }
 
-        /**
-         * Adds a domain name (the part before the dot) to the list of accepted domain names.
-         * Used in split validation mode.
-         *
-         * @param str the domain name to add (e.g., {@code "gmail"})
-         */
-        public static void addValidDomainName(String str) {
-            if (str != null){
-                validDomainNames.add(str);
-            }
+        public static synchronized void addValidDomainName(String str) {
+            if (str != null) { names.add(str); cached = null; }
         }
 
-        /**
-         * Adds a domain extension (the part after the dot) to the list of accepted extensions.
-         * Used in split validation mode.
-         *
-         * @param str the domain extension to add (e.g., {@code "com"})
-         */
-        public static void addValidDomainExtension(String str) {
-            if (str != null){
-                validDomainExtensions.add(str);
-            }
+        public static synchronized void addValidDomainExtension(String str) {
+            if (str != null) { extensions.add(str); cached = null; }
         }
 
-        /**
-         * Adds a complete domain string to the list of accepted full domains.
-         * Used in full domain validation mode.
-         *
-         * @param str the full domain to accept (e.g., {@code "gmail.com"})
-         */
-        public static void addValidDomain(String str) {
-            if (str != null){
-                validDomains.add(str);
-            }
+        public static synchronized void addValidDomain(String str) {
+            if (str != null) { domains.add(str); cached = null; }
         }
 
-        /**
-         * Enables full domain validation mode.
-         * When enabled, {@link #isValid(String)} matches the entire domain after {@code @}.
-         */
         public static void shouldUseFullDomain() {
-            shouldUseFullDomain = true;
+            shouldUseFullDomain(true);
         }
 
-        /**
-         * Sets whether full domain validation mode is enabled or disabled.
-         *
-         * @param useFullDomain {@code true} to enable full domain validation; {@code false} to use split mode
-         */
-        public static void shouldUseFullDomain(boolean useFullDomain) {
-            shouldUseFullDomain = useFullDomain;
+        public static synchronized void shouldUseFullDomain(boolean useFullDomain) {
+            fullDomainMode = useFullDomain;
+            cached = null;
         }
 
-        /**
-         * Validates an email address against the configured allowed domains.
-         *
-         * <p>In full domain mode, the domain after {@code @} must exactly match one of the
-         * entries added via {@link #addValidDomain(String)}.</p>
-         *
-         * <p>In split mode, both the domain name and domain extension must each appear
-         * in their respective allowed lists.</p>
-         *
-         * @param str the email address to validate
-         * @return {@code true} if the email matches the configured domain rules; {@code false} otherwise
-         */
         public static boolean isValid(String str) {
-            if (str == null || !str.contains("@")) {
-                return false;
-            }
+            return validator().isValid(str);
+        }
 
-            int atIndex = str.lastIndexOf('@');
-            if (atIndex == 0 || atIndex == str.length() - 1) {
-                return false;
+        private static synchronized EmailValidator validator() {
+            if (cached == null) {
+                EmailValidator.Builder b = new EmailValidator.Builder().useFullDomain(fullDomainMode);
+                for (String s : names) b.addDomainName(s);
+                for (String s : extensions) b.addDomainExtension(s);
+                for (String s : domains) b.addDomain(s);
+                cached = b.build();
             }
-
-            String domainPart = str.substring(atIndex + 1);
-
-            if (shouldUseFullDomain) {
-                return validDomains.contains(domainPart);
-            } else {
-                String[] parts = domainPart.split("\\.");
-                if (parts.length < 2) {
-                    return false;
-                }
-                return validDomainNames.contains(parts[0]) && validDomainExtensions.contains(parts[1]);
-            }
+            return cached;
         }
     }
 
-    /**
-     * Compares a drawable resource to a {@link Bitmap} for pixel-level equality.
-     *
-     * @param context    the {@link Context} used to load the drawable resource
-     * @param resourceId the resource ID of the drawable to compare
-     * @param bitmap     the {@link Bitmap} to compare against
-     * @return {@code true} if the drawable's bitmap and the provided bitmap are identical;
-     *         {@code false} otherwise
-     */
     public static boolean equalDrawableAndBitmap(Context context, int resourceId, Bitmap bitmap) {
-        if (context == null || bitmap == null){
-            return false;
-        }
-
-        Drawable drawable = AppCompatResources.getDrawable(context, resourceId);
-        
-        if (drawable instanceof BitmapDrawable) {
-            Bitmap drawableBitmap = ((BitmapDrawable) drawable).getBitmap();
-            return drawableBitmap != null && drawableBitmap.sameAs(bitmap);
-        }
-        
-        return false;
+        return Drawables.equalsBitmap(context, resourceId, bitmap);
     }
 
-    /**
-     * Checks whether a string contains any special symbol characters.
-     *
-     * <p>The set of symbols checked includes: {@code ~`!@#$%^&*()_+-=[]{}\\|'";:,.<>/?}</p>
-     *
-     * @param str the string to inspect
-     * @return {@code true} if the string contains at least one symbol; {@code false} otherwise
-     */
-    public static boolean hasSymbols(String str) {
-        if (str == null || str.isEmpty()){
-            return false;
-        }
-        
-        String symbols = "~`!@#$%^&*()_+-=[]{}\\|'\";:,.<>/?";
-        for (int i = 0; i < str.length(); i++) {
-            if (symbols.indexOf(str.charAt(i)) != -1) {
-                return true;
-            }
-        }
-        return false;
-    }
+    public static boolean hasSymbols(String str) { return StringChecks.hasSymbols(str); }
 
-    /**
-     * Checks whether a string contains any numeric digit characters (0–9).
-     *
-     * @param str the string to inspect
-     * @return {@code true} if the string contains at least one digit; {@code false} otherwise
-     */
-    public static boolean hasNumbers(String str) {
-        if (str == null || str.isEmpty()){
-            return false;
-        }
-        
-        for (int i = 0; i < str.length(); i++) {
-            if (Character.isDigit(str.charAt(i))) {
-                return true;
-            }
-        }
-        return false;
-    }
+    public static boolean hasNumbers(String str) { return StringChecks.hasNumbers(str); }
 
-    /**
-     * Checks whether a string contains any whitespace (space) characters.
-     *
-     * @param str the string to inspect
-     * @return {@code true} if the string contains at least one space; {@code false} otherwise
-     */
-    public static boolean hasSpaces(String str) {
-        if (str == null || str.isEmpty()){
-            return false;
-        }
-        
-        for (int i = 0; i < str.length(); i++) {
-            if (str.charAt(i) == ' ') {
-                return true;
-            }
-        }
-        return false;
-    }
+    public static boolean hasSpaces(String str) { return StringChecks.hasSpaces(str); }
 
-    /**
-     * Calculates the number of seconds remaining between two dates.
-     *
-     * @param now   the current date/time
-     * @param until the target future date/time
-     * @return the number of seconds from {@code now} until {@code until} as a {@code double}
-     */
-    public static double howManySecondsLeft(Date now, Date until) {
-        if (now == null || until == null){
-            return 0.0;
-        }
-        return (until.getTime() - now.getTime()) / 1000.0;
-    }
+    public static double howManySecondsLeft(Date now, Date until) { return TimeLeft.seconds(now, until); }
 
-    /**
-     * Calculates the number of minutes remaining between two dates.
-     *
-     * @param now   the current date/time
-     * @param until the target future date/time
-     * @return the number of minutes from {@code now} until {@code until} as a {@code double}
-     */
-    public static double howManyMinutesLeft(Date now, Date until) {
-        if (now == null || until == null){
-            return 0.0;
-        }
-        return (until.getTime() - now.getTime()) / 60000.0;
-    }
+    public static double howManyMinutesLeft(Date now, Date until) { return TimeLeft.minutes(now, until); }
 
-    /**
-     * Calculates the number of hours remaining between two dates.
-     *
-     * @param now   the current date/time
-     * @param until the target future date/time
-     * @return the number of hours from {@code now} until {@code until} as a {@code double}
-     */
-    public static double howManyHoursLeft(Date now, Date until) {
-        if (now == null || until == null){
-            return 0.0;
-        }
-        return (until.getTime() - now.getTime()) / 3600000.0;
-    }
+    public static double howManyHoursLeft(Date now, Date until) { return TimeLeft.hours(now, until); }
 
-    /**
-     * Calculates the number of days remaining between two dates.
-     *
-     * @param now   the current date/time
-     * @param until the target future date/time
-     * @return the number of days from {@code now} until {@code until} as a {@code double}
-     */
-    public static double howManyDaysLeft(Date now, Date until) {
-        if (now == null || until == null){
-            return 0.0;
-        }
-        return (until.getTime() - now.getTime()) / 86400000.0;
-    }
+    public static double howManyDaysLeft(Date now, Date until) { return TimeLeft.days(now, until); }
 }

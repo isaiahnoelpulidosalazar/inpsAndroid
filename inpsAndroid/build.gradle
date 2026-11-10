@@ -9,7 +9,6 @@ android {
 
     defaultConfig {
         minSdk 24
-        targetSdk 36
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -21,14 +20,19 @@ android {
     publishing {
         singleVariant("release") {
             withSourcesJar()
-            withJavadocJar() 
+            withJavadocJar()
         }
     }
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.7.1'
+    // Public API types extend/expose these, so consumers get them transitively.
+    api 'androidx.appcompat:appcompat:1.7.1'
+    api 'androidx.recyclerview:recyclerview:1.4.0'
+    api 'androidx.constraintlayout:constraintlayout:2.2.1'
+    // Theme attributes (colorSurface, ...) used by the drawables come from Material.
     implementation 'com.google.android.material:material:1.12.0'
+
     testImplementation 'junit:junit:4.13.2'
 }
 
@@ -39,9 +43,8 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.isaiahnoelpulidosalazar'
                 artifactId = 'inpsAndroid'
-                version = '1.0.10'
-                // changes:
-                // - add AreaCalculator
+                version = '2.0.0'
+                // changes in 2.0.0: see migrating_to_v2.md
             }
         }
     }

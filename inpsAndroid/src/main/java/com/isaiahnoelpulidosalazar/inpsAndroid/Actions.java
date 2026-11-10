@@ -1,76 +1,51 @@
 package com.isaiahnoelpulidosalazar.inpsAndroid;
 
-import android.os.Handler;
+import com.isaiahnoelpulidosalazar.inpsAndroid.concurrent.MainThread;
 
 /**
- * A utility class for building and executing {@link Runnable} actions on the main thread,
- * with optional support for passing arguments and delayed execution.
+ * Builds and executes a {@link Runnable} on the main thread, optionally carrying an argument.
  *
- * <p>Example usage:</p>
- * <pre>{@code
- * Actions action = new Actions()
- *     .setArg("Hello")
- *     .build(() -> {
- *         String msg = (String) action.getArg();
- *         Log.d("TAG", msg);
- *     });
- * action.execute();
- * }</pre>
+ * @deprecated Since 2.0.0. Use {@link MainThread#post(Runnable)} /
+ *             {@link MainThread#postDelayed(Runnable, long)} and capture arguments in a lambda.
+ *             See {@code migrating_to_v2.md}.
  */
+@Deprecated
 public class Actions {
 
-    Runnable runnable;
-    Object arg;
+    private Runnable runnable;
+    private Object arg;
 
-    /**
-     * Sets an argument that can be retrieved inside the action's {@link Runnable}.
-     *
-     * @param arg the argument to store; can be any {@link Object}
-     * @return this {@code Actions} instance, for chaining
-     */
-    public Actions setArg(Object arg){
+    /** Stores an argument retrievable through {@link #getArg()}. */
+    public Actions setArg(Object arg) {
         this.arg = arg;
         return this;
     }
 
-    /**
-     * Returns the argument previously set via {@link #setArg(Object)}.
-     *
-     * @return the stored argument, or {@code null} if none was set
-     */
-    public Object getArg(){
+    /** @return the argument set via {@link #setArg(Object)}, or {@code null}. */
+    public Object getArg() {
         return arg;
     }
 
-    /**
-     * Assigns the {@link Runnable} that will be executed when {@link #execute()} or
-     * {@link #executeDelayed(int)} is called.
-     *
-     * @param runnable the runnable action to build; must not be {@code null}
-     * @return this {@code Actions} instance, for chaining
-     */
-    public Actions build(Runnable runnable){
+    /** Assigns the runnable to execute. */
+    public Actions build(Runnable runnable) {
         this.runnable = runnable;
         return this;
     }
 
-    /**
-     * Posts the built {@link Runnable} to the main thread's message queue for immediate execution.
-     *
-     * <p>The runnable must have been set via {@link #build(Runnable)} before calling this method.</p>
-     */
-    public void execute(){
-        new Handler().post(runnable);
+    /** Posts the runnable to the main thread. */
+    public void execute() {
+        MainThread.post(requireRunnable());
     }
 
-    /**
-     * Posts the built {@link Runnable} to the main thread's message queue with the specified delay.
-     *
-     * <p>The runnable must have been set via {@link #build(Runnable)} before calling this method.</p>
-     *
-     * @param delay the delay in milliseconds before the runnable is executed
-     */
-    public void executeDelayed(int delay){
-        new Handler().postDelayed(runnable, delay);
+    /** Posts the runnable to the main thread after {@code delay} milliseconds. */
+    public void executeDelayed(int delay) {
+        MainThread.postDelayed(requireRunnable(), delay);
+    }
+
+    private Runnable requireRunnable() {
+        if (runnable == null) {
+            throw new IllegalStateException("Call build(Runnable) before execute()");
+        }
+        return runnable;
     }
 }
