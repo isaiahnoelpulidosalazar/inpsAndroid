@@ -111,14 +111,4 @@ public class RoundedAlertDialog {
     public void dismiss() {
         if (alertDialog != null) alertDialog.dismiss();
     }
-
-    /**
-     * Cancels the dialog (fires cancel listeners). Safe to call before {@link #show()}.
-     *
-     * @deprecated Use {@link #dismiss()}.
-     */
-    @Deprecated
-    public void hide() {
-        if (alertDialog != null) alertDialog.cancel();
-    }
 }

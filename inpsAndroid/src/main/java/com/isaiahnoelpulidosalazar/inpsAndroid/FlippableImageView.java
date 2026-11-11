@@ -69,27 +69,6 @@ public class FlippableImageView extends AppCompatImageView {
         }
     }
 
-    // ---- v1 constructors, kept for source compatibility ---------------------------------------
-
-    /** @deprecated Use the standard constructors plus {@link #setSpeed(Speed)}. */
-    // @Deprecated public FlippableImageView(@NonNull Context c, Speed s) { this(c); setSpeed(s); }
-    /** @deprecated see {@link #FlippableImageView(Context, Speed)} */
-    // @Deprecated public FlippableImageView(@NonNull Context c, Speed s, @Nullable AttributeSet a) { this(c, a); setSpeed(s); }
-    /** @deprecated see {@link #FlippableImageView(Context, Speed)} */
-    // @Deprecated public FlippableImageView(@NonNull Context c, Speed s, @Nullable AttributeSet a, int d) { this(c, a, d); setSpeed(s); }
-    /** @deprecated Use {@link #setReverseBackImage(boolean)}. */
-    // @Deprecated public FlippableImageView(@NonNull Context c, boolean r) { this(c); setReverseBackImage(r); }
-    /** @deprecated see {@link #FlippableImageView(Context, boolean)} */
-    // @Deprecated public FlippableImageView(@NonNull Context c, boolean r, @Nullable AttributeSet a) { this(c, a); setReverseBackImage(r); }
-    /** @deprecated see {@link #FlippableImageView(Context, boolean)} */
-    // @Deprecated public FlippableImageView(@NonNull Context c, boolean r, @Nullable AttributeSet a, int d) { this(c, a, d); setReverseBackImage(r); }
-    /** @deprecated see {@link #FlippableImageView(Context, boolean)} */
-    // @Deprecated public FlippableImageView(@NonNull Context c, boolean r, Speed s) { this(c); setReverseBackImage(r); setSpeed(s); }
-    /** @deprecated see {@link #FlippableImageView(Context, boolean)} */
-    // @Deprecated public FlippableImageView(@NonNull Context c, boolean r, Speed s, @Nullable AttributeSet a) { this(c, a); setReverseBackImage(r); setSpeed(s); }
-    /** @deprecated see {@link #FlippableImageView(Context, boolean)} */
-    // @Deprecated public FlippableImageView(@NonNull Context c, boolean r, Speed s, @Nullable AttributeSet a, int d) { this(c, a, d); setReverseBackImage(r); setSpeed(s); }
-
     // ---- configuration -------------------------------------------------------------------------
 
     public void setSpeed(@NonNull Speed speed) {
@@ -139,12 +118,6 @@ public class FlippableImageView extends AppCompatImageView {
     @Nullable public Drawable getFrontDrawable() { return frontImage; }
 
     @Nullable public Drawable getBackDrawable() { return backImage; }
-
-    /** @deprecated Use {@link #getFrontDrawable()}. Returns {@code null} for non-bitmap drawables. */
-    @Deprecated @Nullable public Bitmap getFrontImage() { return toBitmap(frontImage); }
-
-    /** @deprecated Use {@link #getBackDrawable()}. Returns the un-mirrored bitmap, or {@code null}. */
-    @Deprecated @Nullable public Bitmap getBackImage() { return toBitmap(backImage); }
 
     // ---- flipping ------------------------------------------------------------------------------
 

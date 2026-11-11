@@ -65,20 +65,6 @@ public final class SoundSynthesizer implements AutoCloseable {
         track.play();
     }
 
-    /**
-     * Plays a note using the v1 index table (0-83 = octaves 1-7 as C D E F G A B C# D# F# G# A#,
-     * 84 = C8). Out-of-range indices are ignored, as in v1.
-     *
-     * @deprecated Use {@link #playNote(int)} with a MIDI note number (v1 index 0 = C1 = MIDI 24).
-     */
-    @Deprecated
-    public void playTone(int noteIndex) {
-        if (noteIndex < 0 || noteIndex > 84) return;
-        int octave = noteIndex / 12 + 1;
-        int midi = 12 * (octave + 1) + LEGACY_BLOCK_OFFSETS[noteIndex % 12];
-        playNote(midi);
-    }
-
     /** Releases every native track. Further {@code playNote} calls do nothing. */
     public synchronized void release() {
         released = true;

@@ -92,12 +92,6 @@ public class SimpleList extends RecyclerView {
         return Collections.unmodifiableList(items);
     }
 
-    /** @deprecated Use {@link #getItems()}. The returned list is now read-only. */
-    @Deprecated
-    public List<String> getData() {
-        return getItems();
-    }
-
     /** Uniform item padding in dp. */
     public void setItemPadding(int dp) {
         setItemPadding(dp, dp, dp, dp);
