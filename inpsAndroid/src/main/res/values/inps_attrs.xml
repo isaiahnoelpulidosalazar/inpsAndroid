@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="inpsCornerRadius" format="dimension" />
+    <attr name="inpsIsTranslucent" format="boolean" />
+
+    <declare-styleable name="RoundedButton">
+        <attr name="inpsCornerRadius" />
+    </declare-styleable>
+
+    <declare-styleable name="RoundedEditText">
+        <attr name="inpsCornerRadius" />
+    </declare-styleable>
+
+    <declare-styleable name="RoundedConstraintLayout">
+        <attr name="inpsCornerRadius" />
+        <attr name="inpsIsTranslucent" />
+    </declare-styleable>
+
+    <declare-styleable name="RoundedLinearLayout">
+        <attr name="inpsCornerRadius" />
+        <attr name="inpsIsTranslucent" />
+    </declare-styleable>
+
+    <declare-styleable name="FlippableImageView">
+        <attr name="inpsReverseBackImage" format="boolean" />
+        <attr name="inpsFlipSpeed" format="enum">
+            <enum name="slow" value="0" />
+            <enum name="normal" value="1" />
+            <enum name="fast" value="2" />
+        </attr>
+    </declare-styleable>
+</resources>

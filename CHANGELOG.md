@@ -1,0 +1,87 @@
+# Changelog
+
+## 3.0.0
+
+Breaking release reorganizing packages, removing legacy/duplicate APIs, prefixing resources and attributes, and hardening concurrency, networking, UI, and validation components.
+
+### Package & Namespace Changes
+- Aligned Java source packages to lowercase `com.isaiahnoelpulidosalazar.inpsandroid` (matching the Gradle `namespace`).
+- Reorganized classes by audience:
+  - `com.isaiahnoelpulidosalazar.inpsandroid.core`: `concurrent.MainThread`, `convert.Converters`, `validation.EmailDomainAllowList`, `validation.StringChecks`, `time.TimeLeft`, `network.WebRequest`, `database.EasySQL`
+  - `com.isaiahnoelpulidosalazar.inpsandroid.ui`: `RoundedButton`, `RoundedEditText`, `RoundedLinearLayout`, `RoundedConstraintLayout`, `RoundedAlertDialog`, `SimpleList`, `FlippableImageView`, `Fullscreen`, `Drawables`
+  - `com.isaiahnoelpulidosalazar.inpsandroid.edu`: `AreaCalculator`, `SoundSynthesizer`, `sort.Sort`
+
+### Renames & Removals
+- Renamed `HttpRequest` to `WebRequest` (`core.network`).
+- Renamed `Database` to `EasySQL` (`core.database`).
+- Renamed `EmailValidator` to `EmailDomainAllowList` (`core.validation`).
+- Removed the `crypto` package (`ClassicalCiphers`).
+- Removed `Memory<T>`.
+- Removed duplicate `AreaCalculator` formulas (`parallelogramArea`, `rightTriangleArea`, `squareAsRhombusArea`) and precomputed `sqrt(3)`.
+- Removed `Sort.pigeonholeSort` (merged negative-supporting offset histogram logic into `Sort.countingSort`) and `Sort.timsort`.
+- Removed `FlippableImageView.toBitmap` and renamed `setFrontImage(Bitmap)` / `setBackImage(Bitmap)` to `setFrontBitmap(Bitmap)` / `setBackBitmap(Bitmap)` to eliminate `null` overload ambiguity.
+- Removed unused `colors.xml` (`black`, `white`).
+- Dropped `com.google.android.material:material` from main library dependencies; drawables now use AppCompat and framework attributes (`?android:attr/colorBackground`, `?attr/colorPrimary`, `?attr/colorControlHighlight`).
+
+### Resource & Attribute Prefixes (`resourcePrefix 'inps_'`)
+- Renamed drawables:
+  - `bottom_border` -> `inps_bottom_border`
+  - `top_border` -> `inps_top_border`
+  - `generic_rounded_primary_background` -> `inps_rounded_primary_background`
+  - `generic_rounded_translucent_background` -> `inps_rounded_translucent_background`
+  - `rounded_alert_dialog_background` -> `inps_rounded_alert_dialog_background`
+  - `simple_list_item_background` -> `inps_simple_list_item_background`
+- Renamed layouts & IDs:
+  - `rounded_alert_dialog_layout` -> `inps_rounded_alert_dialog_layout` (with `inps_rounded_alert_dialog_title`, `inps_rounded_alert_dialog_view`, `inps_rounded_alert_dialog_left_button`, `inps_rounded_alert_dialog_right_button`)
+  - `simple_list_item` -> `inps_simple_list_item` (`TextView` id `inps_simple_list_item_text`)
+- Prefixed XML attributes:
+  - `cornerRadius` -> `inpsCornerRadius`
+  - `isTranslucent` -> `inpsIsTranslucent`
+  - `reverseBackImage` -> `inpsReverseBackImage`
+  - `flipSpeed` -> `inpsFlipSpeed`
+
+### Behaviour Changes & Historical v1 -> v2 Notes Moved from Javadoc
+- **WebRequest**:
+  - Bounded worker pool at 4 threads and queue at 64; reports `RejectedExecutionException` via `Callback.onError` on the main thread when full.
+  - `enqueue()` returns a `WebRequest.Call` handle (`cancel()` interrupts the worker and suppresses callbacks on both worker and main threads).
+  - `GET`, `HEAD`, and bodyless requests no longer call `setDoOutput(true)`.
+  - Added `json(String)` (`Content-Type: application/json; charset=utf-8`), default `text/plain; charset=utf-8` for bodies without an explicit `Content-Type`, `maxResponseBytes(int)` (default 8 MB), and response `charset` parsing with UTF-8 fallback.
+  - Historical: replaced the `AsyncTask`-based `URLRequest` from v1.
+- **EasySQL**:
+  - `tableExists(String)` now validates the table identifier via the same path as all other methods.
+  - Historical: v1 opened and closed the SQLite file multiple times per call; v2/v3 retains a single lazily opened `SQLiteOpenHelper` with on-disk version 1.
+- **Converters**:
+  - `toBase64(null)` now returns `null`.
+  - `formatDate()` caches `SimpleDateFormat` per thread and pattern in a `ThreadLocal` and resets `TimeZone.getDefault()` on each call.
+  - Historical: v1 `toBase64` used `Base64.DEFAULT` (which appended `\n`).
+- **EmailDomainAllowList**:
+  - Added local-part validation requiring a non-empty local part with no whitespace and exactly one `@`.
+  - Historical: v1 split mode only checked the first two labels, accepting domains such as `user@gmail.com.evil.example`.
+- **MainThread**:
+  - Historical: v1 allocated an implicitly bound `Handler` per call (crashing on threads without a `Looper`).
+- **SimpleList**:
+  - Now extends `FrameLayout` wrapping an internal `RecyclerView` with `ListAdapter` and `DiffUtil` and `TextView` rows instead of `Button` rows.
+  - `setItems()` snapshots the incoming collection before clearing so `setItems(getItems())` no longer empties the list.
+  - Historical: v1 created a new adapter on every mutation, resetting scroll position.
+- **Rounded Views & RoundedAlertDialog**:
+  - Shared attribute parsing, background creation, ripple, and outline setup consolidated into `RoundedViewHelper`.
+  - `RoundedLinearLayout` and `RoundedConstraintLayout` enable `setClipToOutline(true)` with `ViewOutlineProvider.BACKGROUND`.
+  - `RoundedButton` chooses black or white text from background luminance and respects explicit XML `android:background`.
+  - `RoundedAlertDialog` uses `RoundedButton` in a single-level layout, detaches views from any existing parent in `addView()`, applies `setCancelable()` after `show()`, and no longer hardcodes `@color/white`.
+  - Historical: v1 `RoundedAlertDialog` threw `NullPointerException` if click listeners were configured before button setup.
+- **FlippableImageView**:
+  - Added `.withLayer()` to the flip animation and `onSaveInstanceState` / `onRestoreInstanceState` support for `flipped`.
+  - Historical: v1 re-posted per-frame `Handler` runnables, threw `ClassCastException` on non-bitmap drawables, and `instantFlip()` failed to swap the drawable.
+- **Fullscreen**:
+  - Saves and restores previous `decorFitsSystemWindows`, system bar visibility, and AppCompat action bar visibility per `Window`; added `reapplyOnWindowFocusChanged(Activity, boolean)`.
+  - Historical: v1 used deprecated `SYSTEM_UI_FLAG_*` flags and relied on catching an NPE when no ActionBar was present.
+- **Drawables**:
+  - `equalsBitmap` copies `HARDWARE` or null-config bitmaps to `ARGB_8888` before comparison and catches `IllegalArgumentException` to return `false`.
+  - Historical: v1 returned `false` unconditionally for non-bitmap drawables.
+- **Sort**:
+  - Split into family helpers under `edu.sort`.
+  - Every public method now throws `NullPointerException` on `null` input instead of returning `null`.
+  - `countingSort` supports negative integers and enforces the 10,000,000 range cap; `beadSort` enforces the 10,000,000 max-value cap before allocation; `bucketSortUniform` returns a new sorted array without mutating its input.
+- **SoundSynthesizer**:
+  - Track synthesis and playback run asynchronously on a dedicated single-thread executor; added `prepare(int...)`, `AudioTrack.PERFORMANCE_MODE_LOW_LATENCY` on API 26+, return-code checks, and `0.5` amplitude scaling.
+  - Historical: v1 eagerly allocated 85 native `AudioTrack`s in the constructor on the calling thread.

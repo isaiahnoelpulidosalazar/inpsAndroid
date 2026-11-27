@@ -10,21 +10,20 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.isaiahnoelpulidosalazar.inpsAndroid.AreaCalculator;
-import com.isaiahnoelpulidosalazar.inpsAndroid.FlippableImageView;
-import com.isaiahnoelpulidosalazar.inpsAndroid.Fullscreen;
-import com.isaiahnoelpulidosalazar.inpsAndroid.RoundedAlertDialog;
-import com.isaiahnoelpulidosalazar.inpsAndroid.RoundedEditText;
-import com.isaiahnoelpulidosalazar.inpsAndroid.SimpleList;
-import com.isaiahnoelpulidosalazar.inpsAndroid.Sort;
-import com.isaiahnoelpulidosalazar.inpsAndroid.SoundSynthesizer;
-import com.isaiahnoelpulidosalazar.inpsAndroid.concurrent.MainThread;
-import com.isaiahnoelpulidosalazar.inpsAndroid.convert.Converters;
-import com.isaiahnoelpulidosalazar.inpsAndroid.crypto.ClassicalCiphers;
-import com.isaiahnoelpulidosalazar.inpsAndroid.database.Database;
-import com.isaiahnoelpulidosalazar.inpsAndroid.time.TimeLeft;
-import com.isaiahnoelpulidosalazar.inpsAndroid.validation.EmailValidator;
-import com.isaiahnoelpulidosalazar.inpsAndroid.validation.StringChecks;
+import com.isaiahnoelpulidosalazar.inpsandroid.core.concurrent.MainThread;
+import com.isaiahnoelpulidosalazar.inpsandroid.core.convert.Converters;
+import com.isaiahnoelpulidosalazar.inpsandroid.core.database.EasySQL;
+import com.isaiahnoelpulidosalazar.inpsandroid.core.time.TimeLeft;
+import com.isaiahnoelpulidosalazar.inpsandroid.core.validation.EmailDomainAllowList;
+import com.isaiahnoelpulidosalazar.inpsandroid.core.validation.StringChecks;
+import com.isaiahnoelpulidosalazar.inpsandroid.edu.AreaCalculator;
+import com.isaiahnoelpulidosalazar.inpsandroid.edu.SoundSynthesizer;
+import com.isaiahnoelpulidosalazar.inpsandroid.edu.sort.Sort;
+import com.isaiahnoelpulidosalazar.inpsandroid.ui.FlippableImageView;
+import com.isaiahnoelpulidosalazar.inpsandroid.ui.Fullscreen;
+import com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedAlertDialog;
+import com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedEditText;
+import com.isaiahnoelpulidosalazar.inpsandroid.ui.SimpleList;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     private final ExecutorService dbExecutor = Executors.newSingleThreadExecutor();
     private SoundSynthesizer soundSynthesizer;
-    private Database database;
+    private EasySQL easySQL;
     private boolean isFullscreen;
 
     private RoundedEditText inputText;
@@ -52,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private SimpleList simpleList;
     private FlippableImageView flippableCard;
 
-    private final EmailValidator emailValidator = new EmailValidator.Builder()
+    private final EmailDomainAllowList emailAllowList = new EmailDomainAllowList.Builder()
             .addDomain("gmail.com")
             .addDomain("outlook.com")
             .addDomain("yahoo.com")
@@ -79,7 +78,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         soundSynthesizer = new SoundSynthesizer();
-        database = new Database(this, "inps_demo.db");
+        soundSynthesizer.prepare(60, 64, 67, 72);
+        easySQL = new EasySQL(this, "inps_demo.db");
 
         inputText = findViewById(R.id.input_text);
         outputText = findViewById(R.id.output_text);
@@ -99,19 +99,19 @@ public class MainActivity extends AppCompatActivity {
             String removed = simpleList.getItems().get(pos);
             simpleList.removeItem(pos);
             outputText.setText("Removed \"" + removed + "\" from SimpleList.");
-            dbExecutor.execute(() -> database.delete(TABLE_NOTES, COL_TEXT, removed));
+            dbExecutor.execute(() -> easySQL.delete(TABLE_NOTES, COL_TEXT, removed));
         });
 
-        findViewById(R.id.btn_encrypt).setOnClickListener(v -> {
-            String text = readInputOrDefault("Hello inpsAndroid");
-            String caesar = ClassicalCiphers.caesar(text, 3);
-            String transposed = ClassicalCiphers.transposition(text);
-            outputText.setText("Caesar(+3): " + caesar + "\nTransposition: " + transposed);
+        findViewById(R.id.btn_base64).setOnClickListener(v -> {
+            String text = readInputOrDefault("hello inpsAndroid");
+            String cap = Converters.capitalize(text);
+            String b64 = Converters.toBase64(text);
+            outputText.setText("Capitalized: " + cap + "\nBase64: " + b64);
         });
 
         findViewById(R.id.btn_validate_email).setOnClickListener(v -> {
             String text = readInputOrDefault("developer@gmail.com");
-            boolean valid = emailValidator.isValid(text);
+            boolean valid = emailAllowList.isValid(text);
             boolean hasDigits = StringChecks.hasNumbers(text);
             outputText.setText(String.format(
                     Locale.US,
@@ -124,14 +124,14 @@ public class MainActivity extends AppCompatActivity {
             String note = readInputOrDefault("Note @ " + Converters.toMonthDayYear(new Date()));
             simpleList.addItem(note);
             inputText.setText("");
-            dbExecutor.execute(() -> database.insert(TABLE_NOTES, Collections.singletonMap(COL_TEXT, note)));
-            outputText.setText("Saved \"" + note + "\" to SQLite.");
+            dbExecutor.execute(() -> easySQL.insert(TABLE_NOTES, Collections.singletonMap(COL_TEXT, note)));
+            outputText.setText("Saved \"" + note + "\" to EasySQL.");
         });
 
         findViewById(R.id.btn_flip).setOnClickListener(v -> flippableCard.flip());
 
         findViewById(R.id.btn_dialog).setOnClickListener(v ->
-                showInfoDialog("RoundedAlertDialog", "Built with inpsAndroid 2.0.0 RoundedAlertDialog."));
+                showInfoDialog("RoundedAlertDialog", "Built with inpsAndroid 3.0.0 RoundedAlertDialog."));
 
         findViewById(R.id.btn_fullscreen).setOnClickListener(v -> {
             isFullscreen = !isFullscreen;
@@ -148,16 +148,15 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_note_c5).setOnClickListener(v -> playMidi(72, "C5"));
 
         findViewById(R.id.btn_math_sort).setOnClickListener(v -> {
-            int[] sample = {42, 7, 19, 3, 25};
-            int[] sorted = Sort.quicksort(sample);
+            int[] sample = {42, -7, 19, 3, 25};
+            int[] sorted = Sort.countingSort(sample);
             double circle = AreaCalculator.circleArea(5.0);
-            String b64 = Converters.toBase64("inpsAndroid");
             long now = System.currentTimeMillis();
             double mins = TimeLeft.minutes(now, now + 90_000L);
             outputText.setText(String.format(
                     Locale.US,
-                    "Quicksort: %s\nCircle(r=5) area: %.2f\nBase64(\"inpsAndroid\"): %s\nTimeLeft(+90s): %.2f min",
-                    Arrays.toString(sorted), circle, b64, mins
+                    "CountingSort: %s\nCircle(r=5) area: %.2f\nTimeLeft(+90s): %.2f min",
+                    Arrays.toString(sorted), circle, mins
             ));
         });
 
@@ -169,16 +168,16 @@ public class MainActivity extends AppCompatActivity {
             Map<String, String> cols = new LinkedHashMap<>();
             cols.put("id", "INTEGER PRIMARY KEY AUTOINCREMENT");
             cols.put(COL_TEXT, "TEXT NOT NULL");
-            database.createTable(TABLE_NOTES, cols);
+            easySQL.createTable(TABLE_NOTES, cols);
 
-            List<Map<String, Object>> rows = database.selectAll(TABLE_NOTES);
+            List<Map<String, Object>> rows = easySQL.selectAll(TABLE_NOTES);
             if (rows.isEmpty()) {
-                database.inTransaction(() -> {
-                    database.insert(TABLE_NOTES, Collections.singletonMap(COL_TEXT, "Tap an item to inspect"));
-                    database.insert(TABLE_NOTES, Collections.singletonMap(COL_TEXT, "Long-press to delete"));
-                    database.insert(TABLE_NOTES, Collections.singletonMap(COL_TEXT, "inpsAndroid 2.0.0 ready"));
+                easySQL.inTransaction(() -> {
+                    easySQL.insert(TABLE_NOTES, Collections.singletonMap(COL_TEXT, "Tap an item to inspect"));
+                    easySQL.insert(TABLE_NOTES, Collections.singletonMap(COL_TEXT, "Long-press to delete"));
+                    easySQL.insert(TABLE_NOTES, Collections.singletonMap(COL_TEXT, "inpsAndroid 3.0.0 ready"));
                 });
-                rows = database.selectAll(TABLE_NOTES);
+                rows = easySQL.selectAll(TABLE_NOTES);
             }
 
             List<String> loaded = new ArrayList<>(rows.size());
@@ -222,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         soundSynthesizer.release();
-        database.close();
+        easySQL.close();
         dbExecutor.shutdown();
         super.onDestroy();
     }

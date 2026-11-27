@@ -29,22 +29,22 @@
             android:textAppearance="?attr/textAppearanceBodyMedium" />
 
         <!-- Interactive Input & Core Utilities Card -->
-        <com.isaiahnoelpulidosalazar.inpsAndroid.RoundedLinearLayout
+        <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedLinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp"
-            app:cornerRadius="16dp"
-            app:isTranslucent="true">
+            app:inpsCornerRadius="16dp"
+            app:inpsIsTranslucent="true">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Text, Crypto, Validation &amp; SQLite"
+                android:text="Text, Validation &amp; EasySQL"
                 android:textAppearance="?attr/textAppearanceTitleMedium"
                 android:textStyle="bold" />
 
-            <com.isaiahnoelpulidosalazar.inpsAndroid.RoundedEditText
+            <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedEditText
                 android:id="@+id/input_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -63,20 +63,19 @@
                 android:layout_marginTop="12dp"
                 android:orientation="horizontal">
 
-                <com.isaiahnoelpulidosalazar.inpsAndroid.RoundedButton
-                    android:id="@+id/btn_encrypt"
+                <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
+                    android:id="@+id/btn_base64"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
                     android:minHeight="48dp"
                     android:padding="12dp"
-                    android:text="@string/btn_encrypt"
+                    android:text="@string/btn_base64"
                     android:textAllCaps="false"
-                    android:textColor="@android:color/white"
-                    app:cornerRadius="14dp" />
+                    app:inpsCornerRadius="14dp" />
 
-                <com.isaiahnoelpulidosalazar.inpsAndroid.RoundedButton
+                <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
                     android:id="@+id/btn_validate_email"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -85,11 +84,10 @@
                     android:padding="12dp"
                     android:text="@string/btn_validate_email"
                     android:textAllCaps="false"
-                    android:textColor="@android:color/white"
-                    app:cornerRadius="14dp" />
+                    app:inpsCornerRadius="14dp" />
             </LinearLayout>
 
-            <com.isaiahnoelpulidosalazar.inpsAndroid.RoundedButton
+            <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
                 android:id="@+id/btn_add_note"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -98,8 +96,7 @@
                 android:padding="12dp"
                 android:text="@string/btn_add_note"
                 android:textAllCaps="false"
-                android:textColor="@android:color/white"
-                app:cornerRadius="14dp" />
+                app:inpsCornerRadius="14dp" />
 
             <TextView
                 android:id="@+id/output_text"
@@ -108,17 +105,17 @@
                 android:layout_marginTop="12dp"
                 android:text="Output appears here."
                 android:textAppearance="?attr/textAppearanceBodyMedium" />
-        </com.isaiahnoelpulidosalazar.inpsAndroid.RoundedLinearLayout>
+        </com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedLinearLayout>
 
         <!-- UI Components Card -->
-        <com.isaiahnoelpulidosalazar.inpsAndroid.RoundedLinearLayout
+        <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedLinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:orientation="vertical"
             android:padding="16dp"
-            app:cornerRadius="16dp"
-            app:isTranslucent="true">
+            app:inpsCornerRadius="16dp"
+            app:inpsIsTranslucent="true">
 
             <TextView
                 android:layout_width="match_parent"
@@ -134,14 +131,14 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <com.isaiahnoelpulidosalazar.inpsAndroid.FlippableImageView
+                <com.isaiahnoelpulidosalazar.inpsandroid.ui.FlippableImageView
                     android:id="@+id/flippable_card"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:contentDescription="@string/cd_flippable_card"
                     android:src="@drawable/ic_card_front"
-                    app:flipSpeed="normal"
-                    app:reverseBackImage="false" />
+                    app:inpsFlipSpeed="normal"
+                    app:inpsReverseBackImage="false" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -150,7 +147,7 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <com.isaiahnoelpulidosalazar.inpsAndroid.RoundedButton
+                    <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
                         android:id="@+id/btn_flip"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -158,10 +155,9 @@
                         android:padding="12dp"
                         android:text="@string/btn_flip_card"
                         android:textAllCaps="false"
-                        android:textColor="@android:color/white"
-                        app:cornerRadius="14dp" />
+                        app:inpsCornerRadius="14dp" />
 
-                    <com.isaiahnoelpulidosalazar.inpsAndroid.RoundedButton
+                    <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
                         android:id="@+id/btn_dialog"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -170,10 +166,9 @@
                         android:padding="12dp"
                         android:text="@string/btn_show_dialog"
                         android:textAllCaps="false"
-                        android:textColor="@android:color/white"
-                        app:cornerRadius="14dp" />
+                        app:inpsCornerRadius="14dp" />
 
-                    <com.isaiahnoelpulidosalazar.inpsAndroid.RoundedButton
+                    <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
                         android:id="@+id/btn_fullscreen"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -182,21 +177,20 @@
                         android:padding="12dp"
                         android:text="@string/btn_toggle_fullscreen"
                         android:textAllCaps="false"
-                        android:textColor="@android:color/white"
-                        app:cornerRadius="14dp" />
+                        app:inpsCornerRadius="14dp" />
                 </LinearLayout>
             </LinearLayout>
-        </com.isaiahnoelpulidosalazar.inpsAndroid.RoundedLinearLayout>
+        </com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedLinearLayout>
 
         <!-- Sound Synthesizer & Algorithms Card -->
-        <com.isaiahnoelpulidosalazar.inpsAndroid.RoundedLinearLayout
+        <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedLinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:orientation="vertical"
             android:padding="16dp"
-            app:cornerRadius="16dp"
-            app:isTranslucent="true">
+            app:inpsCornerRadius="16dp"
+            app:inpsIsTranslucent="true">
 
             <TextView
                 android:layout_width="match_parent"
@@ -211,7 +205,7 @@
                 android:layout_marginTop="12dp"
                 android:orientation="horizontal">
 
-                <com.isaiahnoelpulidosalazar.inpsAndroid.RoundedButton
+                <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
                     android:id="@+id/btn_note_c4"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -220,10 +214,9 @@
                     android:minHeight="48dp"
                     android:text="C4"
                     android:textAllCaps="false"
-                    android:textColor="@android:color/white"
-                    app:cornerRadius="12dp" />
+                    app:inpsCornerRadius="12dp" />
 
-                <com.isaiahnoelpulidosalazar.inpsAndroid.RoundedButton
+                <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
                     android:id="@+id/btn_note_e4"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -232,10 +225,9 @@
                     android:minHeight="48dp"
                     android:text="E4"
                     android:textAllCaps="false"
-                    android:textColor="@android:color/white"
-                    app:cornerRadius="12dp" />
+                    app:inpsCornerRadius="12dp" />
 
-                <com.isaiahnoelpulidosalazar.inpsAndroid.RoundedButton
+                <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
                     android:id="@+id/btn_note_g4"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -244,10 +236,9 @@
                     android:minHeight="48dp"
                     android:text="G4"
                     android:textAllCaps="false"
-                    android:textColor="@android:color/white"
-                    app:cornerRadius="12dp" />
+                    app:inpsCornerRadius="12dp" />
 
-                <com.isaiahnoelpulidosalazar.inpsAndroid.RoundedButton
+                <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
                     android:id="@+id/btn_note_c5"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -255,11 +246,10 @@
                     android:minHeight="48dp"
                     android:text="C5"
                     android:textAllCaps="false"
-                    android:textColor="@android:color/white"
-                    app:cornerRadius="12dp" />
+                    app:inpsCornerRadius="12dp" />
             </LinearLayout>
 
-            <com.isaiahnoelpulidosalazar.inpsAndroid.RoundedButton
+            <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
                 android:id="@+id/btn_math_sort"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -268,19 +258,18 @@
                 android:padding="12dp"
                 android:text="@string/btn_math_sort"
                 android:textAllCaps="false"
-                android:textColor="@android:color/white"
-                app:cornerRadius="14dp" />
-        </com.isaiahnoelpulidosalazar.inpsAndroid.RoundedLinearLayout>
+                app:inpsCornerRadius="14dp" />
+        </com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedLinearLayout>
 
-        <!-- SimpleList + SQLite Notes -->
-        <com.isaiahnoelpulidosalazar.inpsAndroid.RoundedLinearLayout
+        <!-- SimpleList + EasySQL Notes -->
+        <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedLinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:orientation="vertical"
             android:padding="16dp"
-            app:cornerRadius="16dp"
-            app:isTranslucent="true">
+            app:inpsCornerRadius="16dp"
+            app:inpsIsTranslucent="true">
 
             <TextView
                 android:layout_width="match_parent"
@@ -289,12 +278,12 @@
                 android:textAppearance="?attr/textAppearanceTitleMedium"
                 android:textStyle="bold" />
 
-            <com.isaiahnoelpulidosalazar.inpsAndroid.SimpleList
+            <com.isaiahnoelpulidosalazar.inpsandroid.ui.SimpleList
                 android:id="@+id/simple_list"
                 android:layout_width="match_parent"
                 android:layout_height="220dp"
                 android:layout_marginTop="8dp" />
-        </com.isaiahnoelpulidosalazar.inpsAndroid.RoundedLinearLayout>
+        </com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedLinearLayout>
 
     </LinearLayout>
 </ScrollView>
