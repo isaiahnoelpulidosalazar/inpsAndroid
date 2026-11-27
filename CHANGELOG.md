@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.0.3
+
+Maintenance release fixing Robolectric test runtime artifact fetching in CI and offline environments.
+
+### Fixes & Build Tooling
+- **Robolectric Offline SDK Resolution (`inpsAndroid/build.gradle`)**: Added a dedicated `robolectricSdk` Gradle configuration (`org.robolectric:android-all-instrumented:15-robolectric-12650502-i7`) synced into `build/robolectric-deps` by `prepareRobolectricSdk` and wired `robolectric.offline=true` + `robolectric.dependency.dir` into unit test tasks, eliminating runtime `MavenArtifactFetcher` / `HttpURLConnection` `IOException` failures in `MainThreadTest`, `ConvertersTest`, and other Robolectric suites.
+
 ## 3.0.2
 
 Documentation & polish release adding comprehensive Android Studio Javadoc and XML comments across the entire codebase without modifying runtime APIs.

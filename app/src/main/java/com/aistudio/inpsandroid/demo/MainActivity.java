@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements DemoHost {
                 easySQL.inTransaction(() -> {
                     easySQL.insert(TABLE_NOTES, Collections.singletonMap(COL_TEXT, "Tap a row to inspect"));
                     easySQL.insert(TABLE_NOTES, Collections.singletonMap(COL_TEXT, "Long-press to delete"));
-                    easySQL.insert(TABLE_NOTES, Collections.singletonMap(COL_TEXT, "inpsAndroid 3.0.2 ready"));
+                    easySQL.insert(TABLE_NOTES, Collections.singletonMap(COL_TEXT, "inpsAndroid 3.0.3 ready"));
                 });
                 loaded = queryAllNotes();
             }

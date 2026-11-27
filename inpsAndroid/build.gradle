@@ -22,6 +22,11 @@ android {
     testOptions {
         unitTests {
             includeAndroidResources = true
+            all {
+                dependsOn 'prepareRobolectricSdk'
+                systemProperty 'robolectric.offline', 'true'
+                systemProperty 'robolectric.dependency.dir', layout.buildDirectory.dir('robolectric-deps').get().asFile.absolutePath
+            }
         }
     }
 
@@ -37,6 +42,16 @@ tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
+configurations {
+    // Resolved via Gradle (cached in ~/.gradle) so Robolectric never fetches jars via raw HttpURLConnection at test time.
+    robolectricSdk
+}
+
+tasks.register('prepareRobolectricSdk', Sync) {
+    from configurations.robolectricSdk
+    into layout.buildDirectory.dir('robolectric-deps')
+}
+
 dependencies {
     api 'androidx.appcompat:appcompat:1.7.1'
     api 'androidx.recyclerview:recyclerview:1.4.0'
@@ -46,6 +61,7 @@ dependencies {
     testImplementation 'org.robolectric:robolectric:4.15.1'
     testImplementation 'androidx.test:core:1.6.1'
     testImplementation 'com.google.android.material:material:1.12.0'
+    robolectricSdk 'org.robolectric:android-all-instrumented:15-robolectric-12650502-i7'
 }
 
 afterEvaluate {
@@ -55,7 +71,7 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.isaiahnoelpulidosalazar'
                 artifactId = 'inpsAndroid'
-                version = '3.0.2'
+                version = '3.0.3'
 
                 pom {
                     name = 'inpsAndroid'

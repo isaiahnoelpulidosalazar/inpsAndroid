@@ -128,7 +128,7 @@ public class CoreFragment extends Fragment implements DemoHost.NotesListener {
 
         view.findViewById(R.id.btn_send_notification).setOnClickListener(v ->
                 runWithNotificationPermission(() -> {
-                    String body = readInputOrDefault("Hello from EasyNotification v3.0.2!");
+                    String body = readInputOrDefault("Hello from EasyNotification v3.0.3!");
                     int id = easyNotification.prepare("demo_alerts")
                             .title("inpsAndroid Alert")
                             .message(body)
@@ -143,8 +143,8 @@ public class CoreFragment extends Fragment implements DemoHost.NotesListener {
                     int id = easyNotification.prepare("demo_alerts")
                             .title("Expandable Summary")
                             .message(body)
-                            .bigText(body + "\n\nTap to reopen inpsAndroid 3.0.2.")
-                            .subText("v3.0.2")
+                            .bigText(body + "\n\nTap to reopen inpsAndroid 3.0.3.")
+                            .subText("v3.0.3")
                             .tapActivity(MainActivity.class)
                             .show();
                     updateNotificationStatus(id, "demo_alerts (BigText)");

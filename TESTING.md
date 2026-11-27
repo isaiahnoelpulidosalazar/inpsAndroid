@@ -11,6 +11,11 @@ android {
     testOptions {
         unitTests {
             includeAndroidResources = true
+            all {
+                dependsOn 'prepareRobolectricSdk'
+                systemProperty 'robolectric.offline', 'true'
+                systemProperty 'robolectric.dependency.dir', layout.buildDirectory.dir('robolectric-deps').get().asFile.absolutePath
+            }
         }
     }
 }
@@ -20,10 +25,12 @@ dependencies {
     testImplementation 'org.robolectric:robolectric:4.15.1'
     testImplementation 'androidx.test:core:1.6.1'
     testImplementation 'com.google.android.material:material:1.12.0'
+    robolectricSdk 'org.robolectric:android-all-instrumented:15-robolectric-12650502-i7'
 }
 ```
 
 - `includeAndroidResources = true` allows Robolectric to inflate library layouts (`inps_rounded_alert_dialog_layout`, `inps_simple_list_item`), load `inps_` drawables, and resolve `inps_attrs.xml`.
+- `robolectricSdk` + `prepareRobolectricSdk` resolve and cache the Robolectric Android 15 runtime jar via Gradle (`~/.gradle`) and run tests with `robolectric.offline=true`, preventing `MavenArtifactFetcher` `HttpURLConnection` network failures during test execution.
 - `com.google.android.material:material` is scoped to `testImplementation` only—it is used to test Material3 themes alongside AppCompat themes without pulling Material into the library's main dependencies.
 
 ## 2. Running Tests
