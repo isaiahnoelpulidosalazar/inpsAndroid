@@ -12,6 +12,7 @@ final class StructureSorts {
         throw new UnsupportedOperationException("No instances");
     }
 
+    /** Inserts all elements into an unbalanced binary search tree and reads them iteratively in-order. */
     static int[] treeSort(int[] arr) {
         if (arr.length <= 1) return arr.clone();
         Node root = null;
@@ -55,6 +56,7 @@ final class StructureSorts {
         }
     }
 
+    /** Partitions elements into ordered card piles via binary search, then k-way merges with a min-heap. */
     static int[] patienceSorting(int[] arr) {
         int n = arr.length;
         if (n <= 1) return arr.clone();

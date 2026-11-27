@@ -21,8 +21,13 @@ public final class Drawables {
      * shapes) are rasterised at the bitmap's size before comparison.
      *
      * <p>{@link Bitmap.Config#HARDWARE} or null-config bitmaps are copied to
-     * {@link Bitmap.Config#ARGB_8888} before reading pixels. Returns {@code false} on null inputs
-     * or {@link IllegalArgumentException}.</p>
+     * {@link Bitmap.Config#ARGB_8888} before reading pixels.</p>
+     *
+     * @param context    Android context used to resolve {@code resourceId}
+     * @param resourceId drawable resource identifier to compare
+     * @param bitmap     bitmap to compare against
+     * @return {@code true} if the resolved drawable has identical pixel contents, or {@code false}
+     * on null inputs, missing drawables, or {@link IllegalArgumentException}
      */
     public static boolean equalsBitmap(Context context, int resourceId, Bitmap bitmap) {
         if (context == null || bitmap == null) return false;

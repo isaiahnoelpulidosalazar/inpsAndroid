@@ -22,13 +22,19 @@ import java.util.Objects;
 /** Shared attribute parsing, background, ripple, and outline helper for {@code Rounded*} views. */
 final class RoundedViewHelper {
 
+    /** Sentinel radius instructing {@link #createBackground} to preserve the XML drawable radius. */
     static final float KEEP_DRAWABLE_RADIUS = -1f;
+    /** Default corner radius in dp applied to rounded layout containers. */
     static final float DEFAULT_LAYOUT_RADIUS_DP = 8f;
 
     private RoundedViewHelper() {
         throw new UnsupportedOperationException("No instances");
     }
 
+    /**
+     * Parses XML styling attributes, builds a rounded background (with optional ripple and contrast
+     * text coloring), and configures outline clipping on {@code view}.
+     */
     static void apply(
             View view,
             @Nullable AttributeSet attrs,
@@ -99,6 +105,7 @@ final class RoundedViewHelper {
         }
     }
 
+    /** Creates a mutable rounded {@link GradientDrawable} from the theme-aware library shape. */
     static GradientDrawable createBackground(Context context, boolean translucent, float radiusPx) {
         int res = translucent
                 ? R.drawable.inps_rounded_translucent_background
@@ -108,6 +115,7 @@ final class RoundedViewHelper {
         return d;
     }
 
+    /** Converts display-independent pixels ({@code dp}) to raw pixels for {@code context}. */
     static float dp(Context context, float dp) {
         return dp * context.getResources().getDisplayMetrics().density;
     }

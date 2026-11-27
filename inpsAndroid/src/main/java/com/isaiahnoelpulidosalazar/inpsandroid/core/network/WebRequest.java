@@ -46,23 +46,41 @@ public final class WebRequest {
     /** Default maximum response size (8 MB). */
     public static final int DEFAULT_MAX_RESPONSE_BYTES = 8 * 1024 * 1024;
 
-    /** Receives results on the main thread. */
+    /** Receives asynchronous HTTP outcomes on the Android main thread. */
     public interface Callback {
+        /**
+         * Called on the main thread when an HTTP response (including 4xx/5xx) is received.
+         *
+         * @param response HTTP status code and decoded response body
+         */
         void onSuccess(Response response);
+
+        /**
+         * Called on the main thread when a network I/O error or queue rejection occurs.
+         *
+         * @param error failure exception (e.g. {@link IOException} or {@link RejectedExecutionException})
+         */
         void onError(Exception error);
     }
 
-    /** Handle for an enqueued {@link WebRequest}. */
+    /** Handle for cancelling or querying an enqueued {@link WebRequest}. */
     public interface Call {
         /** Cancels the request, interrupting the worker if running and suppressing callbacks. */
         void cancel();
-        /** @return {@code true} if {@link #cancel()} has been called. */
+
+        /**
+         * Checks whether this call has been cancelled.
+         *
+         * @return {@code true} if {@link #cancel()} has been called
+         */
         boolean isCancelled();
     }
 
-    /** Status code and decoded body, including error bodies for 4xx/5xx. */
+    /** Immutable HTTP status code and decoded response body, including error bodies for 4xx/5xx. */
     public static final class Response {
+        /** HTTP status code (e.g. {@code 200}, {@code 404}). */
         public final int code;
+        /** Decoded response body text (never {@code null}). */
         public final String body;
 
         Response(int code, String body) {
@@ -70,6 +88,11 @@ public final class WebRequest {
             this.body = body;
         }
 
+        /**
+         * Checks whether {@link #code} is in the {@code 2xx} success range.
+         *
+         * @return {@code true} when {@code 200 <= code < 300}
+         */
         public boolean isSuccessful() { return code >= 200 && code < 300; }
     }
 
@@ -100,25 +123,62 @@ public final class WebRequest {
         this.url = Objects.requireNonNull(url, "url");
     }
 
+    /**
+     * Creates a {@code GET} request builder for {@code url}.
+     *
+     * @param url target HTTP/HTTPS URL
+     * @return new {@link WebRequest} configured for {@code GET}
+     */
     public static WebRequest get(String url) { return new WebRequest("GET", url); }
 
+    /**
+     * Creates a {@code POST} request builder for {@code url} with an optional request body.
+     *
+     * @param url  target HTTP/HTTPS URL
+     * @param body UTF-8 request body, or {@code null}
+     * @return new {@link WebRequest} configured for {@code POST}
+     */
     public static WebRequest post(String url, String body) { return new WebRequest("POST", url).body(body); }
 
+    /**
+     * Creates a request builder for an arbitrary HTTP {@code method}.
+     *
+     * @param method HTTP verb (e.g. {@code PUT}, {@code PATCH}, {@code DELETE})
+     * @param url    target HTTP/HTTPS URL
+     * @return new {@link WebRequest} configured for {@code method}
+     */
     public static WebRequest of(String method, String url) { return new WebRequest(method, url); }
 
+    /**
+     * Adds or replaces a request header.
+     *
+     * @param name  header name
+     * @param value header value
+     * @return this request for chaining
+     */
     public WebRequest header(String name, String value) {
         Objects.requireNonNull(name, "name");
         headers.put(name, value);
         return this;
     }
 
-    /** Sets the UTF-8 request body. */
+    /**
+     * Sets the UTF-8 request body. Ignored for {@code GET} and {@code HEAD} requests.
+     *
+     * @param body payload text, or {@code null} for no body
+     * @return this request for chaining
+     */
     public WebRequest body(String body) {
         this.body = body;
         return this;
     }
 
-    /** Sets {@code Content-Type} to {@code application/json; charset=utf-8} and the request body. */
+    /**
+     * Sets {@code Content-Type} to {@code application/json; charset=utf-8} and assigns the body.
+     *
+     * @param body JSON string payload
+     * @return this request for chaining
+     */
     public WebRequest json(String body) {
         removeHeaderIgnoreCase("Content-Type");
         headers.put("Content-Type", "application/json; charset=utf-8");
@@ -126,13 +186,24 @@ public final class WebRequest {
         return this;
     }
 
-    /** Connect and read timeout in milliseconds (default 15,000). */
+    /**
+     * Sets both connect and read timeouts in milliseconds (default {@code 15,000 ms}).
+     *
+     * @param timeoutMs timeout duration in milliseconds
+     * @return this request for chaining
+     */
     public WebRequest timeoutMs(int timeoutMs) {
         this.timeoutMs = timeoutMs;
         return this;
     }
 
-    /** Sets the maximum response size in bytes (default 8 MB). */
+    /**
+     * Sets the maximum allowed response payload size in bytes (default {@value #DEFAULT_MAX_RESPONSE_BYTES}).
+     *
+     * @param maxResponseBytes strictly positive byte limit
+     * @return this request for chaining
+     * @throws IllegalArgumentException if {@code maxResponseBytes <= 0}
+     */
     public WebRequest maxResponseBytes(int maxResponseBytes) {
         if (maxResponseBytes <= 0) {
             throw new IllegalArgumentException("maxResponseBytes must be positive: " + maxResponseBytes);
@@ -141,7 +212,12 @@ public final class WebRequest {
         return this;
     }
 
-    /** Blocking call. Must not be used on the main thread. */
+    /**
+     * Executes the HTTP request synchronously. Must be called from a background thread.
+     *
+     * @return HTTP {@link Response} containing status code and decoded body
+     * @throws IOException if connection setup, I/O, or {@link #maxResponseBytes(int)} enforcement fails
+     */
     public Response execute() throws IOException {
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
         try {
@@ -176,8 +252,11 @@ public final class WebRequest {
     }
 
     /**
-     * Runs the request on the bounded background pool and delivers the result to {@code callback}
-     * on the main thread.
+     * Runs the request asynchronously on the bounded background pool and delivers the result to
+     * {@code callback} on the main thread.
+     *
+     * @param callback main-thread receiver for response or error notifications
+     * @return {@link Call} handle supporting cancellation
      */
     public Call enqueue(final Callback callback) {
         Objects.requireNonNull(callback, "callback");

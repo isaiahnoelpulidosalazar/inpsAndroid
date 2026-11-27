@@ -16,6 +16,10 @@ import com.isaiahnoelpulidosalazar.inpsandroid.edu.sort.Sort;
 import java.util.Arrays;
 import java.util.Locale;
 
+/**
+ * Interactive playground tab for {@code ...inpsandroid.edu} modules: {@link Sort},
+ * {@link AreaCalculator}, and {@link com.isaiahnoelpulidosalazar.inpsandroid.edu.SoundSynthesizer}.
+ */
 public class EduFragment extends Fragment {
 
     private static final int[] SAMPLE_ARRAY = {42, -7, 19, 3, 25, 0, -12};

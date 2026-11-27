@@ -16,16 +16,34 @@ import com.isaiahnoelpulidosalazar.inpsandroid.R;
  */
 public class RoundedButton extends AppCompatButton {
 
+    /**
+     * Programmatic constructor creating a rounded button with default primary styling.
+     *
+     * @param context Android context
+     */
     public RoundedButton(@NonNull Context context) {
         super(context);
         init(null, 0);
     }
 
+    /**
+     * XML inflation constructor reading {@code app:inpsCornerRadius} if present.
+     *
+     * @param context Android context
+     * @param attrs   XML attribute set
+     */
     public RoundedButton(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(attrs, 0);
     }
 
+    /**
+     * Styled XML inflation constructor.
+     *
+     * @param context      Android context
+     * @param attrs        XML attribute set
+     * @param defStyleAttr default theme style attribute
+     */
     public RoundedButton(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(attrs, defStyleAttr);

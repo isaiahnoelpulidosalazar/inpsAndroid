@@ -1,6 +1,6 @@
-# inpsAndroid Documentation (`3.0.1`)
+# inpsAndroid Documentation (`3.0.2`)
 
-Welcome to the **inpsAndroid** `3.0.1` documentation set.
+Welcome to the **inpsAndroid** `3.0.2` documentation set.
 
 ## Core (`com.isaiahnoelpulidosalazar.inpsandroid.core`)
 - [MainThread](./main-thread.md) — Shared main-looper poster (`post`, `postDelayed`, `run`, `cancel`)

@@ -44,6 +44,8 @@ public final class Fullscreen {
     /**
      * Hides status and navigation bars (and the AppCompat action bar when present), saving the
      * window's prior {@code decorFitsSystemWindows} and bar visibility for {@link #disable(Activity)}.
+     *
+     * @param activity host activity whose window enters immersive fullscreen
      */
     public static void enable(Activity activity) {
         Window window = activity.getWindow();
@@ -68,6 +70,8 @@ public final class Fullscreen {
     /**
      * Restores the {@code decorFitsSystemWindows} value, system bar visibility, and AppCompat
      * action bar state captured when {@link #enable(Activity)} was called.
+     *
+     * @param activity host activity whose prior window chrome should be restored
      */
     public static void disable(Activity activity) {
         Window window = activity.getWindow();
@@ -89,6 +93,9 @@ public final class Fullscreen {
     /**
      * Optional helper for {@link Activity#onWindowFocusChanged(boolean)} that re-hides the system
      * bars when window focus returns while fullscreen is active.
+     *
+     * @param activity host activity receiving focus change
+     * @param hasFocus current window focus state
      */
     public static void reapplyOnWindowFocusChanged(Activity activity, boolean hasFocus) {
         if (!hasFocus) return;

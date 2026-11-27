@@ -1,47 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Custom corner radius dimension applied to Rounded* widgets and SimpleList checkbox items. -->
     <attr name="inpsCornerRadius" format="dimension" />
+    <!-- When true, RoundedLinearLayout and RoundedConstraintLayout use the translucent tinted background. -->
     <attr name="inpsIsTranslucent" format="boolean" />
+    <!-- Enables or disables overshoot bounce animations on RoundedCheckBox toggles. -->
     <attr name="inpsBounceAnimation" format="boolean" />
+    <!-- Visual presentation style for RoundedCheckBox containers (card, capsule pill, or minimal row). -->
     <attr name="inpsCheckStyle" format="enum">
         <enum name="card" value="0" />
         <enum name="pill" value="1" />
         <enum name="minimal" value="2" />
     </attr>
 
+    <!-- Stylable attributes for RoundedButton. -->
     <declare-styleable name="RoundedButton">
         <attr name="inpsCornerRadius" />
     </declare-styleable>
 
+    <!-- Stylable attributes for RoundedEditText. -->
     <declare-styleable name="RoundedEditText">
         <attr name="inpsCornerRadius" />
     </declare-styleable>
 
+    <!-- Stylable attributes for RoundedConstraintLayout. -->
     <declare-styleable name="RoundedConstraintLayout">
         <attr name="inpsCornerRadius" />
         <attr name="inpsIsTranslucent" />
     </declare-styleable>
 
+    <!-- Stylable attributes for RoundedLinearLayout. -->
     <declare-styleable name="RoundedLinearLayout">
         <attr name="inpsCornerRadius" />
         <attr name="inpsIsTranslucent" />
     </declare-styleable>
 
+    <!-- Stylable attributes for RoundedCheckBox. -->
     <declare-styleable name="RoundedCheckBox">
         <attr name="inpsCornerRadius" />
         <attr name="inpsBounceAnimation" />
         <attr name="inpsCheckStyle" />
     </declare-styleable>
 
+    <!-- Stylable attributes for SimpleList, including optional RoundedCheckBox row mode. -->
     <declare-styleable name="SimpleList">
+        <!-- Switches SimpleList from TextView rows to multi-select RoundedCheckBox rows. -->
         <attr name="inpsCheckboxesEnabled" format="boolean" />
         <attr name="inpsBounceAnimation" />
         <attr name="inpsCheckStyle" />
         <attr name="inpsCornerRadius" />
     </declare-styleable>
 
+    <!-- Stylable attributes for FlippableImageView. -->
     <declare-styleable name="FlippableImageView">
+        <!-- Horizontally mirrors the back image so asymmetrical artwork reads naturally after a 180-degree Y flip. -->
         <attr name="inpsReverseBackImage" format="boolean" />
+        <!-- Preset flip animation duration (slow=600ms, normal=300ms, fast=150ms). -->
         <attr name="inpsFlipSpeed" format="enum">
             <enum name="slow" value="0" />
             <enum name="normal" value="1" />

@@ -57,13 +57,32 @@ public final class EasyNotification {
 
     /** Optional hook invoked right before dispatching to tweak the {@link NotificationCompat.Builder}. */
     public interface BuilderCustomizer {
+        /**
+         * Customizes the underlying {@link NotificationCompat.Builder} right before {@code build()}.
+         *
+         * @param builder configured notification builder
+         */
         void customize(@NonNull NotificationCompat.Builder builder);
     }
 
     /** Optional listener notified when a dispatch succeeds or is blocked by missing permissions. */
     public interface DispatchListener {
+        /**
+         * Invoked after a notification is successfully posted to the system notification manager.
+         *
+         * @param id           notification identifier used for dispatch
+         * @param tag          optional notification tag, or {@code null}
+         * @param notification built {@link Notification} instance that was posted
+         */
         void onDispatched(int id, @Nullable String tag, @NonNull Notification notification);
 
+        /**
+         * Invoked when dispatching is skipped or blocked before reaching the notification shade.
+         *
+         * @param id     intended notification identifier
+         * @param tag    optional notification tag, or {@code null}
+         * @param reason human-readable explanation of why posting was blocked
+         */
         void onBlocked(int id, @Nullable String tag, @NonNull String reason);
     }
 
@@ -76,6 +95,11 @@ public final class EasyNotification {
     @DrawableRes
     private int defaultSmallIconRes;
 
+    /**
+     * Creates a new notification dispatcher bound to the application context.
+     *
+     * @param context any Android context; its application context is retained to avoid leaks
+     */
     public EasyNotification(@NonNull Context context) {
         Objects.requireNonNull(context, "context");
         this.appContext = context.getApplicationContext();
@@ -84,7 +108,13 @@ public final class EasyNotification {
         this.defaultSmallIconRes = resolveDefaultIcon(appContext);
     }
 
-    /** Sets the default small icon resource used when a {@link Request} does not override it. */
+    /**
+     * Sets the default small icon resource used when a {@link Request} does not override it.
+     *
+     * @param iconRes drawable resource ID for the status bar icon
+     * @return this dispatcher for chaining
+     * @throws IllegalArgumentException if {@code iconRes == 0}
+     */
     public EasyNotification setDefaultSmallIcon(@DrawableRes int iconRes) {
         if (iconRes == 0) {
             throw new IllegalArgumentException("iconRes must be a valid drawable resource");
@@ -93,7 +123,12 @@ public final class EasyNotification {
         return this;
     }
 
-    /** Registers a {@link DispatchListener} to observe posted and blocked notifications. */
+    /**
+     * Registers a {@link DispatchListener} to observe posted and blocked notifications.
+     *
+     * @param listener listener callback, or {@code null} to clear
+     * @return this dispatcher for chaining
+     */
     public EasyNotification setDispatchListener(@Nullable DispatchListener listener) {
         this.dispatchListener = listener;
         return this;
@@ -102,17 +137,38 @@ public final class EasyNotification {
     /**
      * Creates or updates a notification channel with default importance
      * ({@link NotificationManagerCompat#IMPORTANCE_DEFAULT}). Safe no-op below API 26.
+     *
+     * @param channelId stable channel identifier
+     * @param name      user-visible channel name shown in system settings
+     * @return this dispatcher for chaining
      */
     public EasyNotification createChannel(@NonNull String channelId, @NonNull CharSequence name) {
         return createChannel(channelId, name, null, NotificationManagerCompat.IMPORTANCE_DEFAULT, true, true);
     }
 
-    /** Creates or updates a notification channel with the given importance. Safe no-op below API 26. */
+    /**
+     * Creates or updates a notification channel with the given importance. Safe no-op below API 26.
+     *
+     * @param channelId  stable channel identifier
+     * @param name       user-visible channel name shown in system settings
+     * @param importance channel importance constant from {@link NotificationManagerCompat}
+     * @return this dispatcher for chaining
+     */
     public EasyNotification createChannel(@NonNull String channelId, @NonNull CharSequence name, int importance) {
         return createChannel(channelId, name, null, importance, true, true);
     }
 
-    /** Creates or updates a notification channel with full configuration. Safe no-op below API 26. */
+    /**
+     * Creates or updates a notification channel with full configuration. Safe no-op below API 26.
+     *
+     * @param channelId        stable channel identifier
+     * @param name             user-visible channel name shown in system settings
+     * @param description      optional channel description, or {@code null}
+     * @param importance       channel importance constant from {@link NotificationManagerCompat}
+     * @param vibrationEnabled whether vibration is enabled on this channel
+     * @param soundEnabled     whether the default notification sound is enabled
+     * @return this dispatcher for chaining
+     */
     public EasyNotification createChannel(
             @NonNull String channelId,
             @NonNull CharSequence name,
@@ -137,7 +193,12 @@ public final class EasyNotification {
         return this;
     }
 
-    /** Returns {@code true} if the channel exists on API 26+, or {@code true} below API 26. */
+    /**
+     * Checks whether the given notification channel exists on API 26+.
+     *
+     * @param channelId channel identifier to look up
+     * @return {@code true} if the channel exists on API 26+, or {@code true} below API 26
+     */
     public boolean hasChannel(@NonNull String channelId) {
         requireNonBlank(channelId, "channelId");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && systemManager != null) {
@@ -146,7 +207,11 @@ public final class EasyNotification {
         return true;
     }
 
-    /** Deletes a notification channel on API 26+. */
+    /**
+     * Deletes a notification channel on API 26+ (no-op on older platforms).
+     *
+     * @param channelId channel identifier to delete
+     */
     public void deleteChannel(@NonNull String channelId) {
         requireNonBlank(channelId, "channelId");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && systemManager != null) {
@@ -155,8 +220,10 @@ public final class EasyNotification {
     }
 
     /**
-     * Returns {@code true} if {@code Manifest.permission.POST_NOTIFICATIONS} is granted (always
-     * {@code true} below Android 13 / API 33).
+     * Checks runtime notification permission status.
+     *
+     * @return {@code true} if {@code Manifest.permission.POST_NOTIFICATIONS} is granted (always
+     * {@code true} below Android 13 / API 33)
      */
     public boolean hasPostNotificationPermission() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
@@ -166,34 +233,60 @@ public final class EasyNotification {
                 == PackageManager.PERMISSION_GRANTED;
     }
 
-    /** Returns {@code true} when notifications are enabled at the OS level for this app. */
+    /**
+     * Checks whether notifications are enabled for this app in system settings.
+     *
+     * @return {@code true} when notifications are enabled at the OS level
+     */
     public boolean areNotificationsEnabled() {
         return managerCompat.areNotificationsEnabled();
     }
 
-    /** Returns {@code true} if both OS notifications are enabled and runtime permission is granted. */
+    /**
+     * Convenience check combining system notification toggle and API 33+ runtime permission.
+     *
+     * @return {@code true} if both OS notifications are enabled and runtime permission is granted
+     */
     public boolean canPostNotifications() {
         return areNotificationsEnabled() && hasPostNotificationPermission();
     }
 
-    /** Starts a fluent notification {@link Request} on {@link #DEFAULT_CHANNEL_ID}. */
+    /**
+     * Starts a fluent notification {@link Request} on {@link #DEFAULT_CHANNEL_ID}.
+     *
+     * @return new builder/dispatcher request
+     */
     public Request prepare() {
         return new Request(this, DEFAULT_CHANNEL_ID, DEFAULT_CHANNEL_NAME);
     }
 
-    /** Starts a fluent notification {@link Request} on the given {@code channelId}. */
+    /**
+     * Starts a fluent notification {@link Request} targeting the given {@code channelId}.
+     *
+     * @param channelId target channel identifier
+     * @return new builder/dispatcher request
+     */
     public Request prepare(@NonNull String channelId) {
         requireNonBlank(channelId, "channelId");
         String name = DEFAULT_CHANNEL_ID.equals(channelId) ? DEFAULT_CHANNEL_NAME : channelId;
         return new Request(this, channelId, name);
     }
 
-    /** Cancels a posted notification by {@code id}. */
+    /**
+     * Cancels a posted notification by {@code id}.
+     *
+     * @param id notification ID returned by {@link Request#show()}
+     */
     public void cancel(int id) {
         managerCompat.cancel(id);
     }
 
-    /** Cancels a posted notification by {@code tag} and {@code id}. */
+    /**
+     * Cancels a posted notification by {@code tag} and {@code id}.
+     *
+     * @param tag optional notification tag passed to {@link Request#tag(String)}, or {@code null}
+     * @param id  notification ID returned by {@link Request#show()}
+     */
     public void cancel(@Nullable String tag, int id) {
         managerCompat.cancel(tag, id);
     }
@@ -203,7 +296,12 @@ public final class EasyNotification {
         managerCompat.cancelAll();
     }
 
-    /** Returns {@code true} if a notification with {@code id} is currently active in the shade. */
+    /**
+     * Checks whether a notification with {@code id} is currently active in the system shade.
+     *
+     * @param id notification ID to inspect
+     * @return {@code true} if currently active
+     */
     public boolean isNotificationActive(int id) {
         if (systemManager == null) {
             return false;
@@ -338,7 +436,13 @@ public final class EasyNotification {
             this.smallIconRes = dispatcher.defaultSmallIconRes;
         }
 
-        /** Sets an explicit non-negative notification ID (otherwise an ID is auto-assigned). */
+        /**
+         * Sets an explicit non-negative notification ID (otherwise an ID is auto-assigned).
+         *
+         * @param id non-negative notification ID
+         * @return this request for chaining
+         * @throws IllegalArgumentException if {@code id < 0}
+         */
         public Request id(int id) {
             if (id < 0) {
                 throw new IllegalArgumentException("Notification id must be >= 0");
@@ -348,13 +452,24 @@ public final class EasyNotification {
             return this;
         }
 
-        /** Sets an optional notification tag used together with {@link #id(int)}. */
+        /**
+         * Sets an optional notification tag used together with {@link #id(int)}.
+         *
+         * @param tag notification tag, or {@code null}
+         * @return this request for chaining
+         */
         public Request tag(@Nullable String tag) {
             this.tag = tag;
             return this;
         }
 
-        /** Sets the target channel ID and display name (auto-created on API 26+ if absent). */
+        /**
+         * Sets the target channel ID and display name (auto-created on API 26+ if absent).
+         *
+         * @param channelId   stable channel identifier
+         * @param channelName user-visible channel name
+         * @return this request for chaining
+         */
         public Request channel(@NonNull String channelId, @NonNull CharSequence channelName) {
             requireNonBlank(channelId, "channelId");
             requireNonBlank(channelName, "channelName");
@@ -363,39 +478,78 @@ public final class EasyNotification {
             return this;
         }
 
-        /** Sets channel importance used when auto-creating the channel on API 26+. */
+        /**
+         * Sets channel importance used when auto-creating the channel on API 26+.
+         *
+         * @param importance channel importance constant from {@link NotificationManagerCompat}
+         * @return this request for chaining
+         */
         public Request importance(int importance) {
             this.importance = importance;
             return this;
         }
 
+        /**
+         * Sets the primary notification title text.
+         *
+         * @param title header title, or {@code null} to omit
+         * @return this request for chaining
+         */
         public Request title(@Nullable CharSequence title) {
             this.title = title;
             return this;
         }
 
+        /**
+         * Sets the collapsed notification body text.
+         *
+         * @param message body text, or {@code null} to omit
+         * @return this request for chaining
+         */
         public Request message(@Nullable CharSequence message) {
             this.message = message;
             return this;
         }
 
+        /**
+         * Sets optional secondary header summary text shown beside the app name.
+         *
+         * @param subText subtext string, or {@code null}
+         * @return this request for chaining
+         */
         public Request subText(@Nullable CharSequence subText) {
             this.subText = subText;
             return this;
         }
 
-        /** Applies {@link NotificationCompat.BigTextStyle} for expandable multi-line text. */
+        /**
+         * Applies {@link NotificationCompat.BigTextStyle} for expandable multi-line text.
+         *
+         * @param bigText expanded body text, or {@code null}
+         * @return this request for chaining
+         */
         public Request bigText(@Nullable CharSequence bigText) {
             this.bigText = bigText;
             return this;
         }
 
-        /** Applies {@link NotificationCompat.BigPictureStyle}. */
+        /**
+         * Applies {@link NotificationCompat.BigPictureStyle}.
+         *
+         * @param picture banner image shown when expanded
+         * @return this request for chaining
+         */
         public Request bigPicture(@Nullable Bitmap picture) {
             return bigPicture(picture, null);
         }
 
-        /** Applies {@link NotificationCompat.BigPictureStyle} with an optional expanded large icon. */
+        /**
+         * Applies {@link NotificationCompat.BigPictureStyle} with an optional expanded large icon.
+         *
+         * @param picture               banner image shown when expanded
+         * @param largeIconWhenExpanded large icon shown while expanded, or {@code null}
+         * @return this request for chaining
+         */
         public Request bigPicture(@Nullable Bitmap picture, @Nullable Bitmap largeIconWhenExpanded) {
             this.bigPicture = picture;
             this.bigPictureLargeIcon = largeIconWhenExpanded;
@@ -403,7 +557,12 @@ public final class EasyNotification {
             return this;
         }
 
-        /** Applies {@link NotificationCompat.InboxStyle} with one line per entry. */
+        /**
+         * Applies {@link NotificationCompat.InboxStyle} with one line per entry.
+         *
+         * @param lines lines to render in expanded inbox view
+         * @return this request for chaining
+         */
         public Request inboxLines(@Nullable List<? extends CharSequence> lines) {
             if (lines == null || lines.isEmpty()) {
                 this.inboxLines = null;
@@ -413,6 +572,13 @@ public final class EasyNotification {
             return this;
         }
 
+        /**
+         * Sets the status-bar small icon drawable resource.
+         *
+         * @param iconRes valid drawable resource ID
+         * @return this request for chaining
+         * @throws IllegalArgumentException if {@code iconRes == 0}
+         */
         public Request smallIcon(@DrawableRes int iconRes) {
             if (iconRes == 0) {
                 throw new IllegalArgumentException("smallIcon must be a valid drawable resource");
@@ -421,66 +587,146 @@ public final class EasyNotification {
             return this;
         }
 
+        /**
+         * Sets the optional large icon bitmap displayed on the right/leading edge.
+         *
+         * @param largeIcon bitmap icon, or {@code null}
+         * @return this request for chaining
+         */
         public Request largeIcon(@Nullable Bitmap largeIcon) {
             this.largeIcon = largeIcon;
             return this;
         }
 
+        /**
+         * Sets the accent color used to tint the small icon and action buttons.
+         *
+         * @param color ARGB color integer
+         * @return this request for chaining
+         */
         public Request accentColor(@ColorInt int color) {
             this.accentColor = color;
             return this;
         }
 
+        /**
+         * Sets the legacy priority for Android 7.1 and lower ({@code NotificationCompat.PRIORITY_*}).
+         *
+         * @param priority notification priority constant
+         * @return this request for chaining
+         */
         public Request priority(int priority) {
             this.priority = priority;
             return this;
         }
 
+        /**
+         * Sets the system notification category (e.g. {@link NotificationCompat#CATEGORY_MESSAGE}).
+         *
+         * @param category notification category constant
+         * @return this request for chaining
+         */
         public Request category(@Nullable String category) {
             this.category = category;
             return this;
         }
 
+        /**
+         * Assigns this notification to a bundled notification group key.
+         *
+         * @param groupKey group identifier, or {@code null}
+         * @return this request for chaining
+         */
         public Request group(@Nullable String groupKey) {
             this.groupKey = groupKey;
             return this;
         }
 
+        /**
+         * Marks whether this notification acts as the summary header for {@link #group(String)}.
+         *
+         * @param isSummary {@code true} for the group summary notification
+         * @return this request for chaining
+         */
         public Request groupSummary(boolean isSummary) {
             this.groupSummary = isSummary;
             return this;
         }
 
+        /**
+         * Controls whether tapping the notification automatically dismisses it (default {@code true}).
+         *
+         * @param autoCancel {@code true} to dismiss on tap
+         * @return this request for chaining
+         */
         public Request autoCancel(boolean autoCancel) {
             this.autoCancel = autoCancel;
             return this;
         }
 
+        /**
+         * Marks the notification as ongoing (cannot be swiped away by the user).
+         *
+         * @param ongoing {@code true} for persistent ongoing notifications
+         * @return this request for chaining
+         */
         public Request ongoing(boolean ongoing) {
             this.ongoing = ongoing;
             return this;
         }
 
+        /**
+         * Suppresses sound and vibration alerts for this notification instance.
+         *
+         * @param silent {@code true} to post silently
+         * @return this request for chaining
+         */
         public Request silent(boolean silent) {
             this.silent = silent;
             return this;
         }
 
+        /**
+         * Ensures sound/vibration plays only the first time this notification ID is posted.
+         *
+         * @param onlyAlertOnce {@code true} to suppress repeated alerts on updates
+         * @return this request for chaining
+         */
         public Request onlyAlertOnce(boolean onlyAlertOnce) {
             this.onlyAlertOnce = onlyAlertOnce;
             return this;
         }
 
+        /**
+         * Controls whether the timestamp ({@link #when(long)}) is displayed in the header.
+         *
+         * @param showWhen {@code true} to display the timestamp
+         * @return this request for chaining
+         */
         public Request showWhen(boolean showWhen) {
             this.showWhen = showWhen;
             return this;
         }
 
+        /**
+         * Sets an explicit epoch timestamp in milliseconds for the notification header.
+         *
+         * @param timestampMs epoch time in milliseconds
+         * @return this request for chaining
+         */
         public Request when(long timestampMs) {
             this.whenTimestampMs = timestampMs;
             return this;
         }
 
+        /**
+         * Attaches a determinate or indeterminate progress bar to the notification.
+         *
+         * @param max           maximum progress value
+         * @param progress      current progress value
+         * @param indeterminate {@code true} for an indeterminate spinning bar
+         * @return this request for chaining
+         */
         public Request progress(int max, int progress, boolean indeterminate) {
             this.hasProgress = true;
             this.progressMax = max;
@@ -489,6 +735,12 @@ public final class EasyNotification {
             return this;
         }
 
+        /**
+         * Sets a custom {@link PendingIntent} launched when the user taps the notification body.
+         *
+         * @param intent tap intent, or {@code null}
+         * @return this request for chaining
+         */
         public Request contentIntent(@Nullable PendingIntent intent) {
             this.contentIntent = intent;
             return this;
@@ -497,6 +749,9 @@ public final class EasyNotification {
         /**
          * Configures the tap action to launch {@code activityClass} with
          * {@link PendingIntent#FLAG_IMMUTABLE} and {@link PendingIntent#FLAG_UPDATE_CURRENT}.
+         *
+         * @param activityClass target {@link android.app.Activity} class to launch on tap
+         * @return this request for chaining
          */
         public Request tapActivity(@NonNull Class<?> activityClass) {
             Objects.requireNonNull(activityClass, "activityClass");
@@ -508,7 +763,14 @@ public final class EasyNotification {
             return this;
         }
 
-        /** Appends an action button (Android displays up to 3 actions). */
+        /**
+         * Appends an action button (Android displays up to 3 actions).
+         *
+         * @param iconRes      drawable icon resource for the action
+         * @param actionTitle  button label shown below the notification
+         * @param actionIntent {@link PendingIntent} invoked when the action is tapped
+         * @return this request for chaining
+         */
         public Request addAction(
                 @DrawableRes int iconRes,
                 @NonNull CharSequence actionTitle,
@@ -520,13 +782,22 @@ public final class EasyNotification {
             return this;
         }
 
-        /** Sets a final {@link BuilderCustomizer} hook applied right before {@link #build()}. */
+        /**
+         * Sets a final {@link BuilderCustomizer} hook applied right before {@link #build()}.
+         *
+         * @param customizer customizer callback, or {@code null}
+         * @return this request for chaining
+         */
         public Request customizer(@Nullable BuilderCustomizer customizer) {
             this.customizer = customizer;
             return this;
         }
 
-        /** Builds the configured {@link Notification} without dispatching it. */
+        /**
+         * Builds the configured {@link Notification} without dispatching it.
+         *
+         * @return constructed {@link Notification} ready for posting or inspection
+         */
         @NonNull
         public Notification build() {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(dispatcher.appContext, channelId)

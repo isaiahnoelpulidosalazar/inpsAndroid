@@ -35,6 +35,11 @@ public class RoundedAlertDialog {
     private AlertDialog alertDialog;
     private boolean cancelable = true;
 
+    /**
+     * Inflates the rounded dialog layout and binds it to an {@link AlertDialog.Builder}.
+     *
+     * @param context themed Activity or ContextThemeWrapper context
+     */
     public RoundedAlertDialog(Context context) {
         View dialogView = LayoutInflater.from(context).inflate(R.layout.inps_rounded_alert_dialog_layout, null);
         titleView = dialogView.findViewById(R.id.inps_rounded_alert_dialog_title);
@@ -48,6 +53,9 @@ public class RoundedAlertDialog {
     /**
      * Sets the scrollable content, detaching {@code view} from any existing parent first and
      * replacing any previously added view.
+     *
+     * @param view content view to display inside the scrollable body
+     * @return this dialog builder for chaining
      */
     public RoundedAlertDialog addView(View view) {
         if (view.getParent() instanceof ViewGroup) {
@@ -59,12 +67,23 @@ public class RoundedAlertDialog {
         return this;
     }
 
+    /**
+     * Sets the dialog header title text.
+     *
+     * @param title title string or {@link CharSequence}
+     * @return this dialog builder for chaining
+     */
     public RoundedAlertDialog setTitle(CharSequence title) {
         titleView.setText(title);
         return this;
     }
 
-    /** Configures cancelability both before and after {@link #show()}. */
+    /**
+     * Configures cancelability both before and after {@link #show()}.
+     *
+     * @param cancelable {@code true} to allow Back press and outside tap cancellation
+     * @return this dialog builder for chaining
+     */
     public RoundedAlertDialog setCancelable(boolean cancelable) {
         this.cancelable = cancelable;
         builder.setCancelable(cancelable);
@@ -74,19 +93,57 @@ public class RoundedAlertDialog {
         return this;
     }
 
+    /**
+     * Shows and labels the left action button using the default contrast text color.
+     *
+     * @param text button caption
+     * @return this dialog builder for chaining
+     */
     public RoundedAlertDialog setupLeftButton(String text) { return setup(leftButton, text, null); }
 
+    /**
+     * Shows and labels the left action button with a custom text color.
+     *
+     * @param text  button caption
+     * @param color ARGB text color integer
+     * @return this dialog builder for chaining
+     */
     public RoundedAlertDialog setupLeftButton(String text, int color) { return setup(leftButton, text, color); }
 
+    /**
+     * Shows and labels the right action button using the default contrast text color.
+     *
+     * @param text button caption
+     * @return this dialog builder for chaining
+     */
     public RoundedAlertDialog setupRightButton(String text) { return setup(rightButton, text, null); }
 
+    /**
+     * Shows and labels the right action button with a custom text color.
+     *
+     * @param text  button caption
+     * @param color ARGB text color integer
+     * @return this dialog builder for chaining
+     */
     public RoundedAlertDialog setupRightButton(String text, int color) { return setup(rightButton, text, color); }
 
+    /**
+     * Attaches a click listener to the left action button.
+     *
+     * @param listener click listener
+     * @return this dialog builder for chaining
+     */
     public RoundedAlertDialog setupLeftButtonOnClick(View.OnClickListener listener) {
         leftButton.setOnClickListener(listener);
         return this;
     }
 
+    /**
+     * Attaches a click listener to the right action button.
+     *
+     * @param listener click listener
+     * @return this dialog builder for chaining
+     */
     public RoundedAlertDialog setupRightButtonOnClick(View.OnClickListener listener) {
         rightButton.setOnClickListener(listener);
         return this;
@@ -114,6 +171,11 @@ public class RoundedAlertDialog {
         }
     }
 
+    /**
+     * Returns whether the underlying dialog is currently displayed.
+     *
+     * @return {@code true} if showing
+     */
     public boolean isShowing() {
         return alertDialog != null && alertDialog.isShowing();
     }

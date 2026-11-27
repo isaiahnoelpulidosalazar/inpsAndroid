@@ -9,11 +9,14 @@ final class ComparisonSorts {
         throw new UnsupportedOperationException("No instances");
     }
 
+    /** Swaps two elements in {@code a} at indices {@code i} and {@code j}. */
     static void swap(int[] a, int i, int j) {
         int t = a[i];
         a[i] = a[j];
         a[j] = t;
     }
+
+    /** In-place bubble sort with early exit when a pass makes zero swaps. */
 
     static int[] bubbleSort(int[] arr) {
         for (int end = arr.length - 1; end > 0; end--) {
@@ -29,6 +32,7 @@ final class ComparisonSorts {
         return arr;
     }
 
+    /** Bidirectional bubble sort sweeping left-to-right then right-to-left. */
     static int[] cocktailShakerSort(int[] arr) {
         int start = 0;
         int end = arr.length - 1;
@@ -55,6 +59,7 @@ final class ComparisonSorts {
         return arr;
     }
 
+    /** Alternates odd-index and even-index pair comparisons until no swaps occur. */
     static int[] oddEvenSort(int[] arr) {
         boolean sorted = false;
         while (!sorted) {
@@ -71,6 +76,7 @@ final class ComparisonSorts {
         return arr;
     }
 
+    /** In-place selection sort repeatedly placing the minimum remaining element at index {@code i}. */
     static int[] selectionSort(int[] arr) {
         for (int i = 0; i < arr.length - 1; i++) {
             int min = i;
@@ -82,11 +88,13 @@ final class ComparisonSorts {
         return arr;
     }
 
+    /** In-place insertion sort over the full array. */
     static int[] insertionSort(int[] arr) {
         if (arr.length > 1) insertionRange(arr, 0, arr.length - 1);
         return arr;
     }
 
+    /** Sorts slice {@code [lo, hi]} inclusive using insertion sort. */
     static void insertionRange(int[] arr, int lo, int hi) {
         for (int i = lo + 1; i <= hi; i++) {
             int key = arr[i];
@@ -99,6 +107,7 @@ final class ComparisonSorts {
         }
     }
 
+    /** In-place Shellsort using Knuth's {@code 3*h + 1} gap sequence. */
     static int[] shellsort(int[] arr) {
         int n = arr.length;
         int h = 1;
@@ -117,12 +126,14 @@ final class ComparisonSorts {
         return arr;
     }
 
+    /** Non-mutating dual-direction Hoare quicksort with small-subarray insertion cutoff. */
     static int[] quicksort(int[] arr) {
         int[] copy = arr.clone();
         if (copy.length > 1) quicksortRange(copy, 0, copy.length - 1);
         return copy;
     }
 
+    // Recurse on the smaller partition and loop on the larger one to bound stack depth to O(log n).
     private static void quicksortRange(int[] arr, int lo, int hi) {
         while (lo < hi) {
             if (hi - lo < INSERTION_CUTOFF) {
@@ -152,6 +163,7 @@ final class ComparisonSorts {
         }
     }
 
+    /** Non-mutating top-down merge sort reusing a single scratch buffer. */
     static int[] mergeSort(int[] arr) {
         int[] copy = arr.clone();
         if (copy.length > 1) mergeSortRange(copy, new int[copy.length], 0, copy.length - 1);
@@ -177,6 +189,7 @@ final class ComparisonSorts {
         while (i <= mid) arr[k++] = temp[i++];
     }
 
+    /** In-place max-heap sort over the full array. */
     static int[] heapsort(int[] arr) {
         if (arr.length > 1) heapsortRange(arr, 0, arr.length - 1);
         return arr;
@@ -204,6 +217,7 @@ final class ComparisonSorts {
         }
     }
 
+    /** Non-mutating hybrid introsort: quicksort falling back to heapsort at depth {@code 2*log2(n)}. */
     static int[] introsort(int[] arr) {
         int[] copy = arr.clone();
         if (copy.length > 1) {

@@ -32,7 +32,13 @@ public final class EmailDomainAllowList {
         useFullDomain = b.useFullDomain;
     }
 
-    /** @return {@code true} when the address has a valid local part and an allow-listed domain. */
+    /**
+     * Validates an e-mail address against this allow-list.
+     *
+     * @param email e-mail address to verify, may be {@code null}
+     * @return {@code true} when {@code email} has a non-empty whitespace-free local part, a single
+     * {@code @}, and an allow-listed domain
+     */
     public boolean isValid(String email) {
         if (email == null) return false;
         int at = email.indexOf('@');
@@ -58,25 +64,51 @@ public final class EmailDomainAllowList {
         return names.contains(domain.substring(0, dot)) && extensions.contains(domain.substring(dot + 1));
     }
 
-    /** Builder for {@link EmailDomainAllowList}. */
+    /** Fluent builder for creating immutable {@link EmailDomainAllowList} instances. */
     public static final class Builder {
         private final Set<String> domains = new HashSet<>();
         private final Set<String> names = new HashSet<>();
         private final Set<String> extensions = new HashSet<>();
         private boolean useFullDomain;
 
-        /** Adds an accepted domain name (the label before the dot), e.g. {@code "gmail"}. */
+        /**
+         * Adds an accepted second-level domain label for split mode (e.g. {@code "gmail"}).
+         *
+         * @param name domain label before the dot
+         * @return this builder for chaining
+         */
         public Builder addDomainName(String name) { add(names, name); return this; }
 
-        /** Adds an accepted extension (the label after the dot), e.g. {@code "com"}. */
+        /**
+         * Adds an accepted top-level domain extension for split mode (e.g. {@code "com"}).
+         *
+         * @param extension domain suffix after the dot
+         * @return this builder for chaining
+         */
         public Builder addDomainExtension(String extension) { add(extensions, extension); return this; }
 
-        /** Adds an accepted full domain, e.g. {@code "gmail.com"}. */
+        /**
+         * Adds an accepted complete domain for full-domain mode (e.g. {@code "gmail.com"}).
+         *
+         * @param domain full domain host string
+         * @return this builder for chaining
+         */
         public Builder addDomain(String domain) { add(domains, domain); return this; }
 
-        /** Selects full-domain mode ({@code true}) or split mode ({@code false}, default). */
+        /**
+         * Selects whether validation matches full domains ({@code true}) or split
+         * {@code name.extension} pairs ({@code false}, default).
+         *
+         * @param useFullDomain {@code true} for full-domain matching, {@code false} for split mode
+         * @return this builder for chaining
+         */
         public Builder useFullDomain(boolean useFullDomain) { this.useFullDomain = useFullDomain; return this; }
 
+        /**
+         * Builds an immutable {@link EmailDomainAllowList} from the configured rules.
+         *
+         * @return configured allow-list validator
+         */
         public EmailDomainAllowList build() { return new EmailDomainAllowList(this); }
 
         private static void add(Set<String> set, String value) {

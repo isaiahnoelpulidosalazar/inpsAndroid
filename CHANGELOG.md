@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.0.2
+
+Documentation & polish release adding comprehensive Android Studio Javadoc and XML comments across the entire codebase without modifying runtime APIs.
+
+### Documentation & Tooling
+- **Full Codebase Javadoc**: Enriched all public classes, constructors, interfaces, callbacks, enum constants, and methods across `core`, `ui`, `edu`, and the `:app` demo with `@param`, `@return`, and `@throws` tags for Android Studio Quick Documentation, Parameter Info, and Maven `withJavadocJar()` generation.
+- **XML Attribute & Manifest Comments**: Documented all custom attributes and `<declare-styleable>` groups in `inps_attrs.xml` and the `POST_NOTIFICATIONS` permission in `AndroidManifest.xml`.
+
 ## 3.0.1
 
 Feature release expanding the `core` and `ui` toolkits without breaking `3.0.0` APIs.

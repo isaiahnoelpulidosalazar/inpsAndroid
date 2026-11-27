@@ -74,6 +74,11 @@ public class SimpleList extends FrameLayout {
     private boolean customPaddingSet;
     private int padLeftPx, padTopPx, padRightPx, padBottomPx;
 
+    /**
+     * Programmatic constructor creating a vertical {@link SimpleList}.
+     *
+     * @param context Android context
+     */
     public SimpleList(@NonNull Context context) {
         super(context);
         recyclerView = new RecyclerView(context);
@@ -81,6 +86,13 @@ public class SimpleList extends FrameLayout {
         init(context, null, 0);
     }
 
+    /**
+     * XML inflation constructor reading {@code inpsCheckboxesEnabled}, {@code inpsBounceAnimation},
+     * {@code inpsCheckStyle}, and {@code inpsCornerRadius}.
+     *
+     * @param context Android context
+     * @param attrs   XML attribute set
+     */
     public SimpleList(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         recyclerView = new RecyclerView(context, attrs);
@@ -88,6 +100,13 @@ public class SimpleList extends FrameLayout {
         init(context, attrs, 0);
     }
 
+    /**
+     * Styled XML inflation constructor.
+     *
+     * @param context  Android context
+     * @param attrs    XML attribute set
+     * @param defStyle default style attribute
+     */
     public SimpleList(@NonNull Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         recyclerView = new RecyclerView(context, attrs, defStyle);
@@ -119,16 +138,35 @@ public class SimpleList extends FrameLayout {
         addView(recyclerView, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
     }
 
-    /** Listeners are read at click time, so they can be changed without rebuilding anything. */
+    /**
+     * Registers a listener invoked when a row is tapped. Listeners are read at click time, so they
+     * can be swapped without rebuilding the adapter.
+     *
+     * @param listener click callback, or {@code null}
+     */
     public void setOnItemClickListener(@Nullable OnItemClickListener listener) { this.clickListener = listener; }
 
+    /**
+     * Registers a listener invoked when a row is long-pressed.
+     *
+     * @param listener long-click callback, or {@code null}
+     */
     public void setOnItemLongClickListener(@Nullable OnItemLongClickListener listener) { this.longClickListener = listener; }
 
+    /**
+     * Registers a listener invoked when a row's checkbox is toggled while checkbox mode is enabled.
+     *
+     * @param listener checked-change callback, or {@code null}
+     */
     public void setOnItemCheckedChangeListener(@Nullable OnItemCheckedChangeListener listener) {
         this.checkedChangeListener = listener;
     }
 
-    /** Toggles between classic {@link TextView} rows and modern {@link RoundedCheckBox} rows. */
+    /**
+     * Toggles between classic {@link TextView} rows and modern {@link RoundedCheckBox} rows.
+     *
+     * @param enabled {@code true} to render multi-select checkbox rows
+     */
     public void setCheckboxesEnabled(boolean enabled) {
         if (this.checkboxesEnabled != enabled) {
             this.checkboxesEnabled = enabled;
@@ -136,11 +174,20 @@ public class SimpleList extends FrameLayout {
         }
     }
 
+    /**
+     * Returns whether checkbox row mode is currently active.
+     *
+     * @return {@code true} if rendering {@link RoundedCheckBox} rows
+     */
     public boolean isCheckboxesEnabled() {
         return checkboxesEnabled;
     }
 
-    /** Enables or disables the checkbox bounce animation across all rows. */
+    /**
+     * Enables or disables the checkbox bounce animation across all rows.
+     *
+     * @param enabled {@code true} to enable bounce animations
+     */
     public void setBounceAnimationEnabled(boolean enabled) {
         if (this.bounceAnimationEnabled != enabled) {
             this.bounceAnimationEnabled = enabled;
@@ -150,11 +197,20 @@ public class SimpleList extends FrameLayout {
         }
     }
 
+    /**
+     * Returns whether checkbox rows play the overshoot bounce animation when toggled.
+     *
+     * @return {@code true} if bounce animation is enabled
+     */
     public boolean isBounceAnimationEnabled() {
         return bounceAnimationEnabled;
     }
 
-    /** Configures the visual style used by {@link RoundedCheckBox} rows when checkboxes are enabled. */
+    /**
+     * Configures the visual style used by {@link RoundedCheckBox} rows when checkboxes are enabled.
+     *
+     * @param style checkbox presentation style ({@code CARD}, {@code PILL}, or {@code MINIMAL})
+     */
     public void setCheckStyle(@NonNull RoundedCheckBox.Style style) {
         this.checkStyle = Objects.requireNonNull(style, "style");
         if (checkboxesEnabled) {
@@ -162,11 +218,20 @@ public class SimpleList extends FrameLayout {
         }
     }
 
+    /**
+     * Returns the visual style currently configured for checkbox rows.
+     *
+     * @return active {@link RoundedCheckBox.Style}
+     */
     public RoundedCheckBox.Style getCheckStyle() {
         return checkStyle;
     }
 
-    /** Sets corner radius in dp for checkbox rows. */
+    /**
+     * Sets corner radius in dp for checkbox rows.
+     *
+     * @param dp corner radius in density-independent pixels
+     */
     public void setCheckboxCornerRadiusDp(float dp) {
         this.hasCustomCornerRadius = true;
         this.checkboxCornerRadiusDp = dp;
@@ -175,11 +240,21 @@ public class SimpleList extends FrameLayout {
         }
     }
 
+    /**
+     * Appends a single item string and dispatches a diffed list update.
+     *
+     * @param item string item to append
+     */
     public void addItem(String item) {
         items.add(item);
         submitSnapshot();
     }
 
+    /**
+     * Appends all items in {@code newItems} and dispatches a diffed list update.
+     *
+     * @param newItems collection of string items to append
+     */
     public void addItems(Collection<String> newItems) {
         if (newItems.isEmpty()) return;
         items.addAll(newItems);
@@ -189,6 +264,8 @@ public class SimpleList extends FrameLayout {
     /**
      * Replaces all items, snapshotting {@code newItems} before clearing so
      * {@code setItems(getItems())} is safe. Checked states matching item text are preserved.
+     *
+     * @param newItems replacement collection of items
      */
     public void setItems(Collection<String> newItems) {
         Set<String> previouslyChecked = new HashSet<>();
@@ -211,7 +288,12 @@ public class SimpleList extends FrameLayout {
         adapter.submitList(snapshot);
     }
 
-    /** @throws IndexOutOfBoundsException if position is out of range */
+    /**
+     * Removes the item at {@code position} and shifts subsequent checked indices down by one.
+     *
+     * @param position zero-based row index to remove
+     * @throws IndexOutOfBoundsException if {@code position} is out of range
+     */
     public void removeItem(int position) {
         items.remove(position);
         Set<Integer> shifted = new LinkedHashSet<>();
@@ -227,18 +309,30 @@ public class SimpleList extends FrameLayout {
         submitSnapshot();
     }
 
+    /** Removes all items and clears checked state. */
     public void clear() {
         items.clear();
         checkedPositions.clear();
         submitSnapshot();
     }
 
-    /** @return a read-only live view of the items; mutate through {@link #addItem}, {@link #removeItem}, etc. */
+    /**
+     * Returns an unmodifiable view of the current items; mutate via {@link #addItem},
+     * {@link #removeItem}, or {@link #setItems}.
+     *
+     * @return read-only live list of items
+     */
     public List<String> getItems() {
         return Collections.unmodifiableList(items);
     }
 
-    /** Sets checked state for {@code position} without triggering the bounce animation. */
+    /**
+     * Sets checked state for {@code position} without triggering the bounce animation.
+     *
+     * @param position zero-based row index
+     * @param checked  {@code true} to check, {@code false} to uncheck
+     * @throws IndexOutOfBoundsException if {@code position} is out of range
+     */
     public void setChecked(int position, boolean checked) {
         if (position < 0 || position >= items.size()) {
             throw new IndexOutOfBoundsException("Index: " + position + ", Size: " + items.size());
@@ -249,12 +343,21 @@ public class SimpleList extends FrameLayout {
         }
     }
 
-    /** @return {@code true} if the row at {@code position} is currently checked. */
+    /**
+     * Checks whether the row at {@code position} is currently checked.
+     *
+     * @param position zero-based row index
+     * @return {@code true} if checked
+     */
     public boolean isChecked(int position) {
         return checkedPositions.contains(position);
     }
 
-    /** Checks every item whose text is in {@code selectedItems} and unchecks all others. */
+    /**
+     * Checks every item whose text is in {@code selectedItems} and unchecks all others.
+     *
+     * @param selectedItems collection of item labels to mark checked, or {@code null} to clear
+     */
     public void setCheckedItems(Collection<String> selectedItems) {
         Set<String> targets = selectedItems == null ? Collections.emptySet() : new HashSet<>(selectedItems);
         checkedPositions.clear();
@@ -268,7 +371,11 @@ public class SimpleList extends FrameLayout {
         }
     }
 
-    /** @return unmodifiable list of currently checked item strings in list order. */
+    /**
+     * Returns an unmodifiable list of currently checked item strings in list order.
+     *
+     * @return checked item strings
+     */
     public List<String> getCheckedItems() {
         List<String> result = new ArrayList<>();
         for (int i = 0; i < items.size(); i++) {
@@ -279,7 +386,11 @@ public class SimpleList extends FrameLayout {
         return Collections.unmodifiableList(result);
     }
 
-    /** @return unmodifiable list of checked row indices in ascending order. */
+    /**
+     * Returns an unmodifiable list of checked row indices in ascending order.
+     *
+     * @return checked row indices
+     */
     public List<Integer> getCheckedPositions() {
         List<Integer> result = new ArrayList<>();
         for (int i = 0; i < items.size(); i++) {
@@ -309,12 +420,23 @@ public class SimpleList extends FrameLayout {
         }
     }
 
-    /** Uniform item padding in dp. */
+    /**
+     * Sets uniform item padding in dp on all sides.
+     *
+     * @param dp uniform padding in density-independent pixels
+     */
     public void setItemPadding(int dp) {
         setItemPadding(dp, dp, dp, dp);
     }
 
-    /** Per-side item padding in dp. Applies to existing rows immediately. */
+    /**
+     * Sets per-side item padding in dp and refreshes visible rows immediately.
+     *
+     * @param left   left padding in dp
+     * @param top    top padding in dp
+     * @param right  right padding in dp
+     * @param bottom bottom padding in dp
+     */
     public void setItemPadding(int left, int top, int right, int bottom) {
         Context c = getContext();
         customPaddingSet = true;
@@ -334,15 +456,35 @@ public class SimpleList extends FrameLayout {
         adapter.submitList(new ArrayList<>(items));
     }
 
+    /** Callback invoked when a row in {@link SimpleList} is clicked. */
     public interface OnItemClickListener {
+        /**
+         * Called when the row at {@code position} is tapped.
+         *
+         * @param position zero-based adapter position
+         */
         void onItemClick(int position);
     }
 
+    /** Callback invoked when a row in {@link SimpleList} is long-clicked. */
     public interface OnItemLongClickListener {
+        /**
+         * Called when the row at {@code position} is long-pressed.
+         *
+         * @param position zero-based adapter position
+         */
         void onItemLongClick(int position);
     }
 
+    /** Callback invoked when a checkbox row is toggled in {@link SimpleList}. */
     public interface OnItemCheckedChangeListener {
+        /**
+         * Called when the row at {@code position} changes checked state.
+         *
+         * @param position  zero-based adapter position
+         * @param item      item text at {@code position}
+         * @param isChecked new checked state
+         */
         void onItemCheckedChanged(int position, String item, boolean isChecked);
     }
 

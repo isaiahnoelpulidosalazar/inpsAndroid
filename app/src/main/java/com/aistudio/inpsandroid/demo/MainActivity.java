@@ -31,6 +31,10 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Interactive tabbed documentation and playground activity demonstrating the {@code core},
+ * {@code ui}, and {@code edu} modules of {@code inpsAndroid}.
+ */
 public class MainActivity extends AppCompatActivity implements DemoHost {
 
     private static final String TABLE_NOTES = "notes";
@@ -190,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements DemoHost {
                 easySQL.inTransaction(() -> {
                     easySQL.insert(TABLE_NOTES, Collections.singletonMap(COL_TEXT, "Tap a row to inspect"));
                     easySQL.insert(TABLE_NOTES, Collections.singletonMap(COL_TEXT, "Long-press to delete"));
-                    easySQL.insert(TABLE_NOTES, Collections.singletonMap(COL_TEXT, "inpsAndroid 3.0.1 ready"));
+                    easySQL.insert(TABLE_NOTES, Collections.singletonMap(COL_TEXT, "inpsAndroid 3.0.2 ready"));
                 });
                 loaded = queryAllNotes();
             }

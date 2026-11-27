@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:lineSpacingExtra="3dp"
-                android:text="inpsAndroid 3.0.1 organizes utilities, drop-in UI widgets, and educational algorithm/audio modules under com.isaiahnoelpulidosalazar.inpsandroid."
+                android:text="inpsAndroid 3.0.2 organizes utilities, drop-in UI widgets, and educational algorithm/audio modules under com.isaiahnoelpulidosalazar.inpsandroid."
                 android:textColor="@color/doc_ink_muted"
                 android:textSize="14sp" />
 
@@ -59,7 +59,7 @@
                 android:background="@drawable/bg_code_block"
                 android:fontFamily="monospace"
                 android:padding="12dp"
-                android:text="dependencies {\n    implementation 'com.github.isaiahnoelpulidosalazar:inpsAndroid:3.0.1'\n}"
+                android:text="dependencies {\n    implementation 'com.github.isaiahnoelpulidosalazar:inpsAndroid:3.0.2'\n}"
                 android:textColor="@color/doc_ink"
                 android:textSize="12sp" />
         </LinearLayout>

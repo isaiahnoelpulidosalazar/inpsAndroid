@@ -65,6 +65,12 @@ public class RoundedCheckBox extends LinearLayout implements Checkable {
 
     /** Listener notified when the checked state changes. */
     public interface OnCheckedChangeListener {
+        /**
+         * Called when the checked state of a {@link RoundedCheckBox} changes.
+         *
+         * @param checkBox  the checkbox whose state changed
+         * @param isChecked the new checked state
+         */
         void onCheckedChanged(RoundedCheckBox checkBox, boolean isChecked);
     }
 
@@ -83,14 +89,33 @@ public class RoundedCheckBox extends LinearLayout implements Checkable {
     private boolean broadcasting;
     private OnCheckedChangeListener checkedChangeListener;
 
+    /**
+     * Programmatic constructor creating a rounded checkbox with {@link Style#CARD} styling.
+     *
+     * @param context Android context
+     */
     public RoundedCheckBox(@NonNull Context context) {
         this(context, null);
     }
 
+    /**
+     * XML inflation constructor reading {@code inpsCheckStyle}, {@code inpsBounceAnimation},
+     * {@code inpsCornerRadius}, {@code android:text}, and {@code android:checked}.
+     *
+     * @param context Android context
+     * @param attrs   XML attribute set
+     */
     public RoundedCheckBox(@NonNull Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
+    /**
+     * Styled XML inflation constructor.
+     *
+     * @param context      Android context
+     * @param attrs        XML attribute set
+     * @param defStyleAttr default theme style attribute
+     */
     public RoundedCheckBox(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setOrientation(HORIZONTAL);
@@ -171,7 +196,11 @@ public class RoundedCheckBox extends LinearLayout implements Checkable {
         return checked;
     }
 
-    /** Sets the checked state immediately without triggering the bounce animation. */
+    /**
+     * Sets the checked state immediately without triggering the bounce animation.
+     *
+     * @param checked {@code true} to check, {@code false} to uncheck
+     */
     @Override
     public void setChecked(boolean checked) {
         setChecked(checked, false);
@@ -180,6 +209,9 @@ public class RoundedCheckBox extends LinearLayout implements Checkable {
     /**
      * Sets the checked state and optionally runs the bounce animation when
      * {@link #isBounceAnimationEnabled()} is {@code true}.
+     *
+     * @param checked {@code true} to check, {@code false} to uncheck
+     * @param animate {@code true} to animate with an overshoot bounce if enabled
      */
     public void setChecked(boolean checked, boolean animate) {
         boolean changed = this.checked != checked;
@@ -195,7 +227,11 @@ public class RoundedCheckBox extends LinearLayout implements Checkable {
         }
     }
 
-    /** Enables or disables the overshoot bounce animation when toggled. */
+    /**
+     * Enables or disables the overshoot bounce animation when toggled.
+     *
+     * @param enabled {@code true} to play bounce animations on toggle
+     */
     public void setBounceAnimationEnabled(boolean enabled) {
         this.bounceAnimationEnabled = enabled;
         if (!enabled) {
@@ -203,44 +239,86 @@ public class RoundedCheckBox extends LinearLayout implements Checkable {
         }
     }
 
-    /** @return {@code true} if bounce animations play when toggled. */
+    /**
+     * Checks whether toggle bounce animations are currently enabled.
+     *
+     * @return {@code true} if bounce animations play when toggled
+     */
     public boolean isBounceAnimationEnabled() {
         return bounceAnimationEnabled;
     }
 
-    /** Sets the container presentation style ({@link Style#CARD}, {@link Style#PILL}, or {@link Style#MINIMAL}). */
+    /**
+     * Sets the container presentation style ({@link Style#CARD}, {@link Style#PILL}, or {@link Style#MINIMAL}).
+     *
+     * @param style visual style to apply
+     */
     public void setStyle(@NonNull Style style) {
         this.style = Objects.requireNonNull(style, "style");
         applyVisualState(false);
     }
 
+    /**
+     * Returns the current visual presentation style.
+     *
+     * @return active {@link Style}
+     */
     public Style getStyle() {
         return style;
     }
 
-    /** Sets corner radius in dp for {@link Style#CARD} and {@link Style#MINIMAL}. */
+    /**
+     * Sets corner radius in dp for {@link Style#CARD} and {@link Style#MINIMAL}.
+     *
+     * @param dp corner radius in density-independent pixels
+     */
     public void setCornerRadiusDp(float dp) {
         hasExplicitCornerRadius = true;
         cornerRadiusPx = RoundedViewHelper.dp(getContext(), dp);
         applyVisualState(false);
     }
 
+    /**
+     * Updates the checkbox label text.
+     *
+     * @param text label text, or {@code null} to clear
+     */
     public void setText(@Nullable CharSequence text) {
         labelView.setText(text);
     }
 
+    /**
+     * Updates the checkbox label text from a string resource.
+     *
+     * @param resId string resource identifier
+     */
     public void setText(@StringRes int resId) {
         labelView.setText(resId);
     }
 
+    /**
+     * Returns the current label text.
+     *
+     * @return label {@link CharSequence}
+     */
     public CharSequence getText() {
         return labelView.getText();
     }
 
+    /**
+     * Exposes the internal label {@link TextView} for typography customization.
+     *
+     * @return internal label view
+     */
     public TextView getLabelView() {
         return labelView;
     }
 
+    /**
+     * Registers a callback notified whenever the checked state changes.
+     *
+     * @param listener callback listener, or {@code null} to remove
+     */
     public void setOnCheckedChangeListener(@Nullable OnCheckedChangeListener listener) {
         this.checkedChangeListener = listener;
     }

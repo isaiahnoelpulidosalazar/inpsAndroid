@@ -42,7 +42,13 @@ public final class SoundSynthesizer implements AutoCloseable {
     };
     private volatile boolean released;
 
-    /** @return frequency in Hz of a MIDI note (equal temperament, A4 = 440 Hz). */
+    /**
+     * Converts a MIDI note number to frequency in Hertz under 12-tone equal temperament
+     * ({@code A4 = MIDI 69 = 440 Hz}).
+     *
+     * @param midiNote MIDI note number (typically {@code 0..127})
+     * @return fundamental frequency in Hertz
+     */
     public static double frequencyOf(int midiNote) {
         return 440.0 * Math.pow(2.0, (midiNote - 69) / 12.0);
     }
@@ -51,9 +57,9 @@ public final class SoundSynthesizer implements AutoCloseable {
      * Pre-builds and caches {@link AudioTrack} instances for {@code notes} on the background
      * executor. Safe to call from the UI thread.
      *
-     * @param notes MIDI note numbers in 0..127
-     * @throws IllegalArgumentException if any note is out of range
-     * @throws NullPointerException if {@code notes} is null
+     * @param notes MIDI note numbers in {@code 0..127}
+     * @throws IllegalArgumentException if any note is outside {@code 0..127}
+     * @throws NullPointerException     if {@code notes} is {@code null}
      */
     public void prepare(int... notes) {
         Objects.requireNonNull(notes, "notes");
@@ -72,11 +78,11 @@ public final class SoundSynthesizer implements AutoCloseable {
     }
 
     /**
-     * Plays a note, restarting it if already sounding. Track synthesis and playback run off the
-     * calling thread on the internal single-thread executor.
+     * Plays a note asynchronously, restarting it if already sounding. Track synthesis and
+     * playback run off the calling thread on the internal single-thread executor.
      *
-     * @param midiNote 0-127
-     * @throws IllegalArgumentException if out of range
+     * @param midiNote MIDI note number in {@code 0..127}
+     * @throws IllegalArgumentException if {@code midiNote} is outside {@code 0..127}
      */
     public void playNote(int midiNote) {
         validateMidiNote(midiNote);
@@ -96,7 +102,10 @@ public final class SoundSynthesizer implements AutoCloseable {
         });
     }
 
-    /** Releases every native track and shuts down the background executor. Further calls do nothing. */
+    /**
+     * Releases every cached native {@link AudioTrack} and shuts down the background executor.
+     * Subsequent calls to {@link #prepare(int...)} or {@link #playNote(int)} become no-ops.
+     */
     public void release() {
         if (released) return;
         released = true;
@@ -109,6 +118,7 @@ public final class SoundSynthesizer implements AutoCloseable {
         audioExecutor.shutdown();
     }
 
+    /** Closes this synthesizer by delegating to {@link #release()}. */
     @Override
     public void close() {
         release();

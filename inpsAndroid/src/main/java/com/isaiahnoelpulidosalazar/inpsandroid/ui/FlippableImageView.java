@@ -30,7 +30,12 @@ public class FlippableImageView extends AppCompatImageView {
 
     /** Animation speed: full 180-degree flip duration. */
     public enum Speed {
-        SLOW(600), NORMAL(300), FAST(150);
+        /** 600ms full 180-degree flip duration. */
+        SLOW(600),
+        /** 300ms full 180-degree flip duration. */
+        NORMAL(300),
+        /** 150ms full 180-degree flip duration. */
+        FAST(150);
 
         final long durationMs;
 
@@ -46,10 +51,28 @@ public class FlippableImageView extends AppCompatImageView {
     private boolean reverseBackImage;
     private Speed speed = Speed.NORMAL;
 
+    /**
+     * Programmatic constructor using default {@link Speed#NORMAL}.
+     *
+     * @param context Android context
+     */
     public FlippableImageView(@NonNull Context context) { this(context, null); }
 
+    /**
+     * XML inflation constructor reading {@code app:inpsReverseBackImage} and {@code app:inpsFlipSpeed}.
+     *
+     * @param context Android context
+     * @param attrs   XML attribute set
+     */
     public FlippableImageView(@NonNull Context context, @Nullable AttributeSet attrs) { this(context, attrs, 0); }
 
+    /**
+     * Styled XML inflation constructor.
+     *
+     * @param context      Android context
+     * @param attrs        XML attribute set
+     * @param defStyleAttr default theme style attribute
+     */
     public FlippableImageView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         // Moves the virtual camera back along Z so 3D perspective foreshortening during Y rotation is subtle.
@@ -70,51 +93,101 @@ public class FlippableImageView extends AppCompatImageView {
 
     // ---- configuration -------------------------------------------------------------------------
 
+    /**
+     * Configures the flip animation duration preset.
+     *
+     * @param speed desired {@link Speed} preset
+     */
     public void setSpeed(@NonNull Speed speed) {
         this.speed = Objects.requireNonNull(speed, "speed");
     }
 
+    /**
+     * Returns the current flip animation speed preset.
+     *
+     * @return current {@link Speed}
+     */
     public Speed getSpeed() { return speed; }
 
     /**
      * When {@code true} the back image is mirrored horizontally so it reads correctly after the
      * 180-degree rotation.
+     *
+     * @param reverseBackImage {@code true} to mirror the back image along X
      */
     public void setReverseBackImage(boolean reverseBackImage) {
         this.reverseBackImage = reverseBackImage;
         applySide();
     }
 
+    /**
+     * Sets the front image from a drawable resource ID.
+     *
+     * @param resourceId drawable resource identifier
+     */
     public void setFrontImage(@DrawableRes int resourceId) {
         setFrontImage(AppCompatResources.getDrawable(getContext(), resourceId));
     }
 
+    /**
+     * Sets the front image from a {@link Bitmap} (or clears it when {@code null}).
+     *
+     * @param bitmap front bitmap, or {@code null}
+     */
     public void setFrontBitmap(@Nullable Bitmap bitmap) {
         setFrontImage(bitmap == null ? null : new BitmapDrawable(getResources(), bitmap));
     }
 
-    /** Sets the front image and shows it immediately when the front side is visible. */
+    /**
+     * Sets the front image and shows it immediately when the front side is visible.
+     *
+     * @param drawable front drawable, or {@code null}
+     */
     public void setFrontImage(@Nullable Drawable drawable) {
         frontImage = drawable;
         if (!showingBack) applySide();
     }
 
+    /**
+     * Sets the back image from a drawable resource ID.
+     *
+     * @param resourceId drawable resource identifier
+     */
     public void setBackImage(@DrawableRes int resourceId) {
         setBackImage(AppCompatResources.getDrawable(getContext(), resourceId));
     }
 
+    /**
+     * Sets the back image from a {@link Bitmap} (or clears it when {@code null}).
+     *
+     * @param bitmap back bitmap, or {@code null}
+     */
     public void setBackBitmap(@Nullable Bitmap bitmap) {
         setBackImage(bitmap == null ? null : new BitmapDrawable(getResources(), bitmap));
     }
 
-    /** Sets the back image and shows it immediately when the back side is visible. */
+    /**
+     * Sets the back image and shows it immediately when the back side is visible.
+     *
+     * @param drawable back drawable, or {@code null}
+     */
     public void setBackImage(@Nullable Drawable drawable) {
         backImage = drawable;
         if (showingBack) applySide();
     }
 
+    /**
+     * Returns the currently configured front drawable.
+     *
+     * @return front drawable, or {@code null}
+     */
     @Nullable public Drawable getFrontDrawable() { return frontImage; }
 
+    /**
+     * Returns the currently configured back drawable.
+     *
+     * @return back drawable, or {@code null}
+     */
     @Nullable public Drawable getBackDrawable() { return backImage; }
 
     // ---- flipping ------------------------------------------------------------------------------
@@ -144,7 +217,11 @@ public class FlippableImageView extends AppCompatImageView {
                 .start();
     }
 
-    /** @return {@code true} when flipped to the back side. */
+    /**
+     * Checks which face is currently targeted.
+     *
+     * @return {@code true} when flipped to the back side
+     */
     public boolean isFlipped() { return flipped; }
 
     @Override

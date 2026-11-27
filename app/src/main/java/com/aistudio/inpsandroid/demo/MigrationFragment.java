@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+/** Tab displaying the v1/v2 to v3 migration reference and attribute prefix mapping. */
 public class MigrationFragment extends Fragment {
 
     @Nullable

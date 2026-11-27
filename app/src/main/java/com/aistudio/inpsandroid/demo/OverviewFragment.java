@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+/** Architecture overview tab with quick-jump buttons to the interactive section tabs. */
 public class OverviewFragment extends Fragment {
 
     @Nullable

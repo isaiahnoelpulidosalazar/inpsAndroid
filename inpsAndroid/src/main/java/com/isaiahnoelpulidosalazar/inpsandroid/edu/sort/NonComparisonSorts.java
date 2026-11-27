@@ -5,12 +5,14 @@ import java.util.Arrays;
 /** Package-private non-comparison sorting implementations. */
 final class NonComparisonSorts {
 
+    /** Hard cap on histogram/rod allocations to prevent out-of-memory errors on huge ranges. */
     static final int MAX_RANGE = 10_000_000;
 
     private NonComparisonSorts() {
         throw new UnsupportedOperationException("No instances");
     }
 
+    /** Offset-adjusted counting sort supporting negative and positive integer values. */
     static int[] countingSort(int[] arr) {
         if (arr.length <= 1) return arr.clone();
         int min = arr[0];
@@ -33,6 +35,7 @@ final class NonComparisonSorts {
         return res;
     }
 
+    /** Non-mutating bucket sort for uniform doubles in {@code [0.0, 1.0)}. */
     static double[] bucketSortUniform(double[] arr) {
         for (double x : arr) {
             if (!(x >= 0.0 && x < 1.0)) {
@@ -64,6 +67,7 @@ final class NonComparisonSorts {
         return res;
     }
 
+    /** Gravity (abacus) bead sort descending across abacus rods, then read in ascending order. */
     static int[] beadSort(int[] arr) {
         if (arr.length == 0) return arr.clone();
         int max = 0;

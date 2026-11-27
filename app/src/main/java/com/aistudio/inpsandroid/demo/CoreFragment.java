@@ -26,6 +26,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Interactive playground tab for {@code ...inpsandroid.core} utilities: {@link Converters},
+ * {@link EmailDomainAllowList}, {@link StringChecks}, {@link TimeLeft}, {@code EasySQL}, and
+ * {@link EasyNotification}.
+ */
 public class CoreFragment extends Fragment implements DemoHost.NotesListener {
 
     private RoundedEditText inputText;
@@ -123,7 +128,7 @@ public class CoreFragment extends Fragment implements DemoHost.NotesListener {
 
         view.findViewById(R.id.btn_send_notification).setOnClickListener(v ->
                 runWithNotificationPermission(() -> {
-                    String body = readInputOrDefault("Hello from EasyNotification v3.0.1!");
+                    String body = readInputOrDefault("Hello from EasyNotification v3.0.2!");
                     int id = easyNotification.prepare("demo_alerts")
                             .title("inpsAndroid Alert")
                             .message(body)
@@ -138,8 +143,8 @@ public class CoreFragment extends Fragment implements DemoHost.NotesListener {
                     int id = easyNotification.prepare("demo_alerts")
                             .title("Expandable Summary")
                             .message(body)
-                            .bigText(body + "\n\nTap to reopen inpsAndroid 3.0.1.")
-                            .subText("v3.0.1")
+                            .bigText(body + "\n\nTap to reopen inpsAndroid 3.0.2.")
+                            .subText("v3.0.2")
                             .tapActivity(MainActivity.class)
                             .show();
                     updateNotificationStatus(id, "demo_alerts (BigText)");

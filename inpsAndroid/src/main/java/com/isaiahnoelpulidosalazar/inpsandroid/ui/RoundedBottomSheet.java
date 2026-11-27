@@ -83,6 +83,12 @@ public class RoundedBottomSheet {
     private DialogInterface.OnDismissListener externalDismissListener;
     private DialogInterface.OnCancelListener externalCancelListener;
 
+    /**
+     * Inflates the bottom-sheet layout, configures edge-to-edge bottom insets and drag-to-dismiss
+     * listeners, and prepares the modal dialog window.
+     *
+     * @param context themed Activity or ContextThemeWrapper context
+     */
     public RoundedBottomSheet(@NonNull Context context) {
         this.context = Objects.requireNonNull(context, "context");
         View rootView = LayoutInflater.from(context)
@@ -133,7 +139,12 @@ public class RoundedBottomSheet {
         subtitleView.setOnTouchListener(dragListener);
     }
 
-    /** Sets the header title. Passing {@code null} or empty hides the title view. */
+    /**
+     * Sets the header title. Passing {@code null} or empty hides the title view.
+     *
+     * @param title title text, or {@code null} to hide
+     * @return this builder for chaining
+     */
     public RoundedBottomSheet setTitle(@Nullable CharSequence title) {
         if (title == null || title.length() == 0) {
             titleView.setText(null);
@@ -145,12 +156,22 @@ public class RoundedBottomSheet {
         return this;
     }
 
-    /** Sets the header title from a string resource. */
+    /**
+     * Sets the header title from a string resource.
+     *
+     * @param resId string resource identifier
+     * @return this builder for chaining
+     */
     public RoundedBottomSheet setTitle(@StringRes int resId) {
         return setTitle(context.getString(resId));
     }
 
-    /** Sets the optional header subtitle. Passing {@code null} or empty hides the subtitle view. */
+    /**
+     * Sets the optional header subtitle. Passing {@code null} or empty hides the subtitle view.
+     *
+     * @param subtitle subtitle text, or {@code null} to hide
+     * @return this builder for chaining
+     */
     public RoundedBottomSheet setSubtitle(@Nullable CharSequence subtitle) {
         if (subtitle == null || subtitle.length() == 0) {
             subtitleView.setText(null);
@@ -162,7 +183,12 @@ public class RoundedBottomSheet {
         return this;
     }
 
-    /** Sets the optional header subtitle from a string resource. */
+    /**
+     * Sets the optional header subtitle from a string resource.
+     *
+     * @param resId string resource identifier
+     * @return this builder for chaining
+     */
     public RoundedBottomSheet setSubtitle(@StringRes int resId) {
         return setSubtitle(context.getString(resId));
     }
@@ -170,6 +196,9 @@ public class RoundedBottomSheet {
     /**
      * Convenience helper that displays a styled body message inside the scrollable content region.
      * Passing {@code null} clears and hides the content region.
+     *
+     * @param message body text, or {@code null} to clear
+     * @return this builder for chaining
      */
     public RoundedBottomSheet setMessage(@Nullable CharSequence message) {
         if (message == null || message.length() == 0) {
@@ -188,7 +217,12 @@ public class RoundedBottomSheet {
         return addView(messageView);
     }
 
-    /** Convenience helper that displays a body message from a string resource. */
+    /**
+     * Convenience helper that displays a body message from a string resource.
+     *
+     * @param resId string resource identifier
+     * @return this builder for chaining
+     */
     public RoundedBottomSheet setMessage(@StringRes int resId) {
         return setMessage(context.getString(resId));
     }
@@ -196,6 +230,9 @@ public class RoundedBottomSheet {
     /**
      * Sets the scrollable sheet content, detaching {@code view} from any existing parent first and
      * replacing any previously added view.
+     *
+     * @param view content view to display inside the scrollable body
+     * @return this builder for chaining
      */
     public RoundedBottomSheet addView(@NonNull View view) {
         Objects.requireNonNull(view, "view");
@@ -208,45 +245,85 @@ public class RoundedBottomSheet {
         return this;
     }
 
-    /** Configures cancelability both before and after {@link #show()}. */
+    /**
+     * Configures cancelability both before and after {@link #show()}.
+     *
+     * @param cancelable {@code true} to allow Back press and swipe/outside dismissal
+     * @return this builder for chaining
+     */
     public RoundedBottomSheet setCancelable(boolean cancelable) {
         this.cancelable = cancelable;
         dialog.setCancelable(cancelable);
         return this;
     }
 
+    /**
+     * Returns whether the sheet can be canceled by user interaction.
+     *
+     * @return {@code true} if cancelable
+     */
     public boolean isCancelable() {
         return cancelable;
     }
 
-    /** Configures whether tapping the dimmed backdrop outside the sheet cancels it. */
+    /**
+     * Configures whether tapping the dimmed backdrop outside the sheet cancels it.
+     *
+     * @param cancel {@code true} to dismiss when the backdrop is tapped
+     * @return this builder for chaining
+     */
     public RoundedBottomSheet setCanceledOnTouchOutside(boolean cancel) {
         this.canceledOnTouchOutside = cancel;
         dialog.setCanceledOnTouchOutside(cancel);
         return this;
     }
 
-    /** Enables or disables vertical drag-to-dismiss gestures on the handle and header. */
+    /**
+     * Enables or disables vertical drag-to-dismiss gestures on the handle and header.
+     *
+     * @param draggable {@code true} to enable swipe-down dismissal
+     * @return this builder for chaining
+     */
     public RoundedBottomSheet setDraggable(boolean draggable) {
         this.draggable = draggable;
         return this;
     }
 
+    /**
+     * Returns whether vertical drag-to-dismiss gestures are enabled.
+     *
+     * @return {@code true} if draggable
+     */
     public boolean isDraggable() {
         return draggable;
     }
 
-    /** Shows or hides the top drag handle pill. */
+    /**
+     * Shows or hides the top drag handle pill.
+     *
+     * @param show {@code true} to display the drag handle
+     * @return this builder for chaining
+     */
     public RoundedBottomSheet setShowDragHandle(boolean show) {
         handleArea.setVisibility(show ? View.VISIBLE : View.GONE);
         return this;
     }
 
+    /**
+     * Returns whether the top drag handle is currently visible.
+     *
+     * @return {@code true} if visible
+     */
     public boolean isDragHandleVisible() {
         return handleArea.getVisibility() == View.VISIBLE;
     }
 
-    /** Updates the top corner radius of the sheet surface in dp (default {@code 24dp}). */
+    /**
+     * Updates the top corner radius of the sheet surface in dp (default {@code 24dp}).
+     *
+     * @param dp corner radius in density-independent pixels
+     * @return this builder for chaining
+     */
     public RoundedBottomSheet setCornerRadiusDp(float dp) {
         float radiusPx = Math.max(0f, RoundedViewHelper.dp(context, dp));
         Drawable background = sheetContainer.getBackground();
@@ -263,50 +340,115 @@ public class RoundedBottomSheet {
         return this;
     }
 
+    /**
+     * Configures the primary action button label (hides the button when null/empty).
+     *
+     * @param text button caption, or {@code null} to hide
+     * @return this builder for chaining
+     */
     public RoundedBottomSheet setupPrimaryButton(@Nullable CharSequence text) {
         return setupButton(primaryButton, text, null);
     }
 
+    /**
+     * Configures the primary action button label and custom text color.
+     *
+     * @param text      button caption, or {@code null} to hide
+     * @param textColor ARGB text color integer
+     * @return this builder for chaining
+     */
     public RoundedBottomSheet setupPrimaryButton(@Nullable CharSequence text, int textColor) {
         return setupButton(primaryButton, text, textColor);
     }
 
+    /**
+     * Registers a click listener for the primary action button.
+     *
+     * @param listener click callback, or {@code null}
+     * @return this builder for chaining
+     */
     public RoundedBottomSheet setupPrimaryButtonOnClick(@Nullable View.OnClickListener listener) {
         primaryButton.setOnClickListener(listener);
         return this;
     }
 
+    /**
+     * Configures the secondary action button label (hides the button when null/empty).
+     *
+     * @param text button caption, or {@code null} to hide
+     * @return this builder for chaining
+     */
     public RoundedBottomSheet setupSecondaryButton(@Nullable CharSequence text) {
         return setupButton(secondaryButton, text, null);
     }
 
+    /**
+     * Configures the secondary action button label and custom text color.
+     *
+     * @param text      button caption, or {@code null} to hide
+     * @param textColor ARGB text color integer
+     * @return this builder for chaining
+     */
     public RoundedBottomSheet setupSecondaryButton(@Nullable CharSequence text, int textColor) {
         return setupButton(secondaryButton, text, textColor);
     }
 
+    /**
+     * Registers a click listener for the secondary action button.
+     *
+     * @param listener click callback, or {@code null}
+     * @return this builder for chaining
+     */
     public RoundedBottomSheet setupSecondaryButtonOnClick(@Nullable View.OnClickListener listener) {
         secondaryButton.setOnClickListener(listener);
         return this;
     }
 
+    /**
+     * Registers a listener notified when the bottom sheet finishes dismissing.
+     *
+     * @param listener dismiss callback, or {@code null}
+     * @return this builder for chaining
+     */
     public RoundedBottomSheet setOnDismissListener(@Nullable DialogInterface.OnDismissListener listener) {
         this.externalDismissListener = listener;
         return this;
     }
 
+    /**
+     * Registers a listener notified when the bottom sheet is canceled via Back or backdrop tap.
+     *
+     * @param listener cancel callback, or {@code null}
+     * @return this builder for chaining
+     */
     public RoundedBottomSheet setOnCancelListener(@Nullable DialogInterface.OnCancelListener listener) {
         this.externalCancelListener = listener;
         return this;
     }
 
+    /**
+     * Returns the internal primary {@link RoundedButton} for advanced styling.
+     *
+     * @return primary action button
+     */
     public RoundedButton getPrimaryButton() {
         return primaryButton;
     }
 
+    /**
+     * Returns the internal secondary {@link RoundedButton} for advanced styling.
+     *
+     * @return secondary action button
+     */
     public RoundedButton getSecondaryButton() {
         return secondaryButton;
     }
 
+    /**
+     * Returns the sheet card container view (useful for custom animations or test assertions).
+     *
+     * @return sheet container view
+     */
     public View getSheetContainer() {
         return sheetContainer;
     }
@@ -335,6 +477,11 @@ public class RoundedBottomSheet {
         }
     }
 
+    /**
+     * Returns whether the bottom sheet dialog is currently displayed.
+     *
+     * @return {@code true} if showing
+     */
     public boolean isShowing() {
         return dialog.isShowing();
     }

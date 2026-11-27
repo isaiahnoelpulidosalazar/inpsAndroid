@@ -26,6 +26,11 @@ import com.isaiahnoelpulidosalazar.inpsandroid.ui.SimpleList;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Interactive playground tab for {@code ...inpsandroid.ui} widgets: {@link RoundedCheckBox},
+ * {@link SimpleList}, {@link FlippableImageView}, {@link Drawables}, {@link RoundedBottomSheet},
+ * {@code RoundedAlertDialog}, and {@code Fullscreen}.
+ */
 public class UiFragment extends Fragment implements DemoHost.NotesListener {
 
     private FlippableImageView flippableCard;
