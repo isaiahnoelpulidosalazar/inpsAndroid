@@ -1,5 +1,7 @@
 package com.aistudio.inpsandroid.demo;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import com.isaiahnoelpulidosalazar.inpsandroid.ui.Drawables;
 import com.isaiahnoelpulidosalazar.inpsandroid.ui.FlippableImageView;
 import com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton;
+import com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedCheckBox;
 import com.isaiahnoelpulidosalazar.inpsandroid.ui.SimpleList;
 
 import java.util.List;
@@ -25,6 +28,7 @@ public class UiFragment extends Fragment implements DemoHost.NotesListener {
     private FlippableImageView flippableCard;
     private RoundedButton speedButton;
     private TextView drawablesOutput;
+    private TextView listSelectionOutput;
     private SimpleList simpleList;
 
     @Nullable
@@ -41,7 +45,28 @@ public class UiFragment extends Fragment implements DemoHost.NotesListener {
         flippableCard = view.findViewById(R.id.flippable_card);
         speedButton = view.findViewById(R.id.btn_cycle_speed);
         drawablesOutput = view.findViewById(R.id.ui_drawables_output);
+        listSelectionOutput = view.findViewById(R.id.ui_list_selection_output);
         simpleList = view.findViewById(R.id.simple_list);
+
+        RoundedCheckBox bounceToggle = view.findViewById(R.id.cb_bounce_toggle);
+        RoundedCheckBox cardSample = view.findViewById(R.id.cb_card_sample);
+        RoundedCheckBox pillSample = view.findViewById(R.id.cb_pill_sample);
+        RoundedCheckBox minimalSample = view.findViewById(R.id.cb_minimal_sample);
+        RoundedCheckBox listModeToggle = view.findViewById(R.id.cb_list_mode);
+
+        bounceToggle.setOnCheckedChangeListener((cb, enabled) -> {
+            bounceToggle.setBounceAnimationEnabled(enabled);
+            cardSample.setBounceAnimationEnabled(enabled);
+            pillSample.setBounceAnimationEnabled(enabled);
+            minimalSample.setBounceAnimationEnabled(enabled);
+            listModeToggle.setBounceAnimationEnabled(enabled);
+            simpleList.setBounceAnimationEnabled(enabled);
+        });
+
+        listModeToggle.setOnCheckedChangeListener((cb, enabled) -> {
+            simpleList.setCheckboxesEnabled(enabled);
+            updateSelectionSummary();
+        });
 
         flippableCard.setFrontImage(R.drawable.ic_card_front);
         flippableCard.setBackImage(R.drawable.ic_card_back);
@@ -81,11 +106,10 @@ public class UiFragment extends Fragment implements DemoHost.NotesListener {
             Drawable front = ContextCompat.getDrawable(requireContext(), R.drawable.ic_card_front);
             int width = front != null && front.getIntrinsicWidth() > 0 ? front.getIntrinsicWidth() : 64;
             int height = front != null && front.getIntrinsicHeight() > 0 ? front.getIntrinsicHeight() : 64;
-            android.graphics.Bitmap bmp = android.graphics.Bitmap.createBitmap(
-                    width, height, android.graphics.Bitmap.Config.ARGB_8888);
+            Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
             try {
                 if (front != null) {
-                    android.graphics.Canvas canvas = new android.graphics.Canvas(bmp);
+                    Canvas canvas = new Canvas(bmp);
                     front.setBounds(0, 0, width, height);
                     front.draw(canvas);
                 }
@@ -116,18 +140,21 @@ public class UiFragment extends Fragment implements DemoHost.NotesListener {
             }
         });
 
-        simpleList.setItemPadding(14, 12, 14, 12);
         simpleList.setOnItemClickListener(pos -> {
-            List<String> items = simpleList.getItems();
-            if (pos >= 0 && pos < items.size() && getActivity() instanceof DemoHost) {
-                ((DemoHost) getActivity()).showInfoDialog("SimpleList Row", "Selected: " + items.get(pos));
+            if (!simpleList.isCheckboxesEnabled()) {
+                List<String> items = simpleList.getItems();
+                if (pos >= 0 && pos < items.size() && getActivity() instanceof DemoHost) {
+                    ((DemoHost) getActivity()).showInfoDialog("SimpleList Row", "Selected: " + items.get(pos));
+                }
             }
         });
+        simpleList.setOnItemCheckedChangeListener((pos, item, isChecked) -> updateSelectionSummary());
         simpleList.setOnItemLongClickListener(pos -> {
             List<String> items = simpleList.getItems();
             if (pos >= 0 && pos < items.size()) {
                 String removed = items.get(pos);
                 simpleList.removeItem(pos);
+                updateSelectionSummary();
                 if (getActivity() instanceof DemoHost) {
                     ((DemoHost) getActivity()).deleteNote(removed);
                 }
@@ -155,6 +182,20 @@ public class UiFragment extends Fragment implements DemoHost.NotesListener {
         ));
     }
 
+    private void updateSelectionSummary() {
+        if (listSelectionOutput == null || simpleList == null) return;
+        if (!simpleList.isCheckboxesEnabled()) {
+            listSelectionOutput.setText("Checkbox mode OFF (tap row to inspect)");
+            return;
+        }
+        List<String> checked = simpleList.getCheckedItems();
+        listSelectionOutput.setText(String.format(
+                Locale.US,
+                "Checked (%d): %s",
+                checked.size(), checked
+        ));
+    }
+
     @Override
     public void onDestroyView() {
         if (getActivity() instanceof DemoHost) {
@@ -167,6 +208,7 @@ public class UiFragment extends Fragment implements DemoHost.NotesListener {
     public void onNotesUpdated(List<String> notes) {
         if (simpleList != null) {
             simpleList.setItems(notes);
+            updateSelectionSummary();
         }
     }
 }

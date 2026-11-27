@@ -22,4 +22,9 @@
     <string name="btn_reset_notes">Reset Sample Notes</string>
     <string name="btn_area_demo">Run AreaCalculator</string>
     <string name="cd_flippable_card">Interactive flippable card preview</string>
+    <string name="cb_bounce_toggle">Bounce Animation Enabled</string>
+    <string name="cb_card_sample">Card style checkbox (14dp radius)</string>
+    <string name="cb_pill_sample">Pill style checkbox</string>
+    <string name="cb_minimal_sample">Minimal row checkbox</string>
+    <string name="cb_list_mode">Enable SimpleList Checkboxes</string>
 </resources>

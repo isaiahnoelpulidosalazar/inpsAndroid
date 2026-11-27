@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedCheckBox xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/inps_simple_list_item_checkbox"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="3dp"
+    android:layout_marginBottom="3dp"
+    app:inpsBounceAnimation="true"
+    app:inpsCheckStyle="card"
+    app:inpsCornerRadius="12dp" />

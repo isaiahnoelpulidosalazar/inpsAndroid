@@ -12,6 +12,14 @@ Shared attribute parsing, rounded background creation, ripple feedback, and outl
 | `RoundedEditText` | `AppCompatEditText` | Translucent pill background (`?attr/colorControlHighlight`) | `app:inpsCornerRadius` |
 | `RoundedLinearLayout` | `LinearLayout` | Rounded `8dp` container with `setClipToOutline(true)` | `app:inpsCornerRadius`, `app:inpsIsTranslucent` |
 | `RoundedConstraintLayout` | `ConstraintLayout` | Rounded `8dp` container with `setClipToOutline(true)` | `app:inpsCornerRadius`, `app:inpsIsTranslucent` |
+| `RoundedCheckBox` | `LinearLayout` (`Checkable`) | Modern `CARD`, `PILL`, or `MINIMAL` checkbox with custom-drawn checkmark and toggleable overshoot bounce animation | `app:inpsCheckStyle`, `app:inpsBounceAnimation`, `app:inpsCornerRadius` |
+
+## RoundedCheckBox Styles & Bounce Toggle
+
+- `RoundedCheckBox.Style.CARD` (`card`) — Rounded `12dp` card with hairline border and soft primary tint when checked
+- `RoundedCheckBox.Style.PILL` (`pill`) — Full capsule pill container
+- `RoundedCheckBox.Style.MINIMAL` (`minimal`) — Borderless row with ripple feedback
+- `app:inpsBounceAnimation="true|false"` / `setBounceAnimationEnabled(boolean)` — Turns the overshoot bounce animation on or off
 
 ## Usage
 
@@ -24,11 +32,14 @@ Shared attribute parsing, rounded background creation, ripple feedback, and outl
     app:inpsCornerRadius="16dp"
     app:inpsIsTranslucent="true">
 
-    <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedEditText
+    <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedCheckBox
+        android:id="@+id/cb_bounce"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Name"
-        app:inpsCornerRadius="12dp" />
+        android:checked="true"
+        android:text="Bounce animation enabled"
+        app:inpsBounceAnimation="true"
+        app:inpsCheckStyle="pill" />
 
     <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
         android:layout_width="match_parent"

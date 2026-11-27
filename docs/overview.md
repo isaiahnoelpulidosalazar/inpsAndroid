@@ -18,7 +18,7 @@ The purpose of this architecture is to provide:
 1. **Concurrency & Network (`core`)**: `MainThread` for main-looper posting and `WebRequest` for bounded background HTTP with main-thread callbacks and cancellable `Call` handles.
 2. **Persistence (`core`)**: `EasySQL`, a parameterized SQLite wrapper with validated identifiers, transactions, and `tableExists()`.
 3. **Validation, Conversion & Time (`core`)**: `EmailDomainAllowList`, `StringChecks`, `TimeLeft`, and `Converters`.
-4. **UI & Graphics (`ui`)**: `RoundedButton`, `RoundedEditText`, `RoundedLinearLayout`, `RoundedConstraintLayout`, `RoundedAlertDialog`, `SimpleList`, `FlippableImageView`, `Fullscreen`, and `Drawables`.
+4. **UI & Graphics (`ui`)**: `RoundedButton`, `RoundedCheckBox`, `RoundedEditText`, `RoundedLinearLayout`, `RoundedConstraintLayout`, `RoundedAlertDialog`, `SimpleList`, `FlippableImageView`, `Fullscreen`, and `Drawables`.
 5. **Algorithms, Math & Audio (`edu`)**: `Sort`, `AreaCalculator`, and `SoundSynthesizer`.
 
 ### Package Layout
@@ -31,7 +31,7 @@ The purpose of this architecture is to provide:
 | `...inpsandroid.core.convert` | `Converters` |
 | `...inpsandroid.core.validation` | `EmailDomainAllowList`, `StringChecks` |
 | `...inpsandroid.core.time` | `TimeLeft` |
-| `...inpsandroid.ui` | `RoundedButton`, `RoundedEditText`, `RoundedLinearLayout`, `RoundedConstraintLayout`, `RoundedViewHelper`, `RoundedAlertDialog`, `SimpleList`, `FlippableImageView`, `Fullscreen`, `Drawables` |
+| `...inpsandroid.ui` | `RoundedButton`, `RoundedCheckBox`, `RoundedEditText`, `RoundedLinearLayout`, `RoundedConstraintLayout`, `RoundedViewHelper`, `RoundedAlertDialog`, `SimpleList`, `FlippableImageView`, `Fullscreen`, `Drawables` |
 | `...inpsandroid.edu` | `AreaCalculator`, `SoundSynthesizer` |
 | `...inpsandroid.edu.sort` | `Sort` |
 
@@ -55,9 +55,9 @@ You can browse documentation sets by topic using the sidebar. The following modu
 - [TimeLeft](./time-left) — Fractional time remaining between two instants
 
 **UI & graphics**
-- [Rounded Views](./rounded-views) — `RoundedButton`, `RoundedConstraintLayout`, `RoundedEditText`, `RoundedLinearLayout`
+- [Rounded Views](./rounded-views) — `RoundedButton`, `RoundedCheckBox` (`CARD` / `PILL` / `MINIMAL` + bounce toggle), `RoundedConstraintLayout`, `RoundedEditText`, `RoundedLinearLayout`
 - [RoundedAlertDialog](./rounded-alert-dialog) — Custom rounded dialog with dual `RoundedButton` actions
-- [SimpleList](./simple-list) — `FrameLayout`-wrapped `RecyclerView` with `ListAdapter`, `DiffUtil`, and `TextView` rows
+- [SimpleList](./simple-list) — `FrameLayout`-wrapped `RecyclerView` with `ListAdapter`, `DiffUtil`, `TextView` rows, and optional `RoundedCheckBox` mode
 - [FlippableImageView](./flippable-image-view) — 3D card-flip image component with `Speed` and state restoration
 - [Fullscreen](./fullscreen) — Per-window edge-to-edge immersive fullscreen toggle
 - [Drawables](./drawables) — Pixel-level drawable/bitmap comparison (including `HARDWARE` bitmaps)

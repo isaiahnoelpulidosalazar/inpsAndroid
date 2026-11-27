@@ -2,6 +2,12 @@
 <resources>
     <attr name="inpsCornerRadius" format="dimension" />
     <attr name="inpsIsTranslucent" format="boolean" />
+    <attr name="inpsBounceAnimation" format="boolean" />
+    <attr name="inpsCheckStyle" format="enum">
+        <enum name="card" value="0" />
+        <enum name="pill" value="1" />
+        <enum name="minimal" value="2" />
+    </attr>
 
     <declare-styleable name="RoundedButton">
         <attr name="inpsCornerRadius" />
@@ -19,6 +25,19 @@
     <declare-styleable name="RoundedLinearLayout">
         <attr name="inpsCornerRadius" />
         <attr name="inpsIsTranslucent" />
+    </declare-styleable>
+
+    <declare-styleable name="RoundedCheckBox">
+        <attr name="inpsCornerRadius" />
+        <attr name="inpsBounceAnimation" />
+        <attr name="inpsCheckStyle" />
+    </declare-styleable>
+
+    <declare-styleable name="SimpleList">
+        <attr name="inpsCheckboxesEnabled" format="boolean" />
+        <attr name="inpsBounceAnimation" />
+        <attr name="inpsCheckStyle" />
+        <attr name="inpsCornerRadius" />
     </declare-styleable>
 
     <declare-styleable name="FlippableImageView">

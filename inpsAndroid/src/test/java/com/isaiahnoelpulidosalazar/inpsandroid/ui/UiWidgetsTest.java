@@ -246,4 +246,117 @@ public class UiWidgetsTest {
         Shadows.shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(500));
         assertTrue(activity.getSupportActionBar().isShowing());
     }
+
+    @Test
+    public void testRoundedCheckBoxStylesBounceAndStateRestoration() {
+        RoundedCheckBox checkBox = new RoundedCheckBox(darkPrimaryContext);
+        assertFalse(checkBox.isChecked());
+        assertTrue(checkBox.isBounceAnimationEnabled());
+        assertEquals(RoundedCheckBox.Style.CARD, checkBox.getStyle());
+
+        checkBox.setText("Enable notifications");
+        assertEquals("Enable notifications", checkBox.getText().toString());
+
+        AtomicInteger callbackCount = new AtomicInteger(0);
+        AtomicBoolean lastChecked = new AtomicBoolean(false);
+        checkBox.setOnCheckedChangeListener((cb, isChecked) -> {
+            callbackCount.incrementAndGet();
+            lastChecked.set(isChecked);
+        });
+
+        checkBox.performClick();
+        assertTrue(checkBox.isChecked());
+        assertTrue(lastChecked.get());
+        assertEquals(1, callbackCount.get());
+
+        // Setting same value again must not double-fire listener
+        checkBox.setChecked(true);
+        assertEquals(1, callbackCount.get());
+
+        // Toggle bounce animation off and verify style switches cleanly
+        checkBox.setBounceAnimationEnabled(false);
+        assertFalse(checkBox.isBounceAnimationEnabled());
+        checkBox.setStyle(RoundedCheckBox.Style.PILL);
+        assertEquals(RoundedCheckBox.Style.PILL, checkBox.getStyle());
+        checkBox.setStyle(RoundedCheckBox.Style.MINIMAL);
+        checkBox.setCornerRadiusDp(10f);
+        assertEquals(RoundedCheckBox.Style.MINIMAL, checkBox.getStyle());
+
+        checkBox.performClick();
+        assertFalse(checkBox.isChecked());
+        assertEquals(2, callbackCount.get());
+
+        checkBox.setChecked(true);
+        Parcelable saved = checkBox.onSaveInstanceState();
+        RoundedCheckBox restored = new RoundedCheckBox(darkPrimaryContext);
+        restored.onRestoreInstanceState(saved);
+        assertTrue(restored.isChecked());
+        assertFalse(restored.isBounceAnimationEnabled());
+    }
+
+    @Test
+    public void testSimpleListCheckboxModeAndBounceToggle() {
+        SimpleList list = new SimpleList(darkPrimaryContext);
+        list.setCheckboxesEnabled(true);
+        list.setBounceAnimationEnabled(false);
+        list.setCheckStyle(RoundedCheckBox.Style.PILL);
+        list.setCheckboxCornerRadiusDp(14f);
+        assertTrue(list.isCheckboxesEnabled());
+        assertFalse(list.isBounceAnimationEnabled());
+        assertEquals(RoundedCheckBox.Style.PILL, list.getCheckStyle());
+
+        list.setItems(Arrays.asList("One", "Two", "Three"));
+        Shadows.shadowOf(Looper.getMainLooper()).idle();
+
+        AtomicInteger checkedEvents = new AtomicInteger(0);
+        list.setOnItemCheckedChangeListener((pos, item, isChecked) -> checkedEvents.incrementAndGet());
+
+        RecyclerView rv = list.getRecyclerView();
+        list.measure(
+                View.MeasureSpec.makeMeasureSpec(400, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(400, View.MeasureSpec.EXACTLY)
+        );
+        list.layout(0, 0, 400, 400);
+
+        View firstRow = rv.getChildAt(0);
+        assertTrue(firstRow instanceof RoundedCheckBox);
+        RoundedCheckBox firstCb = (RoundedCheckBox) firstRow;
+        assertFalse(firstCb.isBounceAnimationEnabled());
+
+        firstCb.performClick();
+        assertEquals(1, checkedEvents.get());
+        assertTrue(list.isChecked(0));
+        assertEquals(Arrays.asList("One"), list.getCheckedItems());
+        assertEquals(Arrays.asList(0), list.getCheckedPositions());
+
+        // Self-assignment preserves checked items
+        list.setItems(list.getItems());
+        Shadows.shadowOf(Looper.getMainLooper()).idle();
+        assertEquals(Arrays.asList("One"), list.getCheckedItems());
+
+        // Removing a checked or preceding item updates checked indices properly
+        list.setChecked(2, true);
+        list.removeItem(1);
+        Shadows.shadowOf(Looper.getMainLooper()).idle();
+        assertEquals(Arrays.asList("One", "Three"), list.getCheckedItems());
+
+        list.clearChecked();
+        assertTrue(list.getCheckedItems().isEmpty());
+
+        list.checkAll();
+        assertEquals(Arrays.asList("One", "Three"), list.getCheckedItems());
+
+        list.setCheckedItems(Arrays.asList("Three"));
+        assertEquals(Arrays.asList("Three"), list.getCheckedItems());
+
+        // Switching back to classic text rows
+        list.setCheckboxesEnabled(false);
+        Shadows.shadowOf(Looper.getMainLooper()).idle();
+        list.measure(
+                View.MeasureSpec.makeMeasureSpec(400, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(400, View.MeasureSpec.EXACTLY)
+        );
+        list.layout(0, 0, 400, 400);
+        assertTrue(rv.getChildAt(0) instanceof TextView);
+    }
 }

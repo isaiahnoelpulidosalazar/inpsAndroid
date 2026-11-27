@@ -12,9 +12,9 @@ Welcome to the **inpsAndroid** `3.0.0` documentation set.
 - [TimeLeft](./time-left.md) — Fractional time remaining between two instants
 
 ## UI (`com.isaiahnoelpulidosalazar.inpsandroid.ui`)
-- [Rounded Views](./rounded-views.md) — `RoundedButton`, `RoundedEditText`, `RoundedLinearLayout`, `RoundedConstraintLayout`
+- [Rounded Views](./rounded-views.md) — `RoundedButton`, `RoundedCheckBox`, `RoundedEditText`, `RoundedLinearLayout`, `RoundedConstraintLayout`
 - [RoundedAlertDialog](./rounded-alert-dialog.md) — Builder-style rounded dialog with `RoundedButton` actions
-- [SimpleList](./simple-list.md) — `FrameLayout`-wrapped `RecyclerView` with `ListAdapter`, `DiffUtil`, and `TextView` rows
+- [SimpleList](./simple-list.md) — `FrameLayout`-wrapped `RecyclerView` with `ListAdapter`, `DiffUtil`, `TextView` rows, and optional `RoundedCheckBox` mode
 - [FlippableImageView](./flippable-image-view.md) — 3D card-flip image view with `Speed` and state restoration
 - [Fullscreen](./fullscreen.md) — Per-window immersive fullscreen helper preserving prior window state
 - [Drawables](./drawables.md) — Pixel-level drawable and `Bitmap` comparison (including `HARDWARE` bitmaps)

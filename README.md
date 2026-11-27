@@ -26,7 +26,7 @@ implementation 'com.github.isaiahnoelpulidosalazar:inpsAndroid:3.0.0'
 | `...inpsandroid.core.convert` | `Converters` |
 | `...inpsandroid.core.validation` | `EmailDomainAllowList`, `StringChecks` |
 | `...inpsandroid.core.time` | `TimeLeft` |
-| `...inpsandroid.ui` | `RoundedButton`, `RoundedEditText`, `RoundedLinearLayout`, `RoundedConstraintLayout`, `RoundedViewHelper`, `RoundedAlertDialog`, `SimpleList`, `FlippableImageView`, `Fullscreen`, `Drawables` |
+| `...inpsandroid.ui` | `RoundedButton`, `RoundedCheckBox`, `RoundedEditText`, `RoundedLinearLayout`, `RoundedConstraintLayout`, `RoundedViewHelper`, `RoundedAlertDialog`, `SimpleList`, `FlippableImageView`, `Fullscreen`, `Drawables` |
 | `...inpsandroid.edu` | `AreaCalculator`, `SoundSynthesizer` |
 | `...inpsandroid.edu.sort` | `Sort` |
 
@@ -48,9 +48,9 @@ implementation 'com.github.isaiahnoelpulidosalazar:inpsAndroid:3.0.0'
 - **`TimeLeft`** — Fractional time remaining between two instants.
 
 ### UI (`...inpsandroid.ui`)
-- **Rounded Views** (`RoundedButton`, `RoundedEditText`, `RoundedLinearLayout`, `RoundedConstraintLayout`) — Shared styling via `RoundedViewHelper` supporting `app:inpsCornerRadius`, `app:inpsIsTranslucent` (on layouts), outline clipping on rounded containers, luminance-based text contrast on `RoundedButton`, and explicit XML `android:background` preservation.
+- **Rounded Views** (`RoundedButton`, `RoundedCheckBox`, `RoundedEditText`, `RoundedLinearLayout`, `RoundedConstraintLayout`) — Shared styling via `RoundedViewHelper` supporting `app:inpsCornerRadius`, `app:inpsIsTranslucent` (on layouts), outline clipping on rounded containers, luminance-based text contrast on `RoundedButton`, and explicit XML `android:background` preservation. `RoundedCheckBox` adds `CARD`, `PILL`, and `MINIMAL` styles (`app:inpsCheckStyle`) plus a toggleable bounce animation (`app:inpsBounceAnimation`).
 - **`RoundedAlertDialog`** — Rounded dual-action dialog using `RoundedButton` and theme-aware colors, supporting `addView`, `setCancelable`, and button click listeners.
-- **`SimpleList`** — `FrameLayout`-wrapped `RecyclerView` using `ListAdapter` and `DiffUtil` with ripple-enabled `TextView` rows and snapshot-safe `setItems`.
+- **`SimpleList`** — `FrameLayout`-wrapped `RecyclerView` using `ListAdapter` and `DiffUtil` with ripple-enabled `TextView` rows, snapshot-safe `setItems`, and optional multi-select `RoundedCheckBox` rows (`app:inpsCheckboxesEnabled`, `app:inpsCheckStyle`, `app:inpsBounceAnimation`).
 - **`FlippableImageView`** — 3D card-flip image view with `app:inpsReverseBackImage`, `app:inpsFlipSpeed` (`slow` | `normal` | `fast`), `setFrontBitmap`/`setBackBitmap`, and instance-state persistence.
 - **`Fullscreen`** — Per-window edge-to-edge/immersive fullscreen controller that saves and restores previous system bar and action bar visibility.
 - **`Drawables`** — Pixel-level drawable and bitmap comparison (handling `HARDWARE` bitmaps safely).
