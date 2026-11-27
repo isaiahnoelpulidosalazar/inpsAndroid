@@ -22,4 +22,5 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "inpsAndroid"
+include ':app'
 include ':inpsAndroid'

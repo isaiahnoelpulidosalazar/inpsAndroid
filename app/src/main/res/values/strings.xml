@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">inpsAndroid</string>
+    <string name="subtitle_library">inpsAndroid 2.0.0 — Utility &amp; UI Showcase</string>
+    <string name="hint_input">Enter text, email, or note…</string>
+    <string name="btn_encrypt">Caesar + Transposition</string>
+    <string name="btn_validate_email">Validate Email</string>
+    <string name="btn_add_note">Save Note to SQLite</string>
+    <string name="btn_show_dialog">Show RoundedAlertDialog</string>
+    <string name="btn_toggle_fullscreen">Toggle Fullscreen</string>
+    <string name="btn_flip_card">Flip Card</string>
+    <string name="btn_math_sort">Run Area, Sort &amp; Base64</string>
+    <string name="cd_flippable_card">Interactive flippable card preview</string>
+</resources>
