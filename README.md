@@ -58,7 +58,7 @@ implementation 'com.github.isaiahnoelpulidosalazar:inpsAndroid:3.0.0'
 ### Educational & Media (`...inpsandroid.edu`)
 - **`Sort`** (`...edu.sort.Sort`) — Comparison, non-comparison (including negative-capable `countingSort`), and structure-based sorting algorithms.
 - **`AreaCalculator`** — 2D area and 3D surface-area formulas.
-- **`SoundSynthesizer`** — Asynchronous MIDI-addressed piano note synthesis (`prepare(int...)`, `playNote`, `stopNote`, `release`) using low-latency `AudioTrack` on API 26+.
+- **`SoundSynthesizer`** — Asynchronous MIDI-addressed piano note synthesis (`prepare(int...)`, `playNote`, `frequencyOf`, `release`) using low-latency `AudioTrack` on API 26+.
 
 ## Migrating from v1 / v2 to 3.0.0
 
@@ -109,6 +109,15 @@ All library resources and custom attributes are now prefixed to avoid collisions
 | `simple_list_item` / `simple_list_item_background` | `inps_simple_list_item` / `inps_simple_list_item_background` |
 | `top_border` / `bottom_border` | `inps_top_border` / `inps_bottom_border` |
 | `@color/black`, `@color/white` (`colors.xml`) | **Removed** (use `@android:color/black`, `@android:color/white`, or app theme colors) |
+
+## Documentation Pages
+
+Browse the per-module Markdown reference pages in [`docs/`](./docs/README.md):
+
+- **Core:** [MainThread](./docs/main-thread.md) · [WebRequest](./docs/web-request.md) · [EasySQL](./docs/easy-sql.md) · [Converters](./docs/converters.md) · [EmailDomainAllowList](./docs/email-domain-allow-list.md) · [StringChecks](./docs/string-checks.md) · [TimeLeft](./docs/time-left.md)
+- **UI:** [Rounded Views](./docs/rounded-views.md) · [RoundedAlertDialog](./docs/rounded-alert-dialog.md) · [SimpleList](./docs/simple-list.md) · [FlippableImageView](./docs/flippable-image-view.md) · [Fullscreen](./docs/fullscreen.md) · [Drawables](./docs/drawables.md)
+- **Edu:** [Sort](./docs/sort.md) · [AreaCalculator](./docs/area-calculator.md) · [SoundSynthesizer](./docs/sound-synthesizer.md)
+- **Upgrading:** [Migrating from v1 / v2 to 3.0.0](./docs/migrating-to-v3.md)
 
 ## Testing
 

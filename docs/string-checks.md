@@ -1,37 +1,23 @@
 # StringChecks
 
-The `StringChecks` utility provides null-safe character-class checks on strings. It replaces the string helpers of the deprecated `Check` class.
+Package: `com.isaiahnoelpulidosalazar.inpsandroid.core.validation`
 
-## Purpose & Scope
-
-The purpose of this utility is to provide:
-- Fast single-pass checks for symbols, digits, and spaces
-- Null safety: every method returns `false` for `null`
-
-The symbol set is the fixed ASCII set ``~`!@#$%^&*()_+-=[]{}\|'";:,.<>/?``.
+`StringChecks` provides null-safe character-class checks on strings. All methods return `false` when passed `null`.
 
 ## API Reference
 
-### static boolean hasSymbols(String str)
+| Method | Description |
+|---|---|
+| `hasSymbols(String str)` | Returns `true` if `str` contains any character from `` ~`!@#$%^&*()_+-=[]{}\\|'";:,.<>/? ``. |
+| `hasNumbers(String str)` | Returns `true` if `str` contains any digit (`Character.isDigit(char)`). |
+| `hasSpaces(String str)` | Returns `true` if `str` contains `' '`. |
 
-Returns `true` if the string contains any character from the fixed ASCII symbol set.
-
-```java
-boolean hasSym = StringChecks.hasSymbols("item $5");
-```
-
-### static boolean hasNumbers(String str)
-
-Returns `true` if the string contains a digit (`Character.isDigit`).
+## Usage
 
 ```java
-boolean hasNum = StringChecks.hasNumbers("abc123");
-```
+import com.isaiahnoelpulidosalazar.inpsandroid.core.validation.StringChecks;
 
-### static boolean hasSpaces(String str)
-
-Returns `true` if the string contains a space character.
-
-```java
-boolean hasSp = StringChecks.hasSpaces("hello world");
+boolean hasSym = StringChecks.hasSymbols("hello!"); // true
+boolean hasNum = StringChecks.hasNumbers("v3");     // true
+boolean hasSpc = StringChecks.hasSpaces("a b");     // true
 ```

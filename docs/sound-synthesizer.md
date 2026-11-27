@@ -1,57 +1,29 @@
 # SoundSynthesizer
 
-`SoundSynthesizer` plays decaying sine "piano" notes addressed by MIDI note number (`60` = middle C, `69` = A4 = 440 Hz).
+Package: `com.isaiahnoelpulidosalazar.inpsandroid.edu`
 
-## Purpose & Scope
-
-The purpose of this component is to provide:
-- Instant tone playback with no audio assets
-- Lazy synthesis: each note's `AudioTrack` is created on first use, with at most 16 cached (least-recently-used tracks are released)
-- Thread-safe playback and explicit resource release
-
-Each note lasts 500 ms with an exponential decay and a short fade-out to avoid clicks. The class is `final` and implements `AutoCloseable`.
+`SoundSynthesizer` plays decaying sine "piano" notes addressed by MIDI note number (`60` = middle C, `69` = A4 = `440.0 Hz`). Track synthesis, allocation, and playback scheduling run off the calling thread on a dedicated single-thread executor, caching up to 16 `AudioTrack` instances (LRU eviction) and enabling `AudioTrack.PERFORMANCE_MODE_LOW_LATENCY` on API 26+.
 
 ## API Reference
 
-### static double frequencyOf(int midiNote)
+| Method | Description |
+|---|---|
+| `SoundSynthesizer.frequencyOf(int midiNote)` | Returns equal-temperament frequency in Hz (`A4 = 440.0`). |
+| `prepare(int... notes)` | Pre-builds and caches `AudioTrack` instances asynchronously for MIDI notes `0..127`. |
+| `playNote(int midiNote)` | Synthesizes (if needed) and plays a MIDI note `0..127` asynchronously, restarting if already sounding. |
+| `release()` / `close()` | Releases all native `AudioTrack` instances and shuts down the executor (`AutoCloseable`). Subsequent calls are no-ops. |
 
-Returns the frequency in Hz of a MIDI note (equal temperament, A4 = 440 Hz).
-
-```java
-double hz = SoundSynthesizer.frequencyOf(69); // 440.0
-```
-
-### void playNote(int midiNote)
-
-Plays a note (0-127), restarting it if already sounding. Safe to call from any thread. Throws `IllegalArgumentException` if out of range, and does nothing after `release()`.
+## Usage
 
 ```java
+import com.isaiahnoelpulidosalazar.inpsandroid.edu.SoundSynthesizer;
+
 SoundSynthesizer synth = new SoundSynthesizer();
-synth.playNote(60);
-```
+synth.prepare(60, 64, 67, 72); // C major chord
 
-### void playTone(int noteIndex)
+synth.playNote(60); // Middle C
+double hz = SoundSynthesizer.frequencyOf(69); // 440.0
 
-**Deprecated.** Plays a note using the v1 index table (0-83 = octaves 1-7 as `C D E F G A B C# D# F# G# A#`, 84 = C8). Out-of-range indices are ignored. v1 index `0` (C1) equals MIDI `24`.
-
-```java
-synth.playTone(0); // same as playNote(24)
-```
-
-### void release()
-
-Releases every native track. Further `playNote` calls do nothing.
-
-```java
+// In onDestroy()
 synth.release();
-```
-
-### void close()
-
-Equivalent to `release()`, enabling try-with-resources.
-
-```java
-try (SoundSynthesizer s = new SoundSynthesizer()) {
-    s.playNote(72);
-}
 ```

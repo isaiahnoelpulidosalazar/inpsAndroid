@@ -1,19 +1,18 @@
 # Drawables
 
-The `Drawables` utility provides drawable and bitmap helpers. It replaces `Check.equalDrawableAndBitmap`.
+Package: `com.isaiahnoelpulidosalazar.inpsandroid.ui`
 
-## Purpose & Scope
+`Drawables` provides pixel-level comparison between a drawable resource and a `Bitmap`. Non-bitmap drawables (such as vectors or shapes) are rasterized at the target bitmap's dimensions before comparison.
 
-The purpose of this utility is to provide:
-- Pixel-level verification of a drawable resource against a `Bitmap`
-- Support for non-bitmap drawables (vectors, shapes), which are rasterised at the bitmap's size before comparison
+## Hardware Bitmap Handling
 
-## API Reference
+- `Bitmap.Config.HARDWARE` or null-config bitmaps are copied to `Bitmap.Config.ARGB_8888` before pixel comparison
+- Returns `false` if `context` or `bitmap` is `null`, the drawable resource cannot be loaded, or an `IllegalArgumentException` occurs
 
-### static boolean equalsBitmap(Context context, int resourceId, Bitmap bitmap)
-
-Compares a drawable resource with a bitmap using `Bitmap.sameAs`. Returns `false` if the context or bitmap is `null`, or if the resource cannot be loaded.
+## Usage
 
 ```java
-boolean match = Drawables.equalsBitmap(context, R.drawable.logo, bitmap);
+import com.isaiahnoelpulidosalazar.inpsandroid.ui.Drawables;
+
+boolean matches = Drawables.equalsBitmap(context, R.drawable.ic_badge, capturedBitmap);
 ```

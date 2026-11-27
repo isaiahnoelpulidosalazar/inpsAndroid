@@ -1,76 +1,24 @@
 # TimeLeft
 
-The `TimeLeft` utility calculates fractional time remaining between two instants. It replaces the date helpers of the deprecated `Check` class.
+Package: `com.isaiahnoelpulidosalazar.inpsandroid.core.time`
 
-## Purpose & Scope
-
-The purpose of this utility is to provide:
-- Simple second, minute, hour, and day differences as `double` values
-- Overloads for epoch milliseconds (`long`) and `Date`
-- Null-safe `Date` overloads that return `0.0`
-
-Results are negative when `until` is earlier than `now`.
+`TimeLeft` calculates the fractional time remaining between two instants. The `Date` overloads return `0.0` when either argument is `null`.
 
 ## API Reference
 
-### Millisecond Overloads
+| Method | Description |
+|---|---|
+| `seconds(long nowMs, long untilMs)` / `seconds(Date now, Date until)` | Fractional seconds remaining. |
+| `minutes(long nowMs, long untilMs)` / `minutes(Date now, Date until)` | Fractional minutes remaining. |
+| `hours(long nowMs, long untilMs)` / `hours(Date now, Date until)` | Fractional hours remaining. |
+| `days(long nowMs, long untilMs)` / `days(Date now, Date until)` | Fractional days remaining. |
 
-#### static double seconds(long nowMs, long untilMs)
-Seconds remaining between two epoch-millisecond values.
-
-```java
-double s = TimeLeft.seconds(System.currentTimeMillis(), deadlineMs);
-```
-
-#### static double minutes(long nowMs, long untilMs)
-Minutes remaining.
+## Usage
 
 ```java
-double m = TimeLeft.minutes(nowMs, untilMs);
-```
+import com.isaiahnoelpulidosalazar.inpsandroid.core.time.TimeLeft;
 
-#### static double hours(long nowMs, long untilMs)
-Hours remaining.
-
-```java
-double h = TimeLeft.hours(nowMs, untilMs);
-```
-
-#### static double days(long nowMs, long untilMs)
-Days remaining.
-
-```java
-double d = TimeLeft.days(nowMs, untilMs);
-```
-
----
-
-### Date Overloads
-
-#### static double seconds(Date now, Date until)
-Seconds remaining between two dates, or `0.0` if either is `null`.
-
-```java
-double s = TimeLeft.seconds(new Date(), futureDate);
-```
-
-#### static double minutes(Date now, Date until)
-Minutes remaining, or `0.0` for `null`.
-
-```java
-double m = TimeLeft.minutes(new Date(), futureDate);
-```
-
-#### static double hours(Date now, Date until)
-Hours remaining, or `0.0` for `null`.
-
-```java
-double h = TimeLeft.hours(new Date(), futureDate);
-```
-
-#### static double days(Date now, Date until)
-Days remaining, or `0.0` for `null`.
-
-```java
-double d = TimeLeft.days(new Date(), futureDate);
+long now = System.currentTimeMillis();
+double mins = TimeLeft.minutes(now, now + 90_000L); // 1.5
+double hrs  = TimeLeft.hours(startDate, endDate);
 ```

@@ -1,46 +1,45 @@
 # Project Overview
 
-Welcome to the **inpsAndroid** documentation (version `2.0.0`). This library eliminates boilerplate across Android projects by providing reusable components, safe SQLite and HTTP helpers, threading utilities, validation tools, and UI widgets.
+Welcome to the **inpsAndroid** documentation (version `3.0.0`). This library eliminates boilerplate across Android projects by providing core networking, SQLite, threading, conversion, and validation utilities alongside drop-in UI widgets and educational algorithm/audio modules.
 
 ```groovy
-implementation 'com.github.isaiahnoelpulidosalazar:inpsAndroid:2.0.0'
+implementation 'com.github.isaiahnoelpulidosalazar:inpsAndroid:3.0.0'
 ```
 
 ## Purpose & Scope
 
 The purpose of this architecture is to provide:
-- A lightweight Android utility layer reducing common boilerplate code across Java/Android projects
-- Safe and straightforward abstractions for local storage, threading, validation, and network communication
-- Drop-in UI widgets with configurable rounded aesthetics and animations
-- Source compatibility with v1 through `@Deprecated` wrappers that delegate to the new implementations (planned for removal in `3.0.0`)
+- Lightweight core Android primitives (`core`) for main-thread dispatch, bounded HTTP requests, parameterized SQLite storage, validation, conversions, and time calculations
+- Drop-in UI widgets (`ui`) with shared `RoundedViewHelper` styling, `inps_`-prefixed resources, outline clipping, and animations
+- Educational modules (`edu`) for sorting algorithms, closed-form geometry formulas, and asynchronous MIDI-addressed piano synthesis
 
 ### Core Architecture Components
 
-1. **Concurrency & Network**: `MainThread` for main-looper posting and `HttpRequest` for background HTTP with main-thread callbacks.
-2. **Persistence**: `Database`, a parameterised SQLite wrapper with validated identifiers and transactions.
-3. **Validation & Conversion**: `EmailValidator`, `StringChecks`, `TimeLeft`, `Drawables`, and `Converters`.
-4. **Algorithms & Math**: `ClassicalCiphers`, `Sort`, `AreaCalculator`, and `Memory`.
-5. **Custom Visual & Audio Components**: Rounded views, `RoundedAlertDialog`, `SimpleList`, `FlippableImageView`, `Fullscreen`, and `SoundSynthesizer`.
+1. **Concurrency & Network (`core`)**: `MainThread` for main-looper posting and `WebRequest` for bounded background HTTP with main-thread callbacks and cancellable `Call` handles.
+2. **Persistence (`core`)**: `EasySQL`, a parameterized SQLite wrapper with validated identifiers, transactions, and `tableExists()`.
+3. **Validation, Conversion & Time (`core`)**: `EmailDomainAllowList`, `StringChecks`, `TimeLeft`, and `Converters`.
+4. **UI & Graphics (`ui`)**: `RoundedButton`, `RoundedEditText`, `RoundedLinearLayout`, `RoundedConstraintLayout`, `RoundedAlertDialog`, `SimpleList`, `FlippableImageView`, `Fullscreen`, and `Drawables`.
+5. **Algorithms, Math & Audio (`edu`)**: `Sort`, `AreaCalculator`, and `SoundSynthesizer`.
 
 ### Package Layout
 
 | Package | Contents |
 |---|---|
-| `com.isaiahnoelpulidosalazar.inpsAndroid` | UI widgets, `Sort`, `AreaCalculator`, `Memory`, `Fullscreen`, `SoundSynthesizer`, and the deprecated v1 wrappers |
-| `...inpsAndroid.concurrent` | `MainThread` |
-| `...inpsAndroid.network` | `HttpRequest` |
-| `...inpsAndroid.database` | `Database` |
-| `...inpsAndroid.validation` | `EmailValidator`, `StringChecks` |
-| `...inpsAndroid.time` | `TimeLeft` |
-| `...inpsAndroid.graphics` | `Drawables` |
-| `...inpsAndroid.convert` | `Converters` |
-| `...inpsAndroid.crypto` | `ClassicalCiphers` |
+| `...inpsandroid.core.concurrent` | `MainThread` |
+| `...inpsandroid.core.network` | `WebRequest` |
+| `...inpsandroid.core.database` | `EasySQL` |
+| `...inpsandroid.core.convert` | `Converters` |
+| `...inpsandroid.core.validation` | `EmailDomainAllowList`, `StringChecks` |
+| `...inpsandroid.core.time` | `TimeLeft` |
+| `...inpsandroid.ui` | `RoundedButton`, `RoundedEditText`, `RoundedLinearLayout`, `RoundedConstraintLayout`, `RoundedViewHelper`, `RoundedAlertDialog`, `SimpleList`, `FlippableImageView`, `Fullscreen`, `Drawables` |
+| `...inpsandroid.edu` | `AreaCalculator`, `SoundSynthesizer` |
+| `...inpsandroid.edu.sort` | `Sort` |
 
 ### Requirements
 
 - `minSdk` 24, `compileSdk` 36, Java 17
-- Your app theme must define the Material attributes used by the drawables (`colorPrimary`, `colorSurface`, `colorControlHighlight`), so use a `Theme.Material3.*` or `Theme.MaterialComponents.*` parent
-- `appcompat`, `recyclerview`, and `constraintlayout` are exposed as `api` dependencies; `material` is an `implementation` dependency
+- Your app theme must inherit from an AppCompat (or Material) theme defining `colorPrimary`, `colorControlHighlight`, and `android:colorBackground`
+- `appcompat`, `recyclerview`, and `constraintlayout` are exposed as `api` dependencies (`com.google.android.material:material` is not required by the library)
 
 ## Quick Navigation
 
@@ -48,28 +47,25 @@ You can browse documentation sets by topic using the sidebar. The following modu
 
 **Core utilities**
 - [MainThread](./main-thread) — Shared main-looper poster with immediate, delayed, and cancel support
-- [HttpRequest](./http-request) — Async HTTP client with main-thread callbacks
-- [Database](./database) — Safe SQLite wrapper with transactions
-- [Converters](./converters) — Base64, date formatting, and safe numeric parsing
-- [EmailValidator](./email-validator) — Immutable email domain allow-list validator
+- [WebRequest](./web-request) — Bounded async HTTP client with `Call.cancel()`, `json()`, and `maxResponseBytes()`
+- [EasySQL](./easy-sql) — Parameterized SQLite wrapper with transactions and `tableExists()`
+- [Converters](./converters) — Null-safe Base64, `ThreadLocal` date formatting, and fallback numeric parsing
+- [EmailDomainAllowList](./email-domain-allow-list) — Immutable email domain allow-list validator
 - [StringChecks](./string-checks) — Null-safe symbol, digit, and space checks
 - [TimeLeft](./time-left) — Fractional time remaining between two instants
-- [Drawables](./drawables) — Pixel-level drawable/bitmap comparison
-- [ClassicalCiphers](./classical-ciphers) — Transposition, Caesar, Keyword, and Giovanni ciphers
 
-**Algorithms & data**
-- [Sort](./sort) — Sorting algorithm implementations
+**UI & graphics**
+- [Rounded Views](./rounded-views) — `RoundedButton`, `RoundedConstraintLayout`, `RoundedEditText`, `RoundedLinearLayout`
+- [RoundedAlertDialog](./rounded-alert-dialog) — Custom rounded dialog with dual `RoundedButton` actions
+- [SimpleList](./simple-list) — `FrameLayout`-wrapped `RecyclerView` with `ListAdapter`, `DiffUtil`, and `TextView` rows
+- [FlippableImageView](./flippable-image-view) — 3D card-flip image component with `Speed` and state restoration
+- [Fullscreen](./fullscreen) — Per-window edge-to-edge immersive fullscreen toggle
+- [Drawables](./drawables) — Pixel-level drawable/bitmap comparison (including `HARDWARE` bitmaps)
+
+**Algorithms, math & audio**
+- [Sort](./sort) — Comparison, non-comparison, and structure-based sorting algorithms
 - [AreaCalculator](./area-calculator) — 2D area and 3D surface-area formulas
-- [Memory](./memory) — Generic list-like container
-
-**UI & media**
-- [Rounded Views](./rounded-views) — RoundedButton, RoundedConstraintLayout, RoundedEditText, RoundedLinearLayout
-- [RoundedAlertDialog](./rounded-alert-dialog) — Custom rounded dialog with dual action buttons
-- [SimpleList](./simple-list) — Vertical button list backed by RecyclerView
-- [FlippableImageView](./flippable-image-view) — 3D card-flip image component
-- [Fullscreen](./fullscreen) — Immersive fullscreen toggle
-- [SoundSynthesizer](./sound-synthesizer) — MIDI-addressed synthesized piano notes
+- [SoundSynthesizer](./sound-synthesizer) — Asynchronous MIDI-addressed synthesized piano notes
 
 **Upgrading**
-- [Legacy API](./legacy-api) — Deprecated v1 classes (`Actions`, `Check`, `Cipher`, `Convert`, `EasySQL`, `URLRequest`)
-- [Migrating to 2.0.0](./migrating-to-v2) — Replacement table, behaviour changes, and Gradle notes
+- [Migrating to 3.0.0](./migrating-to-v3) — v1/v2 replacement table, removed APIs, `inps_` prefixes, and behaviour changes

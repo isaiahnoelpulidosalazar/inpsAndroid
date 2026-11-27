@@ -1,54 +1,30 @@
 # MainThread
 
-The `MainThread` utility posts work to the Android main (UI) thread through one shared `Handler` bound explicitly to `Looper.getMainLooper()`.
+Package: `com.isaiahnoelpulidosalazar.inpsandroid.core.concurrent`
 
-## Purpose & Scope
-
-The purpose of this utility is to provide:
-- Safe posting from any thread, including threads without a `Looper`
-- Built-in delayed execution and cancellation without `Handler` boilerplate
-- A replacement for the deprecated `Actions` class (capture arguments in a lambda instead)
-
-`MainThread` is a `final` class with a private constructor and cannot be instantiated.
+`MainThread` posts work to the Android main looper using a shared `Handler` bound explicitly to `Looper.getMainLooper()`.
 
 ## API Reference
 
-### static boolean isMainThread()
+| Method | Description |
+|---|---|
+| `MainThread.isMainThread()` | Returns `true` if the calling thread is the main thread. |
+| `MainThread.post(Runnable runnable)` | Posts `runnable` to the main thread's message queue. |
+| `MainThread.postDelayed(Runnable runnable, long delayMs)` | Posts `runnable` to the main thread after `delayMs` milliseconds. |
+| `MainThread.run(Runnable runnable)` | Runs `runnable` immediately if already on the main thread; otherwise posts it. |
+| `MainThread.cancel(Runnable runnable)` | Removes pending posts of `runnable` from the main thread queue. |
 
-Returns `true` if the calling thread is the main thread.
-
-```java
-if (!MainThread.isMainThread()) { /* on a worker thread */ }
-```
-
-### static void post(Runnable runnable)
-
-Posts the runnable to the main thread's queue.
+## Usage
 
 ```java
-MainThread.post(() -> textView.setText("Done"));
-```
+import com.isaiahnoelpulidosalazar.inpsandroid.core.concurrent.MainThread;
 
-### static void postDelayed(Runnable runnable, long delayMs)
+Runnable refreshUi = () -> statusView.setText("Done");
 
-Posts the runnable to the main thread's queue after the given delay in milliseconds.
+// Safe from any background thread
+MainThread.run(refreshUi);
 
-```java
-MainThread.postDelayed(() -> banner.setVisibility(View.GONE), 1000);
-```
-
-### static void run(Runnable runnable)
-
-Runs the runnable immediately when already on the main thread, otherwise posts it.
-
-```java
-MainThread.run(() -> progress.setProgress(50));
-```
-
-### static void cancel(Runnable runnable)
-
-Removes pending posts of the given runnable.
-
-```java
-MainThread.cancel(hideBanner);
+// Schedule and optionally cancel delayed work
+MainThread.postDelayed(refreshUi, 500L);
+MainThread.cancel(refreshUi);
 ```

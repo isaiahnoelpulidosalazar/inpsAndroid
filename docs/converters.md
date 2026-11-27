@@ -1,99 +1,32 @@
 # Converters
 
-The `Converters` utility provides type and format conversions: string casing, Base64, safe numeric parsing, and date formatting. It replaces the deprecated `Convert` class.
+Package: `com.isaiahnoelpulidosalazar.inpsandroid.core.convert`
 
-## Purpose & Scope
-
-The purpose of this utility is to provide:
-- Safe numeric parsing with explicit fallbacks, so no `NumberFormatException` and no printed stack traces
-- Null-safe string helpers and Base64 encoding/decoding as UTF-8
-- Thread-safe date formatting (a fresh `SimpleDateFormat` is created per call, using `Locale.US` and the device time zone)
+`Converters` provides null-safe string, Base64, numeric, and date conversions. Numeric parsing methods return the supplied fallback rather than throwing `NumberFormatException`.
 
 ## API Reference
 
-### String & Base64 Operations
+| Method | Description |
+|---|---|
+| `capitalize(String str)` | Upper-cases the first code point; returns `null` or `""` unchanged. |
+| `toBase64(String str)` | Encodes UTF-8 text as Base64 (`Base64.NO_WRAP`); returns `null` when `str` is `null`. |
+| `fromBase64(String str)` | Decodes Base64 to UTF-8 text; returns `null` when `str` is `null` or invalid. |
+| `toInt(String str)` / `toInt(String str, int fallback)` | Trims and parses `int`, returning `0` or `fallback` on invalid/`null` input. |
+| `toFloat(String str)` / `toFloat(String str, float fallback)` | Trims and parses `float`, returning `0f` or `fallback` on invalid/`null` input. |
+| `toDouble(String str)` / `toDouble(String str, double fallback)` | Trims and parses `double`, returning `0.0` or `fallback` on invalid/`null` input. |
+| `formatDate(Date date, String pattern)` | Formats `date` using `Locale.US`, `TimeZone.getDefault()`, and a `ThreadLocal` formatter cache. Returns `null` if either argument is `null`. |
+| `toMonthDayYear(Date date)` | Formats using `"M/d/yyyy"`. |
+| `toDayMonthYear(Date date)` | Formats using `"d/M/yyyy"`. |
+| `toYearMonthDay(Date date)` | Formats using `"yyyy/M/d"`. |
 
-#### static String capitalize(String str)
-Upper-cases the first character (code-point aware). `null` and empty strings are returned unchanged.
-
-```java
-String name = Converters.capitalize("john"); // "John"
-```
-
-#### static String toBase64(String str)
-Encodes a UTF-8 string with `Base64.NO_WRAP` (no trailing newline).
-
-```java
-String b64 = Converters.toBase64("hello");
-```
-
-#### static String fromBase64(String str)
-Decodes Base64 to a UTF-8 string. Returns `null` if the input is `null` or invalid.
+## Usage
 
 ```java
-String text = Converters.fromBase64("aGVsbG8=");
-```
+import com.isaiahnoelpulidosalazar.inpsandroid.core.convert.Converters;
 
----
-
-### Safe Numeric Parsing
-
-#### static int toInt(String str, int fallback)
-Trims and parses an integer, returning the fallback on `null` or parse failure.
-
-```java
-int val = Converters.toInt(" 7 ", -1); // 7
-```
-
-#### static float toFloat(String str, float fallback)
-Trims and parses a float, returning the fallback on failure.
-
-```java
-float val = Converters.toFloat("3.14", 0f);
-```
-
-#### static double toDouble(String str, double fallback)
-Trims and parses a double, returning the fallback on failure.
-
-```java
-double val = Converters.toDouble("x", -1.0); // -1.0
-```
-
-#### static int toInt(String str) / toFloat(String str) / toDouble(String str)
-Convenience overloads using `0`, `0f`, and `0.0` as the fallback.
-
-```java
-int val = Converters.toInt("42");
-```
-
----
-
-### Date Formatting
-
-#### static String formatDate(Date date, String pattern)
-Formats a date with any `SimpleDateFormat` pattern. A `null` date returns `null`.
-
-```java
-String d = Converters.formatDate(new Date(), "dd MMM yyyy");
-```
-
-#### static String toMonthDayYear(Date date)
-Formats as unpadded month/day/year, for example `5/4/2026`.
-
-```java
-String d = Converters.toMonthDayYear(new Date());
-```
-
-#### static String toDayMonthYear(Date date)
-Formats as unpadded day/month/year, for example `4/5/2026`.
-
-```java
-String d = Converters.toDayMonthYear(new Date());
-```
-
-#### static String toYearMonthDay(Date date)
-Formats as unpadded year/month/day, for example `2026/5/4`.
-
-```java
-String d = Converters.toYearMonthDay(new Date());
+String title = Converters.capitalize("inpsAndroid"); // "InpsAndroid"
+String encoded = Converters.toBase64("hello");       // "aGVsbG8="
+String decoded = Converters.fromBase64(encoded);     // "hello"
+int port = Converters.toInt("8080", 80);             // 8080
+String today = Converters.toYearMonthDay(new Date());
 ```

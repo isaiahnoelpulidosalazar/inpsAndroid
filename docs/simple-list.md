@@ -1,104 +1,27 @@
 # SimpleList
 
-`SimpleList` is a `RecyclerView` subclass that renders a vertical list of string items as buttons, with click, long-click, and padding customization.
+Package: `com.isaiahnoelpulidosalazar.inpsandroid.ui`
 
-## Purpose & Scope
+`SimpleList` extends `FrameLayout` and encapsulates an internal `RecyclerView` backed by `ListAdapter` and `DiffUtil`. Rows are rendered as ripple-enabled `TextView` items (`inps_simple_list_item`).
 
-The purpose of this component is to provide:
-- Rapid construction of vertical list menus
-- A single adapter for the view's lifetime with fine-grained change notifications, preserving scroll position and item animations
-- Listeners read at click time, so they can be swapped without rebuilding anything
+## Features
 
-Mutate the list only through the methods below. The list returned by `getItems()` is read-only.
+- `setItems(Collection<String>)` snapshots the incoming collection before clearing, so `list.setItems(list.getItems())` is safe
+- `getItems()` returns an unmodifiable live view of the current items
+- `addItem`, `addItems`, `removeItem`, and `clear` submit incremental diffs without resetting scroll position
+- Supports `OnItemClickListener`, `OnItemLongClickListener`, and `setItemPadding(dp)` / `setItemPadding(l, t, r, b)`
 
-## API Reference
-
-### SimpleList(Context context)
-
-Creates the list. `(Context, AttributeSet)` and `(Context, AttributeSet, int)` constructors are available for XML inflation.
+## Usage
 
 ```java
-SimpleList list = new SimpleList(context);
-```
+import com.isaiahnoelpulidosalazar.inpsandroid.ui.SimpleList;
 
-### void addItem(String item)
+SimpleList list = findViewById(R.id.simple_list);
+list.setItemPadding(14, 12, 14, 12);
+list.setItems(Arrays.asList("Overview", "Core", "UI", "Edu"));
 
-Appends an item.
-
-```java
-list.addItem("Apple");
-```
-
-### void addItems(Collection<String> newItems)
-
-Appends several items with one range notification.
-
-```java
-list.addItems(Arrays.asList("Banana", "Cherry"));
-```
-
-### void setItems(Collection<String> newItems)
-
-Replaces all items.
-
-```java
-list.setItems(Arrays.asList("One", "Two"));
-```
-
-### void removeItem(int position)
-
-Removes the item at the position. Throws `IndexOutOfBoundsException` if out of range.
-
-```java
-list.removeItem(0);
-```
-
-### void clear()
-
-Removes all items.
-
-```java
-list.clear();
-```
-
-### List<String> getItems()
-
-Returns a read-only live view of the items.
-
-```java
-List<String> items = list.getItems();
-```
-
-### void setOnItemClickListener(OnItemClickListener listener)
-
-Registers a callback invoked with the tapped position.
-
-```java
-list.setOnItemClickListener(position -> {
-    String item = list.getItems().get(position);
+list.setOnItemClickListener(pos -> {
+    String selected = list.getItems().get(pos);
 });
-```
-
-### void setOnItemLongClickListener(OnItemLongClickListener listener)
-
-Registers a callback invoked with the held position. The long press is consumed when a listener is set.
-
-```java
-list.setOnItemLongClickListener(position -> { /* handle long press */ });
-```
-
-### void setItemPadding(int dp) / setItemPadding(int left, int top, int right, int bottom)
-
-Sets uniform or per-side padding (in dp) for item buttons. Applies to existing rows immediately.
-
-```java
-list.setItemPadding(12);
-```
-
-### List<String> getData()
-
-**Deprecated.** Alias of `getItems()`; the returned list is now read-only.
-
-```java
-List<String> data = list.getData();
+list.setOnItemLongClickListener(pos -> list.removeItem(pos));
 ```

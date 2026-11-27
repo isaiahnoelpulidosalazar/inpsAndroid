@@ -1,57 +1,40 @@
 # Rounded Views
 
-A collection of custom Android view widgets featuring configurable corner radii, themed backgrounds, and interactive effects.
+Package: `com.isaiahnoelpulidosalazar.inpsandroid.ui`
 
-## Purpose & Scope
-
-The purpose of these custom view classes is to provide:
-- Clean XML and programmatic configuration of rounded backgrounds and corner radii
-- Solid (`colorPrimary`) or translucent (`colorControlHighlight`) background modes
-- Luminance-aware ripple feedback on buttons
-
-All views share one background factory. Theme colors come from your app theme, so it must define `colorPrimary` and `colorControlHighlight`.
-
-## XML Attributes
-
-| Attribute | Applies to | Description |
-|---|---|---|
-| `app:cornerRadius` | all four views | Corner radius as a dimension. Layouts default to **8dp**; button and edit text keep the drawable's pill radius (256dp) unless set |
-| `app:isTranslucent` | `RoundedConstraintLayout`, `RoundedLinearLayout` | Uses the translucent background when `true` (default `false`) |
-
-```xml
-<com.isaiahnoelpulidosalazar.inpsAndroid.RoundedLinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:cornerRadius="16dp"
-    app:isTranslucent="true" />
-```
+Shared attribute parsing, rounded background creation, ripple feedback, and outline clipping live in `RoundedViewHelper`.
 
 ## Components
 
-### RoundedButton
-Custom `AppCompatButton` with a rounded primary-colour background and a ripple whose colour (light or dark) is chosen from the background luminance.
+| View | Base Class | Default Style | XML Attributes |
+|---|---|---|---|
+| `RoundedButton` | `AppCompatButton` | Primary color pill with contrast-aware ripple and black/white text; preserves explicit `android:background` | `app:inpsCornerRadius` |
+| `RoundedEditText` | `AppCompatEditText` | Translucent pill background (`?attr/colorControlHighlight`) | `app:inpsCornerRadius` |
+| `RoundedLinearLayout` | `LinearLayout` | Rounded `8dp` container with `setClipToOutline(true)` | `app:inpsCornerRadius`, `app:inpsIsTranslucent` |
+| `RoundedConstraintLayout` | `ConstraintLayout` | Rounded `8dp` container with `setClipToOutline(true)` | `app:inpsCornerRadius`, `app:inpsIsTranslucent` |
 
-```java
-RoundedButton btn = new RoundedButton(context);
-```
+## Usage
 
-### RoundedConstraintLayout
-Custom `ConstraintLayout` with configurable rounded corners and solid or translucent background modes.
+```xml
+<com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedLinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    app:inpsCornerRadius="16dp"
+    app:inpsIsTranslucent="true">
 
-```java
-RoundedConstraintLayout layout = new RoundedConstraintLayout(context);
-```
+    <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Name"
+        app:inpsCornerRadius="12dp" />
 
-### RoundedEditText
-Custom `AppCompatEditText` with a translucent, pill-shaped background and optional corner radius.
-
-```java
-RoundedEditText editText = new RoundedEditText(context);
-```
-
-### RoundedLinearLayout
-Custom `LinearLayout` with rounded corners and solid or translucent backgrounds.
-
-```java
-RoundedLinearLayout layout = new RoundedLinearLayout(context);
+    <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Continue"
+        app:inpsCornerRadius="12dp" />
+</com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedLinearLayout>
 ```

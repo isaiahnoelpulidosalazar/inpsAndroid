@@ -1,29 +1,29 @@
 # Fullscreen
 
-The `Fullscreen` helper provides one-line activation and deactivation of immersive fullscreen mode using `WindowInsetsControllerCompat` (the `SYSTEM_UI_FLAG_*` flags used in v1 are deprecated since API 30).
+Package: `com.isaiahnoelpulidosalazar.inpsandroid.ui`
 
-## Purpose & Scope
-
-The purpose of this utility is to provide:
-- One-line toggling of immersive mode, with bars reappearing transiently on edge swipe
-- Coordinated hiding and restoration of the status bar, navigation bar, and AppCompat action bar (when present)
-
-`enable` makes the window edge-to-edge (`setDecorFitsSystemWindows(false)`), so handle insets yourself in layouts that must avoid the bars.
+`Fullscreen` toggles immersive fullscreen using `WindowInsetsControllerCompat` and `WindowCompat`. It saves each `Window`'s prior `decorFitsSystemWindows`, system bar visibility, and AppCompat `ActionBar` visibility in a `WeakHashMap` and restores them cleanly on `disable(Activity)`.
 
 ## API Reference
 
-### static void enable(Activity activity)
+| Method | Description |
+|---|---|
+| `Fullscreen.enable(Activity activity)` | Captures prior window state, sets `decorFitsSystemWindows(false)`, hides status/navigation bars with transient swipe behavior, and hides the AppCompat `ActionBar` if present. |
+| `Fullscreen.disable(Activity activity)` | Restores the captured `decorFitsSystemWindows`, system bar visibility, and `ActionBar` state. |
+| `Fullscreen.reapplyOnWindowFocusChanged(Activity activity, boolean hasFocus)` | Re-hides system bars when window focus returns while fullscreen is active. |
 
-Hides the system bars and the action bar. Any `Activity` is accepted; the action bar is only touched for an `AppCompatActivity`.
+## Usage
 
 ```java
+import com.isaiahnoelpulidosalazar.inpsandroid.ui.Fullscreen;
+
 Fullscreen.enable(this);
-```
-
-### static void disable(Activity activity)
-
-Restores the system bars and the action bar.
-
-```java
+// Later...
 Fullscreen.disable(this);
+
+@Override
+public void onWindowFocusChanged(boolean hasFocus) {
+    super.onWindowFocusChanged(hasFocus);
+    Fullscreen.reapplyOnWindowFocusChanged(this, hasFocus);
+}
 ```
