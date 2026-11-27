@@ -1,13 +1,25 @@
 <resources>
     <string name="app_name">inpsAndroid</string>
-    <string name="subtitle_library">inpsAndroid 3.0.0 — Utility &amp; UI Showcase</string>
+    <string name="docs_version_badge">v3.0.0</string>
+    <string name="docs_subtitle">Android Utility, UI &amp; Edu Library Docs</string>
+
+    <string name="tab_overview">Overview</string>
+    <string name="tab_core">Core</string>
+    <string name="tab_ui">UI</string>
+    <string name="tab_edu">Edu</string>
+    <string name="tab_migration">Migration</string>
+
     <string name="hint_input">Enter text, email, or note…</string>
     <string name="btn_base64">Base64 &amp; Capitalize</string>
     <string name="btn_validate_email">Validate Email</string>
     <string name="btn_add_note">Save Note to EasySQL</string>
+    <string name="btn_time_left">Calculate TimeLeft</string>
     <string name="btn_show_dialog">Show RoundedAlertDialog</string>
     <string name="btn_toggle_fullscreen">Toggle Fullscreen</string>
     <string name="btn_flip_card">Flip Card</string>
-    <string name="btn_math_sort">Run Area, Sort &amp; TimeLeft</string>
+    <string name="btn_cycle_speed">Speed: Normal</string>
+    <string name="btn_compare_drawables">Compare Drawables</string>
+    <string name="btn_reset_notes">Reset Sample Notes</string>
+    <string name="btn_area_demo">Run AreaCalculator</string>
     <string name="cd_flippable_card">Interactive flippable card preview</string>
 </resources>

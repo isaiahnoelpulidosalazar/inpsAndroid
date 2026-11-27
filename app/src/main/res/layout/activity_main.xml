@@ -1,289 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/root_scroll"
+    android:id="@+id/root_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:background="@color/doc_bg"
+    android:orientation="vertical">
 
+    <!-- Top Docs Header + Tabs -->
     <LinearLayout
-        android:id="@+id/root_container"
+        android:id="@+id/docs_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:background="@color/doc_surface"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="20dp"
+            android:paddingTop="14dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:textColor="@color/doc_ink"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/bg_doc_badge"
+                android:paddingStart="10dp"
+                android:paddingTop="3dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="3dp"
+                android:text="@string/docs_version_badge"
+                android:textColor="@color/doc_primary_ink"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            android:textAppearance="?attr/textAppearanceHeadlineMedium"
-            android:textStyle="bold" />
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="8dp"
+            android:text="@string/docs_subtitle"
+            android:textColor="@color/doc_ink_muted"
+            android:textSize="13sp" />
 
-        <TextView
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/docs_tabs"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="16dp"
-            android:text="@string/subtitle_library"
-            android:textAppearance="?attr/textAppearanceBodyMedium" />
+            android:layout_height="48dp"
+            android:background="@color/doc_surface"
+            app:tabIndicatorColor="@color/doc_primary"
+            app:tabIndicatorFullWidth="false"
+            app:tabIndicatorHeight="3dp"
+            app:tabMode="scrollable"
+            app:tabPaddingEnd="18dp"
+            app:tabPaddingStart="18dp"
+            app:tabRippleColor="@color/doc_primary_soft"
+            app:tabSelectedTextColor="@color/doc_primary"
+            app:tabTextAppearance="@style/DocsTabTextAppearance"
+            app:tabTextColor="@color/doc_ink_muted" />
 
-        <!-- Interactive Input & Core Utilities Card -->
-        <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedLinearLayout
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp"
-            app:inpsCornerRadius="16dp"
-            app:inpsIsTranslucent="true">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Text, Validation &amp; EasySQL"
-                android:textAppearance="?attr/textAppearanceTitleMedium"
-                android:textStyle="bold" />
-
-            <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedEditText
-                android:id="@+id/input_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:hint="@string/hint_input"
-                android:minHeight="48dp"
-                android:paddingStart="16dp"
-                android:paddingTop="12dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="12dp"
-                android:singleLine="true" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:orientation="horizontal">
-
-                <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
-                    android:id="@+id/btn_base64"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_weight="1"
-                    android:minHeight="48dp"
-                    android:padding="12dp"
-                    android:text="@string/btn_base64"
-                    android:textAllCaps="false"
-                    app:inpsCornerRadius="14dp" />
-
-                <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
-                    android:id="@+id/btn_validate_email"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:minHeight="48dp"
-                    android:padding="12dp"
-                    android:text="@string/btn_validate_email"
-                    android:textAllCaps="false"
-                    app:inpsCornerRadius="14dp" />
-            </LinearLayout>
-
-            <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
-                android:id="@+id/btn_add_note"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:minHeight="48dp"
-                android:padding="12dp"
-                android:text="@string/btn_add_note"
-                android:textAllCaps="false"
-                app:inpsCornerRadius="14dp" />
-
-            <TextView
-                android:id="@+id/output_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="Output appears here."
-                android:textAppearance="?attr/textAppearanceBodyMedium" />
-        </com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedLinearLayout>
-
-        <!-- UI Components Card -->
-        <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedLinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:orientation="vertical"
-            android:padding="16dp"
-            app:inpsCornerRadius="16dp"
-            app:inpsIsTranslucent="true">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="UI Widgets &amp; Flip Animation"
-                android:textAppearance="?attr/textAppearanceTitleMedium"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <com.isaiahnoelpulidosalazar.inpsandroid.ui.FlippableImageView
-                    android:id="@+id/flippable_card"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:contentDescription="@string/cd_flippable_card"
-                    android:src="@drawable/ic_card_front"
-                    app:inpsFlipSpeed="normal"
-                    app:inpsReverseBackImage="false" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
-                        android:id="@+id/btn_flip"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:minHeight="48dp"
-                        android:padding="12dp"
-                        android:text="@string/btn_flip_card"
-                        android:textAllCaps="false"
-                        app:inpsCornerRadius="14dp" />
-
-                    <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
-                        android:id="@+id/btn_dialog"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:minHeight="48dp"
-                        android:padding="12dp"
-                        android:text="@string/btn_show_dialog"
-                        android:textAllCaps="false"
-                        app:inpsCornerRadius="14dp" />
-
-                    <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
-                        android:id="@+id/btn_fullscreen"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:minHeight="48dp"
-                        android:padding="12dp"
-                        android:text="@string/btn_toggle_fullscreen"
-                        android:textAllCaps="false"
-                        app:inpsCornerRadius="14dp" />
-                </LinearLayout>
-            </LinearLayout>
-        </com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedLinearLayout>
-
-        <!-- Sound Synthesizer & Algorithms Card -->
-        <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedLinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:orientation="vertical"
-            android:padding="16dp"
-            app:inpsCornerRadius="16dp"
-            app:inpsIsTranslucent="true">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="SoundSynthesizer &amp; Algorithms"
-                android:textAppearance="?attr/textAppearanceTitleMedium"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:orientation="horizontal">
-
-                <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
-                    android:id="@+id/btn_note_c4"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="6dp"
-                    android:layout_weight="1"
-                    android:minHeight="48dp"
-                    android:text="C4"
-                    android:textAllCaps="false"
-                    app:inpsCornerRadius="12dp" />
-
-                <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
-                    android:id="@+id/btn_note_e4"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="6dp"
-                    android:layout_weight="1"
-                    android:minHeight="48dp"
-                    android:text="E4"
-                    android:textAllCaps="false"
-                    app:inpsCornerRadius="12dp" />
-
-                <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
-                    android:id="@+id/btn_note_g4"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="6dp"
-                    android:layout_weight="1"
-                    android:minHeight="48dp"
-                    android:text="G4"
-                    android:textAllCaps="false"
-                    app:inpsCornerRadius="12dp" />
-
-                <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
-                    android:id="@+id/btn_note_c5"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:minHeight="48dp"
-                    android:text="C5"
-                    android:textAllCaps="false"
-                    app:inpsCornerRadius="12dp" />
-            </LinearLayout>
-
-            <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
-                android:id="@+id/btn_math_sort"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:minHeight="48dp"
-                android:padding="12dp"
-                android:text="@string/btn_math_sort"
-                android:textAllCaps="false"
-                app:inpsCornerRadius="14dp" />
-        </com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedLinearLayout>
-
-        <!-- SimpleList + EasySQL Notes -->
-        <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedLinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:orientation="vertical"
-            android:padding="16dp"
-            app:inpsCornerRadius="16dp"
-            app:inpsIsTranslucent="true">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="SimpleList (Tap item or Long-press to remove)"
-                android:textAppearance="?attr/textAppearanceTitleMedium"
-                android:textStyle="bold" />
-
-            <com.isaiahnoelpulidosalazar.inpsandroid.ui.SimpleList
-                android:id="@+id/simple_list"
-                android:layout_width="match_parent"
-                android:layout_height="220dp"
-                android:layout_marginTop="8dp" />
-        </com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedLinearLayout>
-
+            android:layout_height="1dp"
+            android:background="@color/doc_border" />
     </LinearLayout>
-</ScrollView>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/docs_pager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+</LinearLayout>
