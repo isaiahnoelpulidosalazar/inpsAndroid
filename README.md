@@ -1,75 +1,71 @@
-# Project Overview
+# inpsAndroid
 
-Welcome to the **inpsAndroid** documentation (version `2.0.0`). This library eliminates boilerplate across Android projects by providing reusable components, safe SQLite and HTTP helpers, threading utilities, validation tools, and UI widgets.
+Welcome to the **inpsAndroid** documentation (version `3.0.0`). This library eliminates boilerplate across Android projects by providing core networking, SQLite, threading, conversion, and validation utilities alongside drop-in UI widgets and educational algorithm/audio modules.
 
 ```groovy
-implementation 'com.github.isaiahnoelpulidosalazar:inpsAndroid:2.0.0'
+implementation 'com.github.isaiahnoelpulidosalazar:inpsAndroid:3.0.0'
 ```
 
 ## Purpose & Scope
 
-The purpose of this architecture is to provide:
-- A lightweight Android utility layer reducing common boilerplate code across Java/Android projects
-- Safe and straightforward abstractions for local storage, threading, validation, and network communication
-- Drop-in UI widgets with configurable rounded aesthetics and animations
-- Source compatibility with v1 through `@Deprecated` wrappers that delegate to the new implementations (planned for removal in `3.0.0`)
+**inpsAndroid** is organized into three audience-focused packages under `com.isaiahnoelpulidosalazar.inpsandroid`:
 
-### Core Architecture Components
+- **`core`** — Lightweight Android primitives for main-thread dispatch, bounded HTTP requests, parameterized SQLite storage, date/Base64/numeric conversions, validation, and time calculations
+- **`ui`** — Configurable rounded widgets (`Rounded*`), `RoundedAlertDialog`, `SimpleList`, `FlippableImageView`, `Fullscreen`, and `Drawables`
+- **`edu`** — Sorting algorithm implementations (`Sort`), geometric area/surface-area formulas (`AreaCalculator`), and MIDI-addressed piano synthesis (`SoundSynthesizer`)
 
-1. **Concurrency & Network**: `MainThread` for main-looper posting and `HttpRequest` for background HTTP with main-thread callbacks.
-2. **Persistence**: `Database`, a parameterised SQLite wrapper with validated identifiers and transactions.
-3. **Validation & Conversion**: `EmailValidator`, `StringChecks`, `TimeLeft`, `Drawables`, and `Converters`.
-4. **Algorithms & Math**: `ClassicalCiphers`, `Sort`, `AreaCalculator`, and `Memory`.
-5. **Custom Visual & Audio Components**: Rounded views, `RoundedAlertDialog`, `SimpleList`, `FlippableImageView`, `Fullscreen`, and `SoundSynthesizer`.
+> **Breaking changes in `3.0.0`:** Deprecated v1 wrappers, `crypto` (`ClassicalCiphers`), and `Memory<T>` have been removed, packages have been reorganized under lowercase `com.isaiahnoelpulidosalazar.inpsandroid`, and XML resources/attributes use the `inps_` / `inps` prefix. See [CHANGELOG.md](./CHANGELOG.md) for the complete migration summary.
 
 ### Package Layout
 
 | Package | Contents |
 |---|---|
-| `com.isaiahnoelpulidosalazar.inpsAndroid` | UI widgets, `Sort`, `AreaCalculator`, `Memory`, `Fullscreen`, `SoundSynthesizer`, and the deprecated v1 wrappers |
-| `...inpsAndroid.concurrent` | `MainThread` |
-| `...inpsAndroid.network` | `HttpRequest` |
-| `...inpsAndroid.database` | `Database` |
-| `...inpsAndroid.validation` | `EmailValidator`, `StringChecks` |
-| `...inpsAndroid.time` | `TimeLeft` |
-| `...inpsAndroid.graphics` | `Drawables` |
-| `...inpsAndroid.convert` | `Converters` |
-| `...inpsAndroid.crypto` | `ClassicalCiphers` |
+| `...inpsandroid.core.concurrent` | `MainThread` |
+| `...inpsandroid.core.network` | `WebRequest` |
+| `...inpsandroid.core.database` | `EasySQL` |
+| `...inpsandroid.core.convert` | `Converters` |
+| `...inpsandroid.core.validation` | `EmailDomainAllowList`, `StringChecks` |
+| `...inpsandroid.core.time` | `TimeLeft` |
+| `...inpsandroid.ui` | `RoundedButton`, `RoundedEditText`, `RoundedLinearLayout`, `RoundedConstraintLayout`, `RoundedViewHelper`, `RoundedAlertDialog`, `SimpleList`, `FlippableImageView`, `Fullscreen`, `Drawables` |
+| `...inpsandroid.edu` | `AreaCalculator`, `SoundSynthesizer` |
+| `...inpsandroid.edu.sort` | `Sort` |
 
 ### Requirements
 
 - `minSdk` 24, `compileSdk` 36, Java 17
-- Your app theme must define the Material attributes used by the drawables (`colorPrimary`, `colorSurface`, `colorControlHighlight`), so use a `Theme.Material3.*` or `Theme.MaterialComponents.*` parent
-- `appcompat`, `recyclerview`, and `constraintlayout` are exposed as `api` dependencies; `material` is an `implementation` dependency
+- App theme must inherit from an AppCompat (or Material) theme defining `colorPrimary`, `colorControlHighlight`, and `android:colorBackground`
+- `androidx.appcompat:appcompat`, `androidx.recyclerview:recyclerview`, and `androidx.constraintlayout:constraintlayout` are exposed as `api` dependencies (`material` is not required by the library)
 
-## Quick Navigation
+## Module Highlights
 
-You can browse documentation sets by topic using the sidebar. The following modules are available:
+### Core (`...inpsandroid.core`)
+- **`MainThread`** — Shared main-looper poster supporting immediate, delayed, and cancellable runnables.
+- **`WebRequest`** — Async HTTP client backed by a 4-thread pool and a bounded queue of 64, returning a cancellable `WebRequest.Call` handle with `json(String)`, configurable `maxResponseBytes(int)` (default 8 MB), charset-aware decoding, and main-thread callbacks.
+- **`EasySQL`** — Parameterized SQLite wrapper with validated identifiers, transactions, and `tableExists(String)` (all methods block on disk I/O).
+- **`Converters`** — Null-safe Base64 encoding/decoding, thread-safe cached date formatting, and safe numeric parsing.
+- **`EmailDomainAllowList`** — Immutable email domain allow-list validator with local-part and domain checks.
+- **`StringChecks`** — Null-safe symbol, digit, and whitespace checks.
+- **`TimeLeft`** — Fractional time remaining between two instants.
 
-**Core utilities**
-- [MainThread](./main-thread) — Shared main-looper poster with immediate, delayed, and cancel support
-- [HttpRequest](./http-request) — Async HTTP client with main-thread callbacks
-- [Database](./database) — Safe SQLite wrapper with transactions
-- [Converters](./converters) — Base64, date formatting, and safe numeric parsing
-- [EmailValidator](./email-validator) — Immutable email domain allow-list validator
-- [StringChecks](./string-checks) — Null-safe symbol, digit, and space checks
-- [TimeLeft](./time-left) — Fractional time remaining between two instants
-- [Drawables](./drawables) — Pixel-level drawable/bitmap comparison
-- [ClassicalCiphers](./classical-ciphers) — Transposition, Caesar, Keyword, and Giovanni ciphers
+### UI (`...inpsandroid.ui`)
+- **Rounded Views** (`RoundedButton`, `RoundedEditText`, `RoundedLinearLayout`, `RoundedConstraintLayout`) — Shared styling via `RoundedViewHelper` supporting `app:inpsCornerRadius`, `app:inpsIsTranslucent` (on layouts), outline clipping on rounded containers, luminance-based text contrast on `RoundedButton`, and explicit XML `android:background` preservation.
+- **`RoundedAlertDialog`** — Rounded dual-action dialog using `RoundedButton` and theme-aware colors, supporting `addView`, `setCancelable`, and button click listeners.
+- **`SimpleList`** — `FrameLayout`-wrapped `RecyclerView` using `ListAdapter` and `DiffUtil` with ripple-enabled `TextView` rows and snapshot-safe `setItems`.
+- **`FlippableImageView`** — 3D card-flip image view with `app:inpsReverseBackImage`, `app:inpsFlipSpeed` (`slow` | `normal` | `fast`), `setFrontBitmap`/`setBackBitmap`, and instance-state persistence.
+- **`Fullscreen`** — Per-window edge-to-edge/immersive fullscreen controller that saves and restores previous system bar and action bar visibility.
+- **`Drawables`** — Pixel-level drawable and bitmap comparison (handling `HARDWARE` bitmaps safely).
 
-**Algorithms & data**
-- [Sort](./sort) — Sorting algorithm implementations
-- [AreaCalculator](./area-calculator) — 2D area and 3D surface-area formulas
-- [Memory](./memory) — Generic list-like container
+### Educational & Media (`...inpsandroid.edu`)
+- **`Sort`** (`...edu.sort.Sort`) — Comparison, non-comparison (including negative-capable `countingSort`), and structure-based sorting algorithms.
+- **`AreaCalculator`** — 2D area and 3D surface-area formulas.
+- **`SoundSynthesizer`** — Asynchronous MIDI-addressed piano note synthesis (`prepare(int...)`, `playNote`, `stopNote`, `release`) using low-latency `AudioTrack` on API 26+.
 
-**UI & media**
-- [Rounded Views](./rounded-views) — RoundedButton, RoundedConstraintLayout, RoundedEditText, RoundedLinearLayout
-- [RoundedAlertDialog](./rounded-alert-dialog) — Custom rounded dialog with dual action buttons
-- [SimpleList](./simple-list) — Vertical button list backed by RecyclerView
-- [FlippableImageView](./flippable-image-view) — 3D card-flip image component
-- [Fullscreen](./fullscreen) — Immersive fullscreen toggle
-- [SoundSynthesizer](./sound-synthesizer) — MIDI-addressed synthesized piano notes
+## Testing
 
-**Upgrading**
-- [Legacy API](./legacy-api) — Deprecated v1 classes (`Actions`, `Check`, `Cipher`, `Convert`, `EasySQL`, `URLRequest`)
-- [Migrating to 2.0.0](./migrating-to-v2) — Replacement table, behaviour changes, and Gradle notes
+Run the library unit and Robolectric test suite with:
+
+```bash
+gradle :inpsAndroid:testDebugUnitTest
+```
+
+See [CHANGELOG.md](./CHANGELOG.md) for all `3.0.0` changes and historical v1/v2 notes, and [LICENSE](./LICENSE) for licensing terms.
