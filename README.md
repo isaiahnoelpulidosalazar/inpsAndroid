@@ -127,4 +127,4 @@ Run the library unit and Robolectric test suite with:
 gradle :inpsAndroid:testDebugUnitTest
 ```
 
-See [TESTING.md](./TESTING.md) for instructions on writing and running JUnit 4 and Robolectric tests, [CHANGELOG.md](./CHANGELOG.md) for the complete `3.0.0` changelog and historical v1/v2 notes, and [LICENSE](./LICENSE) for licensing terms.
+See [TESTING.md](./TESTING.md) for instructions on writing and running JUnit 4 and Robolectric tests, [CONTRIBUTING.md](./CONTRIBUTING.md) for issue and pull request guidelines, [CHANGELOG.md](./CHANGELOG.md) for the complete `3.0.0` changelog and historical v1/v2 notes, and [LICENSE](./LICENSE) for licensing terms.
