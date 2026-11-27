@@ -1,9 +1,9 @@
 # Project Overview
 
-Welcome to the **inpsAndroid** documentation (version `3.0.0`). This library eliminates boilerplate across Android projects by providing core networking, SQLite, threading, conversion, and validation utilities alongside drop-in UI widgets and educational algorithm/audio modules.
+Welcome to the **inpsAndroid** documentation (version `3.0.1`). This library eliminates boilerplate across Android projects by providing core networking, SQLite, notification, threading, conversion, and validation utilities alongside drop-in UI widgets and educational algorithm/audio modules.
 
 ```groovy
-implementation 'com.github.isaiahnoelpulidosalazar:inpsAndroid:3.0.0'
+implementation 'com.github.isaiahnoelpulidosalazar:inpsAndroid:3.0.1'
 ```
 
 ## Purpose & Scope
@@ -16,7 +16,7 @@ The purpose of this architecture is to provide:
 ### Core Architecture Components
 
 1. **Concurrency & Network (`core`)**: `MainThread` for main-looper posting and `WebRequest` for bounded background HTTP with main-thread callbacks and cancellable `Call` handles.
-2. **Persistence (`core`)**: `EasySQL`, a parameterized SQLite wrapper with validated identifiers, transactions, and `tableExists()`.
+2. **Persistence & Notifications (`core`)**: `EasySQL` (parameterized SQLite wrapper with validated identifiers, transactions, and `tableExists()`) and `EasyNotification` (channel-aware notification dispatcher with permission guards and rich styles).
 3. **Validation, Conversion & Time (`core`)**: `EmailDomainAllowList`, `StringChecks`, `TimeLeft`, and `Converters`.
 4. **UI & Graphics (`ui`)**: `RoundedButton`, `RoundedCheckBox`, `RoundedEditText`, `RoundedLinearLayout`, `RoundedConstraintLayout`, `RoundedAlertDialog`, `RoundedBottomSheet`, `SimpleList`, `FlippableImageView`, `Fullscreen`, and `Drawables`.
 5. **Algorithms, Math & Audio (`edu`)**: `Sort`, `AreaCalculator`, and `SoundSynthesizer`.
@@ -28,6 +28,7 @@ The purpose of this architecture is to provide:
 | `...inpsandroid.core.concurrent` | `MainThread` |
 | `...inpsandroid.core.network` | `WebRequest` |
 | `...inpsandroid.core.database` | `EasySQL` |
+| `...inpsandroid.core.notification` | `EasyNotification` |
 | `...inpsandroid.core.convert` | `Converters` |
 | `...inpsandroid.core.validation` | `EmailDomainAllowList`, `StringChecks` |
 | `...inpsandroid.core.time` | `TimeLeft` |
@@ -49,6 +50,7 @@ You can browse documentation sets by topic using the sidebar. The following modu
 - [MainThread](./main-thread) — Shared main-looper poster with immediate, delayed, and cancel support
 - [WebRequest](./web-request) — Bounded async HTTP client with `Call.cancel()`, `json()`, and `maxResponseBytes()`
 - [EasySQL](./easy-sql) — Parameterized SQLite wrapper with transactions and `tableExists()`
+- [EasyNotification](./easy-notification) — Channel-aware notification dispatcher with API 33+ permission guards and rich styles
 - [Converters](./converters) — Null-safe Base64, `ThreadLocal` date formatting, and fallback numeric parsing
 - [EmailDomainAllowList](./email-domain-allow-list) — Immutable email domain allow-list validator
 - [StringChecks](./string-checks) — Null-safe symbol, digit, and space checks

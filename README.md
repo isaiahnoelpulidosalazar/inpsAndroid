@@ -1,9 +1,9 @@
 # inpsAndroid
 
-Welcome to the **inpsAndroid** documentation (version `3.0.0`). This library eliminates boilerplate across Android projects by providing core networking, SQLite, threading, conversion, and validation utilities alongside drop-in UI widgets and educational algorithm/audio modules.
+Welcome to the **inpsAndroid** documentation (version `3.0.1`). This library eliminates boilerplate across Android projects by providing core networking, SQLite, notifications, threading, conversion, and validation utilities alongside drop-in UI widgets and educational algorithm/audio modules.
 
 ```groovy
-implementation 'com.github.isaiahnoelpulidosalazar:inpsAndroid:3.0.0'
+implementation 'com.github.isaiahnoelpulidosalazar:inpsAndroid:3.0.1'
 ```
 
 ## Purpose & Scope
@@ -23,6 +23,7 @@ implementation 'com.github.isaiahnoelpulidosalazar:inpsAndroid:3.0.0'
 | `...inpsandroid.core.concurrent` | `MainThread` |
 | `...inpsandroid.core.network` | `WebRequest` |
 | `...inpsandroid.core.database` | `EasySQL` |
+| `...inpsandroid.core.notification` | `EasyNotification` |
 | `...inpsandroid.core.convert` | `Converters` |
 | `...inpsandroid.core.validation` | `EmailDomainAllowList`, `StringChecks` |
 | `...inpsandroid.core.time` | `TimeLeft` |
@@ -42,6 +43,7 @@ implementation 'com.github.isaiahnoelpulidosalazar:inpsAndroid:3.0.0'
 - **`MainThread`** — Shared main-looper poster supporting immediate, delayed, and cancellable runnables.
 - **`WebRequest`** — Async HTTP client backed by a 4-thread pool and a bounded queue of 64, returning a cancellable `WebRequest.Call` handle with `json(String)`, configurable `maxResponseBytes(int)` (default 8 MB), charset-aware decoding, and main-thread callbacks.
 - **`EasySQL`** — Parameterized SQLite wrapper with validated identifiers, transactions, and `tableExists(String)` (all methods block on disk I/O).
+- **`EasyNotification`** — Channel-aware notification dispatcher with API 33+ `POST_NOTIFICATIONS` checks, `BigText`/`BigPicture`/`Inbox` styles, actions, and `tapActivity()` helpers.
 - **`Converters`** — Null-safe Base64 encoding/decoding, thread-safe cached date formatting, and safe numeric parsing.
 - **`EmailDomainAllowList`** — Immutable email domain allow-list validator with local-part and domain checks.
 - **`StringChecks`** — Null-safe symbol, digit, and whitespace checks.
@@ -115,7 +117,7 @@ All library resources and custom attributes are now prefixed to avoid collisions
 
 Browse the per-module Markdown reference pages in [`docs/`](./docs/README.md):
 
-- **Core:** [MainThread](./docs/main-thread.md) · [WebRequest](./docs/web-request.md) · [EasySQL](./docs/easy-sql.md) · [Converters](./docs/converters.md) · [EmailDomainAllowList](./docs/email-domain-allow-list.md) · [StringChecks](./docs/string-checks.md) · [TimeLeft](./docs/time-left.md)
+- **Core:** [MainThread](./docs/main-thread.md) · [WebRequest](./docs/web-request.md) · [EasySQL](./docs/easy-sql.md) · [EasyNotification](./docs/easy-notification.md) · [Converters](./docs/converters.md) · [EmailDomainAllowList](./docs/email-domain-allow-list.md) · [StringChecks](./docs/string-checks.md) · [TimeLeft](./docs/time-left.md)
 - **UI:** [Rounded Views](./docs/rounded-views.md) · [RoundedAlertDialog](./docs/rounded-alert-dialog.md) · [RoundedBottomSheet](./docs/rounded-bottom-sheet.md) · [SimpleList](./docs/simple-list.md) · [FlippableImageView](./docs/flippable-image-view.md) · [Fullscreen](./docs/fullscreen.md) · [Drawables](./docs/drawables.md)
 - **Edu:** [Sort](./docs/sort.md) · [AreaCalculator](./docs/area-calculator.md) · [SoundSynthesizer](./docs/sound-synthesizer.md)
 - **Upgrading:** [Migrating from v1 / v2 to 3.0.0](./docs/migrating-to-v3.md)

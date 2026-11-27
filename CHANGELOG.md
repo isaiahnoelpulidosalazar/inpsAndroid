@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.0.1
+
+Feature release expanding the `core` and `ui` toolkits without breaking `3.0.0` APIs.
+
+### New Components & Enhancements
+- **`EasyNotification`** (`core.notification`): Custom notification dispatcher managing API 26+ channels, API 33+ `POST_NOTIFICATIONS` permission checks (`RESULT_BLOCKED` fallback + `DispatchListener`), fluent styles (`bigText`, `bigPicture`, `inboxLines`), progress bars, actions, and `FLAG_IMMUTABLE` `tapActivity()` helpers.
+- **`RoundedBottomSheet`** (`ui`): Builder-style modal bottom sheet with top-rounded corners, outline clipping, toggleable drag handle, swipe-to-dismiss gestures, system navigation bar and IME inset handling, scrollable body content (`addView` / `setMessage`), and dual `RoundedButton` actions.
+- **`RoundedCheckBox`** (`ui`): Checkable rounded widget supporting `CARD`, `PILL`, and `MINIMAL` styles (`app:inpsCheckStyle`) and a user-toggleable overshoot bounce animation (`app:inpsBounceAnimation`).
+- **`SimpleList`** (`ui`): Added optional multi-select `RoundedCheckBox` rows (`app:inpsCheckboxesEnabled`), bounce animation toggle forwarding, style customization, and selection tracking helpers alongside classic `TextView` rows.
+
 ## 3.0.0
 
 Breaking release reorganizing packages, removing legacy/duplicate APIs, prefixing resources and attributes, and hardening concurrency, networking, UI, and validation components.

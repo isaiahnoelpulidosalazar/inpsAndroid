@@ -1,16 +1,22 @@
 package com.aistudio.inpsandroid.demo;
 
+import android.Manifest;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 
 import com.isaiahnoelpulidosalazar.inpsandroid.core.convert.Converters;
+import com.isaiahnoelpulidosalazar.inpsandroid.core.notification.EasyNotification;
 import com.isaiahnoelpulidosalazar.inpsandroid.core.time.TimeLeft;
 import com.isaiahnoelpulidosalazar.inpsandroid.core.validation.EmailDomainAllowList;
 import com.isaiahnoelpulidosalazar.inpsandroid.core.validation.StringChecks;
@@ -26,6 +32,21 @@ public class CoreFragment extends Fragment implements DemoHost.NotesListener {
     private TextView outputText;
     private TextView dbStatusText;
     private TextView timeOutputText;
+    private TextView notificationOutputText;
+    private EasyNotification easyNotification;
+    private Runnable pendingNotificationAction;
+
+    private final ActivityResultLauncher<String> notificationPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), granted -> {
+                if (granted && pendingNotificationAction != null) {
+                    Runnable action = pendingNotificationAction;
+                    pendingNotificationAction = null;
+                    action.run();
+                } else if (!granted && notificationOutputText != null) {
+                    pendingNotificationAction = null;
+                    notificationOutputText.setText("Blocked: POST_NOTIFICATIONS permission denied.");
+                }
+            });
 
     private final EmailDomainAllowList emailAllowList = new EmailDomainAllowList.Builder()
             .addDomain("gmail.com")
@@ -49,6 +70,17 @@ public class CoreFragment extends Fragment implements DemoHost.NotesListener {
         outputText = view.findViewById(R.id.core_output_text);
         dbStatusText = view.findViewById(R.id.core_db_status);
         timeOutputText = view.findViewById(R.id.core_time_output);
+        notificationOutputText = view.findViewById(R.id.core_notification_output);
+
+        easyNotification = new EasyNotification(requireContext())
+                .createChannel(
+                        "demo_alerts",
+                        "Demo Alerts",
+                        "Notifications dispatched from the inpsAndroid Core tab",
+                        NotificationManagerCompat.IMPORTANCE_HIGH,
+                        true,
+                        true
+                );
 
         view.findViewById(R.id.btn_base64).setOnClickListener(v -> {
             String text = readInputOrDefault("hello inpsAndroid");
@@ -89,6 +121,35 @@ public class CoreFragment extends Fragment implements DemoHost.NotesListener {
             ));
         });
 
+        view.findViewById(R.id.btn_send_notification).setOnClickListener(v ->
+                runWithNotificationPermission(() -> {
+                    String body = readInputOrDefault("Hello from EasyNotification v3.0.1!");
+                    int id = easyNotification.prepare("demo_alerts")
+                            .title("inpsAndroid Alert")
+                            .message(body)
+                            .tapActivity(MainActivity.class)
+                            .show();
+                    updateNotificationStatus(id, "demo_alerts");
+                }));
+
+        view.findViewById(R.id.btn_send_big_text_notification).setOnClickListener(v ->
+                runWithNotificationPermission(() -> {
+                    String body = readInputOrDefault("Expandable BigText notification dispatched cleanly via EasyNotification.");
+                    int id = easyNotification.prepare("demo_alerts")
+                            .title("Expandable Summary")
+                            .message(body)
+                            .bigText(body + "\n\nTap to reopen inpsAndroid 3.0.1.")
+                            .subText("v3.0.1")
+                            .tapActivity(MainActivity.class)
+                            .show();
+                    updateNotificationStatus(id, "demo_alerts (BigText)");
+                }));
+
+        view.findViewById(R.id.btn_cancel_notifications).setOnClickListener(v -> {
+            easyNotification.cancelAll();
+            notificationOutputText.setText("Cancelled all active app notifications.");
+        });
+
         if (getActivity() instanceof DemoHost) {
             DemoHost host = (DemoHost) getActivity();
             host.registerNotesListener(this);
@@ -111,6 +172,29 @@ public class CoreFragment extends Fragment implements DemoHost.NotesListener {
                     Locale.US,
                     "EasySQL active rows: %d (synced with UI -> SimpleList).",
                     notes.size()
+            ));
+        }
+    }
+
+    private void runWithNotificationPermission(Runnable action) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+                && !easyNotification.hasPostNotificationPermission()) {
+            pendingNotificationAction = action;
+            notificationOutputText.setText("Requesting POST_NOTIFICATIONS permission...");
+            notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+            return;
+        }
+        action.run();
+    }
+
+    private void updateNotificationStatus(int id, String channelLabel) {
+        if (id == EasyNotification.RESULT_BLOCKED) {
+            notificationOutputText.setText("Blocked: notifications disabled or permission denied.");
+        } else {
+            notificationOutputText.setText(String.format(
+                    Locale.US,
+                    "Dispatched notification id=%d on %s.",
+                    id, channelLabel
             ));
         }
     }

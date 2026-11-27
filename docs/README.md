@@ -1,11 +1,12 @@
-# inpsAndroid Documentation (`3.0.0`)
+# inpsAndroid Documentation (`3.0.1`)
 
-Welcome to the **inpsAndroid** `3.0.0` documentation set.
+Welcome to the **inpsAndroid** `3.0.1` documentation set.
 
 ## Core (`com.isaiahnoelpulidosalazar.inpsandroid.core`)
 - [MainThread](./main-thread.md) — Shared main-looper poster (`post`, `postDelayed`, `run`, `cancel`)
 - [WebRequest](./web-request.md) — Bounded async HTTP client with `Call.cancel()`, `json()`, and `maxResponseBytes()`
 - [EasySQL](./easy-sql.md) — Parameterized SQLite wrapper with validated identifiers, transactions, and `tableExists()`
+- [EasyNotification](./easy-notification.md) — Channel-aware notification dispatcher with permission guards and rich styles
 - [Converters](./converters.md) — Null-safe Base64, `ThreadLocal` date formatting, and fallback numeric parsing
 - [EmailDomainAllowList](./email-domain-allow-list.md) — Immutable email allow-list validator
 - [StringChecks](./string-checks.md) — Null-safe symbol, digit, and space checks
