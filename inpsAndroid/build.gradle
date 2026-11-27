@@ -30,6 +30,13 @@ android {
         }
     }
 
+    lint {
+        abortOnError = true
+        warningsAsErrors = false
+        checkReleaseBuilds = true
+        lintConfig = file('lint.xml')
+    }
+
     publishing {
         singleVariant("release") {
             withSourcesJar()

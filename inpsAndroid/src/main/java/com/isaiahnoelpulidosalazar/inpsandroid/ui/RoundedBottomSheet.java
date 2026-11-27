@@ -1,6 +1,7 @@
 package com.isaiahnoelpulidosalazar.inpsandroid.ui;
 
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -9,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.RippleDrawable;
+import android.os.Build;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -133,10 +135,7 @@ public class RoundedBottomSheet {
             }
         });
 
-        DragDismissTouchListener dragListener = new DragDismissTouchListener();
-        handleArea.setOnTouchListener(dragListener);
-        titleView.setOnTouchListener(dragListener);
-        subtitleView.setOnTouchListener(dragListener);
+        attachDragDismissListeners();
     }
 
     /**
@@ -465,7 +464,7 @@ public class RoundedBottomSheet {
             configureWindow();
             sheetContainer.post(() -> {
                 int height = sheetContainer.getHeight();
-                if (height > 0 && dialog.isShowing() && !dismissing && ValueAnimator.areAnimatorsEnabled()) {
+                if (height > 0 && dialog.isShowing() && !dismissing && areAnimatorsEnabledCompat()) {
                     sheetContainer.setTranslationY(height);
                     sheetContainer.animate()
                             .translationY(0f)
@@ -505,7 +504,7 @@ public class RoundedBottomSheet {
             return;
         }
         int height = sheetContainer.getHeight();
-        if (height <= 0 || !sheetContainer.isAttachedToWindow() || !ValueAnimator.areAnimatorsEnabled()) {
+        if (height <= 0 || !sheetContainer.isAttachedToWindow() || !areAnimatorsEnabledCompat()) {
             if (cancel) {
                 dialog.cancel();
             } else {
@@ -548,6 +547,19 @@ public class RoundedBottomSheet {
                 || secondaryButton.getVisibility() == View.VISIBLE;
         actionsContainer.setVisibility(anyVisible ? View.VISIBLE : View.GONE);
         return this;
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void attachDragDismissListeners() {
+        // DragDismissTouchListener invokes v.performClick() when a tap completes without dragging.
+        DragDismissTouchListener dragListener = new DragDismissTouchListener();
+        handleArea.setOnTouchListener(dragListener);
+        titleView.setOnTouchListener(dragListener);
+        subtitleView.setOnTouchListener(dragListener);
+    }
+
+    private static boolean areAnimatorsEnabledCompat() {
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.O || ValueAnimator.areAnimatorsEnabled();
     }
 
     private void configureWindow() {
