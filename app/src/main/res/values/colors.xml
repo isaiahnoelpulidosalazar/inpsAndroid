@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="doc_bg">#F8FAFC</color>
+    <color name="doc_surface">#FFFFFF</color>
+    <color name="doc_code_bg">#F1F5F9</color>
+    <color name="doc_border">#E2E8F0</color>
+    <color name="doc_ink">#0F172A</color>
+    <color name="doc_ink_muted">#475569</color>
+    <color name="doc_primary">#1D4ED8</color>
+    <color name="doc_primary_soft">#DBEAFE</color>
+    <color name="doc_primary_ink">#1E3A8A</color>
+    <color name="doc_accent">#0F766E</color>
+    <color name="doc_accent_soft">#CCFBF1</color>
+</resources>

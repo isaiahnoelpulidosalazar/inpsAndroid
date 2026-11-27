@@ -60,6 +60,56 @@ implementation 'com.github.isaiahnoelpulidosalazar:inpsAndroid:3.0.0'
 - **`AreaCalculator`** — 2D area and 3D surface-area formulas.
 - **`SoundSynthesizer`** — Asynchronous MIDI-addressed piano note synthesis (`prepare(int...)`, `playNote`, `stopNote`, `release`) using low-latency `AudioTrack` on API 26+.
 
+## Migrating from v1 / v2 to 3.0.0
+
+Version `3.0.0` removes all `@Deprecated` v1 wrappers (`Actions`, `Check`, `Cipher`, `Convert`, v1 `EasySQL`, `URLRequest`) and reorganizes the entire library under `com.isaiahnoelpulidosalazar.inpsandroid` (`core`, `ui`, `edu`).
+
+### 1. Class & Package Mapping
+
+| v1 | v2 (`...inpsAndroid`) | v3 (`...inpsandroid`) |
+|---|---|---|
+| `URLRequest` | `network.HttpRequest` | `core.network.WebRequest` |
+| `EasySQL` | `database.Database` | `core.database.EasySQL` |
+| `Convert` | `convert.Converters` | `core.convert.Converters` |
+| `Check` | `validation.EmailValidator` | `core.validation.EmailDomainAllowList` |
+| `Check` | `validation.StringChecks` | `core.validation.StringChecks` |
+| `Actions` | `concurrent.MainThread` | `core.concurrent.MainThread` |
+| `Actions` | `Fullscreen` | `ui.Fullscreen` |
+| `Cipher` | `crypto.ClassicalCiphers` | **Removed** (use `javax.crypto`) |
+| — | `time.TimeLeft` | `core.time.TimeLeft` |
+| — | `graphics.Drawables` | `ui.Drawables` |
+| — | `RoundedButton`, `RoundedEditText`, `RoundedLinearLayout`, `RoundedConstraintLayout`, `RoundedViewHelper`, `RoundedAlertDialog`, `SimpleList`, `FlippableImageView` | `ui.*` |
+| — | `AreaCalculator`, `SoundSynthesizer` | `edu.*` |
+| — | `Sort` | `edu.sort.Sort` |
+| — | `Memory<T>` | **Removed** (use `java.util.ArrayList<T>`) |
+
+### 2. Removed Methods & API Changes
+
+- **`Sort`**: `pigeonholeSort` was merged into `countingSort` (now supports negative integers with a `10_000_000` range cap), and `timsort` was removed (use `Arrays.sort`). All `Sort` methods now throw `NullPointerException` on `null` input instead of returning `null`.
+- **`AreaCalculator`**: Removed formula duplicates `parallelogramArea` (use `rectangleArea`), `rightTriangleArea` (use `triangleArea`), and `squareAsRhombusArea` (use `squareArea(side) / 2`).
+- **`FlippableImageView`**: Removed `toBitmap`. Renamed `setFrontImage(Bitmap)` and `setBackImage(Bitmap)` to `setFrontBitmap(Bitmap)` and `setBackBitmap(Bitmap)` to eliminate `null` overload ambiguity.
+- **`SimpleList`**: Now wraps a `RecyclerView` inside a `FrameLayout` instead of extending `RecyclerView` directly (use `getRecyclerView()` if needed). List rows now use `TextView` instead of `Button`, and `setItems()` snapshots incoming collections before updating via `ListAdapter`/`DiffUtil`.
+- **`WebRequest`**: Bounded to 4 worker threads and a queue capacity of 64; `enqueue()` returns a cancellable `WebRequest.Call`; added `json(String)` and `maxResponseBytes(int)`.
+- **`Converters` & `EmailDomainAllowList`**: `Converters.toBase64(null)` returns `null`. `EmailDomainAllowList` requires a non-empty local part without whitespace and a single `@`.
+
+### 3. XML Attributes & Resource Prefix (`inps_`)
+
+All library resources and custom attributes are now prefixed to avoid collisions (`resourcePrefix 'inps_'`):
+
+| v2 | v3 |
+|---|---|
+| `app:cornerRadius` | `app:inpsCornerRadius` |
+| `app:isTranslucent` | `app:inpsIsTranslucent` |
+| `app:reverseBackImage` | `app:inpsReverseBackImage` |
+| `app:flipSpeed` | `app:inpsFlipSpeed` |
+| `generic_rounded_primary_background` | `inps_rounded_primary_background` |
+| `generic_rounded_translucent_background` | `inps_rounded_translucent_background` |
+| `rounded_alert_dialog_background` | `inps_rounded_alert_dialog_background` |
+| `rounded_alert_dialog_layout` | `inps_rounded_alert_dialog_layout` |
+| `simple_list_item` / `simple_list_item_background` | `inps_simple_list_item` / `inps_simple_list_item_background` |
+| `top_border` / `bottom_border` | `inps_top_border` / `inps_bottom_border` |
+| `@color/black`, `@color/white` (`colors.xml`) | **Removed** (use `@android:color/black`, `@android:color/white`, or app theme colors) |
+
 ## Testing
 
 Run the library unit and Robolectric test suite with:
@@ -68,4 +118,4 @@ Run the library unit and Robolectric test suite with:
 gradle :inpsAndroid:testDebugUnitTest
 ```
 
-See [CHANGELOG.md](./CHANGELOG.md) for all `3.0.0` changes and historical v1/v2 notes, and [LICENSE](./LICENSE) for licensing terms.
+See [CHANGELOG.md](./CHANGELOG.md) for the complete `3.0.0` changelog and historical v1/v2 notes, and [LICENSE](./LICENSE) for licensing terms.

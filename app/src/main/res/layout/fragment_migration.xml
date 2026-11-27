@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/migration_scroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Breaking Summary Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_doc_card"
+            android:orientation="vertical"
+            android:padding="18dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_doc_badge"
+                android:paddingStart="10dp"
+                android:paddingTop="3dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="3dp"
+                android:text="UPGRADING TO 3.0.0"
+                android:textColor="@color/doc_primary_ink"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Migrating from v1 &amp; v2"
+                android:textColor="@color/doc_ink"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:lineSpacingExtra="3dp"
+                android:text="inpsAndroid 3.0.0 removes all deprecated v1 shims and reorganizes classes into lowercase core, ui, and edu packages under com.isaiahnoelpulidosalazar.inpsandroid."
+                android:textColor="@color/doc_ink_muted"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Class Mapping Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/bg_doc_card"
+            android:orientation="vertical"
+            android:padding="18dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="1. Class &amp; Package Mapping"
+                android:textColor="@color/doc_ink"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_code_block"
+                android:fontFamily="monospace"
+                android:lineSpacingExtra="4dp"
+                android:padding="12dp"
+                android:text="URLRequest / HttpRequest  -> core.network.WebRequest\nEasySQL (v1) / Database   -> core.database.EasySQL\nConvert / Converters      -> core.convert.Converters\nCheck / EmailValidator    -> core.validation.EmailDomainAllowList\nCheck / StringChecks      -> core.validation.StringChecks\nActions / MainThread      -> core.concurrent.MainThread\nActions / Fullscreen      -> ui.Fullscreen\nDrawables                 -> ui.Drawables\nSort                      -> edu.sort.Sort\nCipher / ClassicalCiphers -> Removed (use javax.crypto)\nMemory&lt;T&gt;                 -> Removed (use ArrayList&lt;T&gt;)"
+                android:textColor="@color/doc_ink"
+                android:textSize="11.5sp" />
+        </LinearLayout>
+
+        <!-- Removed & Changed APIs Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/bg_doc_card"
+            android:orientation="vertical"
+            android:padding="18dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="2. API &amp; Behavior Changes"
+                android:textColor="@color/doc_ink"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:lineSpacingExtra="4dp"
+                android:text="• Sort: pigeonholeSort merged into countingSort (supports negatives); timsort removed; null input throws NullPointerException.\n• AreaCalculator: removed parallelogramArea, rightTriangleArea, and squareAsRhombusArea.\n• FlippableImageView: removed toBitmap(); bitmap setters renamed to setFrontBitmap / setBackBitmap.\n• SimpleList: now extends FrameLayout wrapping a RecyclerView with ListAdapter + DiffUtil."
+                android:textColor="@color/doc_ink_muted"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- XML Prefix Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/bg_doc_card"
+            android:orientation="vertical"
+            android:padding="18dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="3. Prefixed XML Attributes &amp; Resources"
+                android:textColor="@color/doc_ink"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_code_block"
+                android:fontFamily="monospace"
+                android:lineSpacingExtra="4dp"
+                android:padding="12dp"
+                android:text="app:cornerRadius      -> app:inpsCornerRadius\napp:isTranslucent     -> app:inpsIsTranslucent\napp:reverseBackImage  -> app:inpsReverseBackImage\napp:flipSpeed         -> app:inpsFlipSpeed\n@color/black, @color/white -> Removed\ndrawables &amp; layouts   -> inps_* prefix"
+                android:textColor="@color/doc_ink"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

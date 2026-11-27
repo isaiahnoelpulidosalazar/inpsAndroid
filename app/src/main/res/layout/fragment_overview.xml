@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/overview_scroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Getting Started Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_doc_card"
+            android:orientation="vertical"
+            android:padding="18dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_doc_badge_teal"
+                android:paddingStart="10dp"
+                android:paddingTop="3dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="3dp"
+                android:text="GETTING STARTED"
+                android:textColor="@color/doc_accent"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Modular Android Boilerplate Killer"
+                android:textColor="@color/doc_ink"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:lineSpacingExtra="3dp"
+                android:text="inpsAndroid 3.0.0 organizes utilities, drop-in UI widgets, and educational algorithm/audio modules under com.isaiahnoelpulidosalazar.inpsandroid."
+                android:textColor="@color/doc_ink_muted"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_code_block"
+                android:fontFamily="monospace"
+                android:padding="12dp"
+                android:text="dependencies {\n    implementation 'com.github.isaiahnoelpulidosalazar:inpsAndroid:3.0.0'\n}"
+                android:textColor="@color/doc_ink"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!-- Package Architecture Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/bg_doc_card"
+            android:orientation="vertical"
+            android:padding="18dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Package Architecture"
+                android:textColor="@color/doc_ink"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <!-- Core row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_code_block"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="monospace"
+                    android:text="...inpsandroid.core"
+                    android:textColor="@color/doc_primary"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="MainThread, WebRequest, EasySQL, Converters, EmailDomainAllowList, StringChecks, TimeLeft"
+                    android:textColor="@color/doc_ink_muted"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- UI row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_code_block"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="monospace"
+                    android:text="...inpsandroid.ui"
+                    android:textColor="@color/doc_primary"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="RoundedButton, RoundedEditText, RoundedLinearLayout, RoundedConstraintLayout, RoundedAlertDialog, SimpleList, FlippableImageView, Fullscreen, Drawables"
+                    android:textColor="@color/doc_ink_muted"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- Edu row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_code_block"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="monospace"
+                    android:text="...inpsandroid.edu"
+                    android:textColor="@color/doc_primary"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="edu.sort.Sort, AreaCalculator, SoundSynthesizer"
+                    android:textColor="@color/doc_ink_muted"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:orientation="horizontal">
+
+                <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
+                    android:id="@+id/btn_jump_core"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    android:minHeight="48dp"
+                    android:text="Explore Core"
+                    android:textAllCaps="false"
+                    app:inpsCornerRadius="12dp" />
+
+                <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
+                    android:id="@+id/btn_jump_ui"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    android:minHeight="48dp"
+                    android:text="Explore UI"
+                    android:textAllCaps="false"
+                    app:inpsCornerRadius="12dp" />
+
+                <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
+                    android:id="@+id/btn_jump_edu"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:minHeight="48dp"
+                    android:text="Explore Edu"
+                    android:textAllCaps="false"
+                    app:inpsCornerRadius="12dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Requirements Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/bg_doc_card"
+            android:orientation="vertical"
+            android:padding="18dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Requirements &amp; Theme Setup"
+                android:textColor="@color/doc_ink"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:lineSpacingExtra="4dp"
+                android:text="• minSdk 24, compileSdk 36, Java 17\n• AppCompat or Material theme defining colorPrimary, colorControlHighlight, and android:colorBackground\n• No Material dependency required by the library itself\n• Library resources &amp; attributes are prefixed with inps_ / inps"
+                android:textColor="@color/doc_ink_muted"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

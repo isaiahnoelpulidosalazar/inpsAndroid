@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/core_scroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Converters & Validation Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_doc_card"
+            android:orientation="vertical"
+            android:padding="18dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_doc_badge"
+                android:paddingStart="10dp"
+                android:paddingTop="3dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="3dp"
+                android:text="CONVERTERS &amp; VALIDATION"
+                android:textColor="@color/doc_primary_ink"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Converters, EmailDomainAllowList &amp; StringChecks"
+                android:textColor="@color/doc_ink"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:lineSpacingExtra="3dp"
+                android:text="Null-safe Base64 encoding, ThreadLocal date formatting, digit/symbol checks, and allow-list email validation requiring a non-empty local part."
+                android:textColor="@color/doc_ink_muted"
+                android:textSize="14sp" />
+
+            <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedEditText
+                android:id="@+id/core_input_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:hint="@string/hint_input"
+                android:minHeight="48dp"
+                android:paddingStart="14dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="14dp"
+                android:paddingBottom="12dp"
+                android:singleLine="true"
+                app:inpsCornerRadius="12dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
+                    android:id="@+id/btn_base64"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:minHeight="48dp"
+                    android:padding="10dp"
+                    android:text="@string/btn_base64"
+                    android:textAllCaps="false"
+                    app:inpsCornerRadius="12dp" />
+
+                <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
+                    android:id="@+id/btn_validate_email"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:minHeight="48dp"
+                    android:padding="10dp"
+                    android:text="@string/btn_validate_email"
+                    android:textAllCaps="false"
+                    app:inpsCornerRadius="12dp" />
+            </LinearLayout>
+
+            <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
+                android:id="@+id/btn_add_note"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:minHeight="48dp"
+                android:padding="10dp"
+                android:text="@string/btn_add_note"
+                android:textAllCaps="false"
+                app:inpsCornerRadius="12dp" />
+
+            <TextView
+                android:id="@+id/core_output_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_code_block"
+                android:fontFamily="monospace"
+                android:padding="12dp"
+                android:text="Run any action above to inspect live output."
+                android:textColor="@color/doc_ink"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!-- EasySQL & MainThread Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/bg_doc_card"
+            android:orientation="vertical"
+            android:padding="18dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="EasySQL &amp; MainThread"
+                android:textColor="@color/doc_ink"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:lineSpacingExtra="3dp"
+                android:text="Parameterized SQLite wrapper with validated identifiers, transactions, and tableExists(). Methods block on disk I/O; dispatch results back to the UI with MainThread.post()."
+                android:textColor="@color/doc_ink_muted"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_code_block"
+                android:fontFamily="monospace"
+                android:padding="12dp"
+                android:text="easySQL.inTransaction(() -> {\n  easySQL.insert(&quot;notes&quot;, row);\n});\nMainThread.post(() -> refreshUi());"
+                android:textColor="@color/doc_ink"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/core_db_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="EasySQL rows synced with UI tab SimpleList."
+                android:textColor="@color/doc_accent"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- WebRequest & TimeLeft Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/bg_doc_card"
+            android:orientation="vertical"
+            android:padding="18dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="WebRequest &amp; TimeLeft"
+                android:textColor="@color/doc_ink"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:lineSpacingExtra="3dp"
+                android:text="WebRequest uses a 4-thread pool and a bounded queue of 64, returning a cancellable Call handle with json(), maxResponseBytes(), and charset parsing."
+                android:textColor="@color/doc_ink_muted"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_code_block"
+                android:fontFamily="monospace"
+                android:padding="12dp"
+                android:text="WebRequest.Call call = WebRequest.post(url)\n  .json(&quot;{\&quot;hello\&quot;:\&quot;world\&quot;}&quot;)\n  .maxResponseBytes(1024 * 1024)\n  .enqueue(callback);"
+                android:textColor="@color/doc_ink"
+                android:textSize="12sp" />
+
+            <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
+                android:id="@+id/btn_time_left"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:minHeight="48dp"
+                android:padding="10dp"
+                android:text="@string/btn_time_left"
+                android:textAllCaps="false"
+                app:inpsCornerRadius="12dp" />
+
+            <TextView
+                android:id="@+id/core_time_output"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_code_block"
+                android:fontFamily="monospace"
+                android:padding="12dp"
+                android:text="TimeLeft.seconds / minutes / hours ready."
+                android:textColor="@color/doc_ink"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

@@ -8,55 +8,42 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
+import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.isaiahnoelpulidosalazar.inpsandroid.core.concurrent.MainThread;
-import com.isaiahnoelpulidosalazar.inpsandroid.core.convert.Converters;
 import com.isaiahnoelpulidosalazar.inpsandroid.core.database.EasySQL;
-import com.isaiahnoelpulidosalazar.inpsandroid.core.time.TimeLeft;
-import com.isaiahnoelpulidosalazar.inpsandroid.core.validation.EmailDomainAllowList;
-import com.isaiahnoelpulidosalazar.inpsandroid.core.validation.StringChecks;
-import com.isaiahnoelpulidosalazar.inpsandroid.edu.AreaCalculator;
 import com.isaiahnoelpulidosalazar.inpsandroid.edu.SoundSynthesizer;
-import com.isaiahnoelpulidosalazar.inpsandroid.edu.sort.Sort;
-import com.isaiahnoelpulidosalazar.inpsandroid.ui.FlippableImageView;
 import com.isaiahnoelpulidosalazar.inpsandroid.ui.Fullscreen;
 import com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedAlertDialog;
-import com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedEditText;
-import com.isaiahnoelpulidosalazar.inpsandroid.ui.SimpleList;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements DemoHost {
 
     private static final String TABLE_NOTES = "notes";
     private static final String COL_TEXT = "body";
 
     private final ExecutorService dbExecutor = Executors.newSingleThreadExecutor();
+    private final Set<NotesListener> notesListeners = new LinkedHashSet<>();
+    private final List<String> cachedNotes = new ArrayList<>();
+
     private SoundSynthesizer soundSynthesizer;
     private EasySQL easySQL;
+    private ViewPager2 docsPager;
     private boolean isFullscreen;
-
-    private RoundedEditText inputText;
-    private TextView outputText;
-    private SimpleList simpleList;
-    private FlippableImageView flippableCard;
-
-    private final EmailDomainAllowList emailAllowList = new EmailDomainAllowList.Builder()
-            .addDomain("gmail.com")
-            .addDomain("outlook.com")
-            .addDomain("yahoo.com")
-            .useFullDomain(true)
-            .build();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,16 +51,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        View rootContainer = findViewById(R.id.root_container);
-        final int basePad = Math.round(16 * getResources().getDisplayMetrics().density);
-        ViewCompat.setOnApplyWindowInsetsListener(rootContainer, (v, windowInsets) -> {
-            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(
-                    basePad + insets.left,
-                    basePad + insets.top,
-                    basePad + insets.right,
-                    basePad + insets.bottom
-            );
+        WindowInsetsControllerCompat insetsController =
+                WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        insetsController.setAppearanceLightStatusBars(true);
+        insetsController.setAppearanceLightNavigationBars(true);
+
+        View header = findViewById(R.id.docs_header);
+        ViewCompat.setOnApplyWindowInsetsListener(header, (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.statusBars()
+                    | WindowInsetsCompat.Type.displayCutout());
+            v.setPadding(insets.left, insets.top, insets.right, 0);
             return windowInsets;
         });
 
@@ -81,124 +68,92 @@ public class MainActivity extends AppCompatActivity {
         soundSynthesizer.prepare(60, 64, 67, 72);
         easySQL = new EasySQL(this, "inps_demo.db");
 
-        inputText = findViewById(R.id.input_text);
-        outputText = findViewById(R.id.output_text);
-        simpleList = findViewById(R.id.simple_list);
-        flippableCard = findViewById(R.id.flippable_card);
+        TabLayout tabLayout = findViewById(R.id.docs_tabs);
+        docsPager = findViewById(R.id.docs_pager);
+        docsPager.setAdapter(new DocsPagerAdapter(this));
+        docsPager.setOffscreenPageLimit(4);
 
-        flippableCard.setFrontImage(R.drawable.ic_card_front);
-        flippableCard.setBackImage(R.drawable.ic_card_back);
-        flippableCard.setOnClickListener(v -> flippableCard.flip());
+        final int[] tabTitles = {
+                R.string.tab_overview,
+                R.string.tab_core,
+                R.string.tab_ui,
+                R.string.tab_edu,
+                R.string.tab_migration
+        };
+        new TabLayoutMediator(tabLayout, docsPager,
+                (tab, position) -> tab.setText(tabTitles[position])).attach();
 
-        simpleList.setItemPadding(14, 12, 14, 12);
-        simpleList.setOnItemClickListener(pos -> {
-            String item = simpleList.getItems().get(pos);
-            showInfoDialog("List Item", "Selected: " + item);
-        });
-        simpleList.setOnItemLongClickListener(pos -> {
-            String removed = simpleList.getItems().get(pos);
-            simpleList.removeItem(pos);
-            outputText.setText("Removed \"" + removed + "\" from SimpleList.");
-            dbExecutor.execute(() -> easySQL.delete(TABLE_NOTES, COL_TEXT, removed));
-        });
-
-        findViewById(R.id.btn_base64).setOnClickListener(v -> {
-            String text = readInputOrDefault("hello inpsAndroid");
-            String cap = Converters.capitalize(text);
-            String b64 = Converters.toBase64(text);
-            outputText.setText("Capitalized: " + cap + "\nBase64: " + b64);
-        });
-
-        findViewById(R.id.btn_validate_email).setOnClickListener(v -> {
-            String text = readInputOrDefault("developer@gmail.com");
-            boolean valid = emailAllowList.isValid(text);
-            boolean hasDigits = StringChecks.hasNumbers(text);
-            outputText.setText(String.format(
-                    Locale.US,
-                    "Email \"%s\" allow-listed: %s\nContains digit: %s",
-                    text, valid, hasDigits
-            ));
-        });
-
-        findViewById(R.id.btn_add_note).setOnClickListener(v -> {
-            String note = readInputOrDefault("Note @ " + Converters.toMonthDayYear(new Date()));
-            simpleList.addItem(note);
-            inputText.setText("");
-            dbExecutor.execute(() -> easySQL.insert(TABLE_NOTES, Collections.singletonMap(COL_TEXT, note)));
-            outputText.setText("Saved \"" + note + "\" to EasySQL.");
-        });
-
-        findViewById(R.id.btn_flip).setOnClickListener(v -> flippableCard.flip());
-
-        findViewById(R.id.btn_dialog).setOnClickListener(v ->
-                showInfoDialog("RoundedAlertDialog", "Built with inpsAndroid 3.0.0 RoundedAlertDialog."));
-
-        findViewById(R.id.btn_fullscreen).setOnClickListener(v -> {
-            isFullscreen = !isFullscreen;
-            if (isFullscreen) {
-                Fullscreen.enable(this);
-            } else {
-                Fullscreen.disable(this);
-            }
-        });
-
-        findViewById(R.id.btn_note_c4).setOnClickListener(v -> playMidi(60, "C4"));
-        findViewById(R.id.btn_note_e4).setOnClickListener(v -> playMidi(64, "E4"));
-        findViewById(R.id.btn_note_g4).setOnClickListener(v -> playMidi(67, "G4"));
-        findViewById(R.id.btn_note_c5).setOnClickListener(v -> playMidi(72, "C5"));
-
-        findViewById(R.id.btn_math_sort).setOnClickListener(v -> {
-            int[] sample = {42, -7, 19, 3, 25};
-            int[] sorted = Sort.countingSort(sample);
-            double circle = AreaCalculator.circleArea(5.0);
-            long now = System.currentTimeMillis();
-            double mins = TimeLeft.minutes(now, now + 90_000L);
-            outputText.setText(String.format(
-                    Locale.US,
-                    "CountingSort: %s\nCircle(r=5) area: %.2f\nTimeLeft(+90s): %.2f min",
-                    Arrays.toString(sorted), circle, mins
-            ));
-        });
-
-        loadInitialNotes();
+        loadNotesFromDb(false);
     }
 
-    private void loadInitialNotes() {
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        Fullscreen.reapplyOnWindowFocusChanged(this, hasFocus);
+    }
+
+    @Override
+    public void selectTab(int index) {
+        if (docsPager != null) {
+            docsPager.setCurrentItem(index, true);
+        }
+    }
+
+    @Override
+    public void addNote(String note, Runnable onSaved) {
         dbExecutor.execute(() -> {
-            Map<String, String> cols = new LinkedHashMap<>();
-            cols.put("id", "INTEGER PRIMARY KEY AUTOINCREMENT");
-            cols.put(COL_TEXT, "TEXT NOT NULL");
-            easySQL.createTable(TABLE_NOTES, cols);
-
-            List<Map<String, Object>> rows = easySQL.selectAll(TABLE_NOTES);
-            if (rows.isEmpty()) {
-                easySQL.inTransaction(() -> {
-                    easySQL.insert(TABLE_NOTES, Collections.singletonMap(COL_TEXT, "Tap an item to inspect"));
-                    easySQL.insert(TABLE_NOTES, Collections.singletonMap(COL_TEXT, "Long-press to delete"));
-                    easySQL.insert(TABLE_NOTES, Collections.singletonMap(COL_TEXT, "inpsAndroid 3.0.0 ready"));
-                });
-                rows = easySQL.selectAll(TABLE_NOTES);
-            }
-
-            List<String> loaded = new ArrayList<>(rows.size());
-            for (Map<String, Object> row : rows) {
-                Object val = row.get(COL_TEXT);
-                if (val != null) loaded.add(val.toString());
-            }
-            MainThread.post(() -> simpleList.setItems(loaded));
+            easySQL.insert(TABLE_NOTES, Collections.singletonMap(COL_TEXT, note));
+            List<String> updated = queryAllNotes();
+            MainThread.post(() -> {
+                updateNotesCache(updated);
+                if (onSaved != null) {
+                    onSaved.run();
+                }
+            });
         });
     }
 
-    private void playMidi(int midi, String label) {
-        soundSynthesizer.playNote(midi);
-        outputText.setText(String.format(
-                Locale.US,
-                "Playing %s (MIDI %d, %.2f Hz)",
-                label, midi, SoundSynthesizer.frequencyOf(midi)
-        ));
+    @Override
+    public void deleteNote(String note) {
+        dbExecutor.execute(() -> {
+            easySQL.delete(TABLE_NOTES, COL_TEXT, note);
+            List<String> updated = queryAllNotes();
+            MainThread.post(() -> updateNotesCache(updated));
+        });
     }
 
-    private void showInfoDialog(String title, String message) {
+    @Override
+    public void resetSampleNotes() {
+        loadNotesFromDb(true);
+    }
+
+    @Override
+    public List<String> getCurrentNotes() {
+        return new ArrayList<>(cachedNotes);
+    }
+
+    @Override
+    public void registerNotesListener(NotesListener listener) {
+        notesListeners.add(listener);
+    }
+
+    @Override
+    public void unregisterNotesListener(NotesListener listener) {
+        notesListeners.remove(listener);
+    }
+
+    @Override
+    public void toggleFullscreen() {
+        isFullscreen = !isFullscreen;
+        if (isFullscreen) {
+            Fullscreen.enable(this);
+        } else {
+            Fullscreen.disable(this);
+        }
+    }
+
+    @Override
+    public void showInfoDialog(String title, String message) {
         TextView body = new TextView(this);
         int pad = Math.round(24 * getResources().getDisplayMetrics().density);
         body.setPadding(pad, pad / 2, pad, pad / 2);
@@ -212,10 +167,57 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private String readInputOrDefault(String fallback) {
-        CharSequence cs = inputText.getText();
-        String s = cs == null ? "" : cs.toString().trim();
-        return s.isEmpty() ? fallback : s;
+    @Override
+    public double playMidiNote(int midi) {
+        soundSynthesizer.playNote(midi);
+        return SoundSynthesizer.frequencyOf(midi);
+    }
+
+    private void loadNotesFromDb(boolean forceSeed) {
+        dbExecutor.execute(() -> {
+            Map<String, String> cols = new LinkedHashMap<>();
+            cols.put("id", "INTEGER PRIMARY KEY AUTOINCREMENT");
+            cols.put(COL_TEXT, "TEXT NOT NULL");
+            easySQL.createTable(TABLE_NOTES, cols);
+
+            if (forceSeed) {
+                easySQL.dropTable(TABLE_NOTES);
+                easySQL.createTable(TABLE_NOTES, cols);
+            }
+
+            List<String> loaded = queryAllNotes();
+            if (loaded.isEmpty()) {
+                easySQL.inTransaction(() -> {
+                    easySQL.insert(TABLE_NOTES, Collections.singletonMap(COL_TEXT, "Tap a row to inspect"));
+                    easySQL.insert(TABLE_NOTES, Collections.singletonMap(COL_TEXT, "Long-press to delete"));
+                    easySQL.insert(TABLE_NOTES, Collections.singletonMap(COL_TEXT, "inpsAndroid 3.0.0 ready"));
+                });
+                loaded = queryAllNotes();
+            }
+
+            final List<String> finalNotes = loaded;
+            MainThread.post(() -> updateNotesCache(finalNotes));
+        });
+    }
+
+    private List<String> queryAllNotes() {
+        List<Map<String, Object>> rows = easySQL.selectAll(TABLE_NOTES);
+        List<String> loaded = new ArrayList<>(rows.size());
+        for (Map<String, Object> row : rows) {
+            Object val = row.get(COL_TEXT);
+            if (val != null) {
+                loaded.add(val.toString());
+            }
+        }
+        return loaded;
+    }
+
+    private void updateNotesCache(List<String> notes) {
+        cachedNotes.clear();
+        cachedNotes.addAll(notes);
+        for (NotesListener listener : new ArrayList<>(notesListeners)) {
+            listener.onNotesUpdated(getCurrentNotes());
+        }
     }
 
     @Override

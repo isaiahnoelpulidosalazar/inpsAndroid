@@ -1,7 +1,22 @@
 <resources>
-    <style name="Theme.InpsAndroidDemo" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="colorPrimary">#1565C0</item>
+    <style name="Theme.InpsAndroidDemo" parent="Theme.Material3.Light.NoActionBar">
+        <item name="android:colorBackground">@color/doc_bg</item>
+        <item name="colorSurface">@color/doc_surface</item>
+        <item name="colorSurfaceVariant">@color/doc_code_bg</item>
+        <item name="colorPrimary">@color/doc_primary</item>
         <item name="colorOnPrimary">#FFFFFF</item>
-        <item name="colorSecondary">#00897B</item>
+        <item name="colorPrimaryContainer">@color/doc_primary_soft</item>
+        <item name="colorOnPrimaryContainer">@color/doc_primary_ink</item>
+        <item name="colorSecondary">@color/doc_accent</item>
+        <item name="colorControlHighlight">#1A1D4ED8</item>
+        <item name="android:textColorPrimary">@color/doc_ink</item>
+        <item name="android:textColorSecondary">@color/doc_ink_muted</item>
+    </style>
+
+    <style name="DocsTabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 </resources>
