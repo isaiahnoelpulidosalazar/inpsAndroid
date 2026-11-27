@@ -98,6 +98,17 @@
                         android:textAllCaps="false"
                         app:inpsCornerRadius="12dp" />
                 </LinearLayout>
+
+                <com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedButton
+                    android:id="@+id/btn_bottom_sheet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:minHeight="48dp"
+                    android:padding="10dp"
+                    android:text="@string/btn_show_bottom_sheet"
+                    android:textAllCaps="false"
+                    app:inpsCornerRadius="12dp" />
             </com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedLinearLayout>
         </LinearLayout>
 

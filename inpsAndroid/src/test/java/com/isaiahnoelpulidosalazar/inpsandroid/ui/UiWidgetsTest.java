@@ -359,4 +359,70 @@ public class UiWidgetsTest {
         list.layout(0, 0, 400, 400);
         assertTrue(rv.getChildAt(0) instanceof TextView);
     }
+
+    @Test
+    public void testRoundedBottomSheetContentActionsDragHandleAndCancelable() {
+        FrameLayout previousParent = new FrameLayout(darkPrimaryContext);
+        TextView customContent = new TextView(darkPrimaryContext);
+        customContent.setText("Sheet body");
+        previousParent.addView(customContent);
+        assertEquals(previousParent, customContent.getParent());
+
+        AtomicBoolean secondaryClicked = new AtomicBoolean(false);
+        AtomicBoolean primaryClicked = new AtomicBoolean(false);
+        AtomicBoolean dismissed = new AtomicBoolean(false);
+
+        RoundedBottomSheet sheet = new RoundedBottomSheet(darkPrimaryContext)
+                .setTitle("Options")
+                .setSubtitle("Configure behavior")
+                .setMessage("Temporary message")
+                .addView(customContent)
+                .setupSecondaryButton("Cancel")
+                .setupSecondaryButtonOnClick(v -> secondaryClicked.set(true))
+                .setupPrimaryButton("Apply", Color.CYAN)
+                .setupPrimaryButtonOnClick(v -> primaryClicked.set(true))
+                .setOnDismissListener(d -> dismissed.set(true));
+
+        assertEquals(0, previousParent.getChildCount());
+        assertTrue(sheet.isDragHandleVisible());
+        assertTrue(sheet.isDraggable());
+        assertTrue(sheet.isCancelable());
+        assertTrue(sheet.getSheetContainer().getClipToOutline());
+
+        sheet.setShowDragHandle(false);
+        assertFalse(sheet.isDragHandleVisible());
+        sheet.setDraggable(false);
+        assertFalse(sheet.isDraggable());
+        sheet.setCornerRadiusDp(28f);
+
+        assertEquals(View.VISIBLE, sheet.getSecondaryButton().getVisibility());
+        assertEquals(View.VISIBLE, sheet.getPrimaryButton().getVisibility());
+        sheet.getSecondaryButton().performClick();
+        sheet.getPrimaryButton().performClick();
+        assertTrue(secondaryClicked.get());
+        assertTrue(primaryClicked.get());
+
+        // Safe before show()
+        sheet.dismiss();
+        assertFalse(sheet.isShowing());
+
+        sheet.show();
+        assertTrue(sheet.isShowing());
+        sheet.setCancelable(false);
+        assertFalse(sheet.isCancelable());
+
+        sheet.dismiss();
+        Shadows.shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(300));
+        assertFalse(sheet.isShowing());
+        assertTrue(dismissed.get());
+
+        // Immediate dismissal bypasses animation cleanly
+        dismissed.set(false);
+        sheet.show();
+        assertTrue(sheet.isShowing());
+        sheet.dismissImmediately();
+        assertFalse(sheet.isShowing());
+        Shadows.shadowOf(Looper.getMainLooper()).idle();
+        assertTrue(dismissed.get());
+    }
 }

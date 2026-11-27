@@ -11,7 +11,7 @@ implementation 'com.github.isaiahnoelpulidosalazar:inpsAndroid:3.0.0'
 **inpsAndroid** is organized into three audience-focused packages under `com.isaiahnoelpulidosalazar.inpsandroid`:
 
 - **`core`** — Lightweight Android primitives for main-thread dispatch, bounded HTTP requests, parameterized SQLite storage, date/Base64/numeric conversions, validation, and time calculations
-- **`ui`** — Configurable rounded widgets (`Rounded*`), `RoundedAlertDialog`, `SimpleList`, `FlippableImageView`, `Fullscreen`, and `Drawables`
+- **`ui`** — Configurable rounded widgets (`Rounded*`), `RoundedAlertDialog`, `RoundedBottomSheet`, `SimpleList`, `FlippableImageView`, `Fullscreen`, and `Drawables`
 - **`edu`** — Sorting algorithm implementations (`Sort`), geometric area/surface-area formulas (`AreaCalculator`), and MIDI-addressed piano synthesis (`SoundSynthesizer`)
 
 > **Breaking changes in `3.0.0`:** Deprecated v1 wrappers, `crypto` (`ClassicalCiphers`), and `Memory<T>` have been removed, packages have been reorganized under lowercase `com.isaiahnoelpulidosalazar.inpsandroid`, and XML resources/attributes use the `inps_` / `inps` prefix. See [CHANGELOG.md](./CHANGELOG.md) for the complete migration summary.
@@ -26,7 +26,7 @@ implementation 'com.github.isaiahnoelpulidosalazar:inpsAndroid:3.0.0'
 | `...inpsandroid.core.convert` | `Converters` |
 | `...inpsandroid.core.validation` | `EmailDomainAllowList`, `StringChecks` |
 | `...inpsandroid.core.time` | `TimeLeft` |
-| `...inpsandroid.ui` | `RoundedButton`, `RoundedCheckBox`, `RoundedEditText`, `RoundedLinearLayout`, `RoundedConstraintLayout`, `RoundedViewHelper`, `RoundedAlertDialog`, `SimpleList`, `FlippableImageView`, `Fullscreen`, `Drawables` |
+| `...inpsandroid.ui` | `RoundedButton`, `RoundedCheckBox`, `RoundedEditText`, `RoundedLinearLayout`, `RoundedConstraintLayout`, `RoundedViewHelper`, `RoundedAlertDialog`, `RoundedBottomSheet`, `SimpleList`, `FlippableImageView`, `Fullscreen`, `Drawables` |
 | `...inpsandroid.edu` | `AreaCalculator`, `SoundSynthesizer` |
 | `...inpsandroid.edu.sort` | `Sort` |
 
@@ -50,6 +50,7 @@ implementation 'com.github.isaiahnoelpulidosalazar:inpsAndroid:3.0.0'
 ### UI (`...inpsandroid.ui`)
 - **Rounded Views** (`RoundedButton`, `RoundedCheckBox`, `RoundedEditText`, `RoundedLinearLayout`, `RoundedConstraintLayout`) — Shared styling via `RoundedViewHelper` supporting `app:inpsCornerRadius`, `app:inpsIsTranslucent` (on layouts), outline clipping on rounded containers, luminance-based text contrast on `RoundedButton`, and explicit XML `android:background` preservation. `RoundedCheckBox` adds `CARD`, `PILL`, and `MINIMAL` styles (`app:inpsCheckStyle`) plus a toggleable bounce animation (`app:inpsBounceAnimation`).
 - **`RoundedAlertDialog`** — Rounded dual-action dialog using `RoundedButton` and theme-aware colors, supporting `addView`, `setCancelable`, and button click listeners.
+- **`RoundedBottomSheet`** — Top-rounded modal bottom sheet with an optional drag handle, swipe-to-dismiss gesture, edge-to-edge inset padding, `addView`/`setMessage` content, and dual `RoundedButton` actions.
 - **`SimpleList`** — `FrameLayout`-wrapped `RecyclerView` using `ListAdapter` and `DiffUtil` with ripple-enabled `TextView` rows, snapshot-safe `setItems`, and optional multi-select `RoundedCheckBox` rows (`app:inpsCheckboxesEnabled`, `app:inpsCheckStyle`, `app:inpsBounceAnimation`).
 - **`FlippableImageView`** — 3D card-flip image view with `app:inpsReverseBackImage`, `app:inpsFlipSpeed` (`slow` | `normal` | `fast`), `setFrontBitmap`/`setBackBitmap`, and instance-state persistence.
 - **`Fullscreen`** — Per-window edge-to-edge/immersive fullscreen controller that saves and restores previous system bar and action bar visibility.
@@ -115,7 +116,7 @@ All library resources and custom attributes are now prefixed to avoid collisions
 Browse the per-module Markdown reference pages in [`docs/`](./docs/README.md):
 
 - **Core:** [MainThread](./docs/main-thread.md) · [WebRequest](./docs/web-request.md) · [EasySQL](./docs/easy-sql.md) · [Converters](./docs/converters.md) · [EmailDomainAllowList](./docs/email-domain-allow-list.md) · [StringChecks](./docs/string-checks.md) · [TimeLeft](./docs/time-left.md)
-- **UI:** [Rounded Views](./docs/rounded-views.md) · [RoundedAlertDialog](./docs/rounded-alert-dialog.md) · [SimpleList](./docs/simple-list.md) · [FlippableImageView](./docs/flippable-image-view.md) · [Fullscreen](./docs/fullscreen.md) · [Drawables](./docs/drawables.md)
+- **UI:** [Rounded Views](./docs/rounded-views.md) · [RoundedAlertDialog](./docs/rounded-alert-dialog.md) · [RoundedBottomSheet](./docs/rounded-bottom-sheet.md) · [SimpleList](./docs/simple-list.md) · [FlippableImageView](./docs/flippable-image-view.md) · [Fullscreen](./docs/fullscreen.md) · [Drawables](./docs/drawables.md)
 - **Edu:** [Sort](./docs/sort.md) · [AreaCalculator](./docs/area-calculator.md) · [SoundSynthesizer](./docs/sound-synthesizer.md)
 - **Upgrading:** [Migrating from v1 / v2 to 3.0.0](./docs/migrating-to-v3.md)
 

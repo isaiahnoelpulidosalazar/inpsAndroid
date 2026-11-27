@@ -14,6 +14,7 @@ Welcome to the **inpsAndroid** `3.0.0` documentation set.
 ## UI (`com.isaiahnoelpulidosalazar.inpsandroid.ui`)
 - [Rounded Views](./rounded-views.md) — `RoundedButton`, `RoundedCheckBox`, `RoundedEditText`, `RoundedLinearLayout`, `RoundedConstraintLayout`
 - [RoundedAlertDialog](./rounded-alert-dialog.md) — Builder-style rounded dialog with `RoundedButton` actions
+- [RoundedBottomSheet](./rounded-bottom-sheet.md) — Draggable modal bottom sheet with drag handle, insets handling, and `RoundedButton` actions
 - [SimpleList](./simple-list.md) — `FrameLayout`-wrapped `RecyclerView` with `ListAdapter`, `DiffUtil`, `TextView` rows, and optional `RoundedCheckBox` mode
 - [FlippableImageView](./flippable-image-view.md) — 3D card-flip image view with `Speed` and state restoration
 - [Fullscreen](./fullscreen.md) — Per-window immersive fullscreen helper preserving prior window state

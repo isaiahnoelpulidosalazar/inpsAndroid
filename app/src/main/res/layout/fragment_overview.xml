@@ -130,7 +130,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="RoundedButton, RoundedEditText, RoundedLinearLayout, RoundedConstraintLayout, RoundedAlertDialog, SimpleList, FlippableImageView, Fullscreen, Drawables"
+                    android:text="RoundedButton, RoundedCheckBox, RoundedEditText, RoundedLinearLayout, RoundedConstraintLayout, RoundedAlertDialog, RoundedBottomSheet, SimpleList, FlippableImageView, Fullscreen, Drawables"
                     android:textColor="@color/doc_ink_muted"
                     android:textSize="13sp" />
             </LinearLayout>
