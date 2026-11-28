@@ -35,7 +35,7 @@ implementation 'com.github.isaiahnoelpulidosalazar:inpsAndroid:3.0.4'
 
 ### Requirements
 
-- `minSdk` 24, `compileSdk` 36, Java 17
+- `minSdk` 24, `compileSdk` 37, Java 17
 - App theme must inherit from an AppCompat (or Material) theme defining `colorPrimary`, `colorControlHighlight`, and `android:colorBackground`
 - `androidx.appcompat:appcompat`, `androidx.recyclerview:recyclerview`, and `androidx.constraintlayout:constraintlayout` are exposed as `api` dependencies (`material` is not required by the library)
 
