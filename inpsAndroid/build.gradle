@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace 'com.isaiahnoelpulidosalazar.inpsandroid'
-    compileSdk 36
+    compileSdk 37
     resourcePrefix 'inps_'
 
     defaultConfig {
