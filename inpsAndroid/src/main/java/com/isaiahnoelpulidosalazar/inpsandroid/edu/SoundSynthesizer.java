@@ -69,13 +69,14 @@ public final class SoundSynthesizer implements AutoCloseable {
       validateMidiNote(note);
     }
     if (released) return;
-    audioExecutor.execute(() -> {
-      if (released) return;
-      for (int note : copy) {
-        if (released) return;
-        getOrCreateTrack(note);
-      }
-    });
+    audioExecutor.execute(
+        () -> {
+          if (released) return;
+          for (int note : copy) {
+            if (released) return;
+            getOrCreateTrack(note);
+          }
+        });
   }
 
   /**
@@ -88,19 +89,20 @@ public final class SoundSynthesizer implements AutoCloseable {
   public void playNote(int midiNote) {
     validateMidiNote(midiNote);
     if (released) return;
-    audioExecutor.execute(() -> {
-      if (released) return;
-      AudioTrack track = getOrCreateTrack(midiNote);
-      if (track == null) return;
-      try {
-        track.stop();
-      } catch (IllegalStateException ignored) {
-        // Not playing yet
-      }
-      if (track.reloadStaticData() == AudioTrack.SUCCESS) {
-        track.play();
-      }
-    });
+    audioExecutor.execute(
+        () -> {
+          if (released) return;
+          AudioTrack track = getOrCreateTrack(midiNote);
+          if (track == null) return;
+          try {
+            track.stop();
+          } catch (IllegalStateException ignored) {
+            // Not playing yet
+          }
+          if (track.reloadStaticData() == AudioTrack.SUCCESS) {
+            track.play();
+          }
+        });
   }
 
   /**
@@ -110,12 +112,13 @@ public final class SoundSynthesizer implements AutoCloseable {
   public void release() {
     if (released) return;
     released = true;
-    audioExecutor.execute(() -> {
-      for (AudioTrack track : tracks.values()) {
-        releaseTrack(track);
-      }
-      tracks.clear();
-    });
+    audioExecutor.execute(
+        () -> {
+          for (AudioTrack track : tracks.values()) {
+            releaseTrack(track);
+          }
+          tracks.clear();
+        });
     audioExecutor.shutdown();
   }
 

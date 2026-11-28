@@ -69,10 +69,11 @@ public class EasySQLTest {
     assertThrows(
         RuntimeException.class,
         () ->
-            db.inTransaction(() -> {
-              db.insert("items", Collections.singletonMap("name", "RolledBack"));
-              throw new RuntimeException("force rollback");
-            }));
+            db.inTransaction(
+                () -> {
+                  db.insert("items", Collections.singletonMap("name", "RolledBack"));
+                  throw new RuntimeException("force rollback");
+                }));
     assertEquals(1, db.selectAll("items").size());
 
     // Transaction commit

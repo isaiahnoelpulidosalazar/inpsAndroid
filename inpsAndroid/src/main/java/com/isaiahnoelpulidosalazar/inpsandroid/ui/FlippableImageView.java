@@ -230,10 +230,11 @@ public class FlippableImageView extends AppCompatImageView {
         .setDuration(duration)
         .withLayer()
         .setUpdateListener(animation -> syncSide())
-        .withEndAction(() -> {
-          syncSide();
-          animate().setUpdateListener(null);
-        })
+        .withEndAction(
+            () -> {
+              syncSide();
+              animate().setUpdateListener(null);
+            })
         .start();
   }
 

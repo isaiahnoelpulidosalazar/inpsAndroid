@@ -54,14 +54,15 @@ public class EduFragment extends Fragment {
         .setOnClickListener(v -> showSorted("Sort.heapsort", Sort.heapsort(SAMPLE_ARRAY.clone())));
 
     view.findViewById(R.id.btn_area_demo)
-        .setOnClickListener(v -> {
-          double circle = AreaCalculator.circleArea(5.0);
-          double triangle = AreaCalculator.triangleArea(8.0, 6.0);
-          double rect = AreaCalculator.rectangleArea(12.0, 4.5);
-          double sphere = AreaCalculator.sphereSurfaceArea(3.0);
-          areaOutput.setText(
-              getString(R.string.edu_area_result_format, circle, triangle, rect, sphere));
-        });
+        .setOnClickListener(
+            v -> {
+              double circle = AreaCalculator.circleArea(5.0);
+              double triangle = AreaCalculator.triangleArea(8.0, 6.0);
+              double rect = AreaCalculator.rectangleArea(12.0, 4.5);
+              double sphere = AreaCalculator.sphereSurfaceArea(3.0);
+              areaOutput.setText(
+                  getString(R.string.edu_area_result_format, circle, triangle, rect, sphere));
+            });
 
     view.findViewById(R.id.btn_note_c4)
         .setOnClickListener(v -> playNote(60, getString(R.string.btn_note_c4)));

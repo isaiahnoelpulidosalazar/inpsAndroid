@@ -47,10 +47,11 @@ public class MainThreadTest {
     AtomicBoolean bgIsMain = new AtomicBoolean(true);
 
     Thread bg =
-        new Thread(() -> {
-          bgIsMain.set(MainThread.isMainThread());
-          MainThread.run(() -> ranOnMain.set(MainThread.isMainThread()));
-        });
+        new Thread(
+            () -> {
+              bgIsMain.set(MainThread.isMainThread());
+              MainThread.run(() -> ranOnMain.set(MainThread.isMainThread()));
+            });
     bg.start();
     bg.join(2000);
 

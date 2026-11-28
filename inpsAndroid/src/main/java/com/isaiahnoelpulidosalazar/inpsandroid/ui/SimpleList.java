@@ -550,18 +550,20 @@ public class SimpleList extends FrameLayout {
   private final class TextHolder extends RecyclerView.ViewHolder {
     TextHolder(@NonNull TextView itemView) {
       super(itemView);
-      itemView.setOnClickListener(v -> {
-        int position = getBindingAdapterPosition();
-        if (position != RecyclerView.NO_POSITION && clickListener != null) {
-          clickListener.onItemClick(position);
-        }
-      });
-      itemView.setOnLongClickListener(v -> {
-        int position = getBindingAdapterPosition();
-        if (position == RecyclerView.NO_POSITION || longClickListener == null) return false;
-        longClickListener.onItemLongClick(position);
-        return true;
-      });
+      itemView.setOnClickListener(
+          v -> {
+            int position = getBindingAdapterPosition();
+            if (position != RecyclerView.NO_POSITION && clickListener != null) {
+              clickListener.onItemClick(position);
+            }
+          });
+      itemView.setOnLongClickListener(
+          v -> {
+            int position = getBindingAdapterPosition();
+            if (position == RecyclerView.NO_POSITION || longClickListener == null) return false;
+            longClickListener.onItemLongClick(position);
+            return true;
+          });
     }
   }
 
@@ -572,28 +574,30 @@ public class SimpleList extends FrameLayout {
     CheckboxHolder(@NonNull RoundedCheckBox checkBox) {
       super(checkBox);
       this.checkBox = checkBox;
-      checkBox.setOnCheckedChangeListener((cb, isChecked) -> {
-        if (binding) return;
-        int position = getBindingAdapterPosition();
-        if (position == RecyclerView.NO_POSITION) return;
-        if (isChecked) {
-          checkedPositions.add(position);
-        } else {
-          checkedPositions.remove(position);
-        }
-        if (checkedChangeListener != null && position < items.size()) {
-          checkedChangeListener.onItemCheckedChanged(position, items.get(position), isChecked);
-        }
-        if (clickListener != null) {
-          clickListener.onItemClick(position);
-        }
-      });
-      checkBox.setOnLongClickListener(v -> {
-        int position = getBindingAdapterPosition();
-        if (position == RecyclerView.NO_POSITION || longClickListener == null) return false;
-        longClickListener.onItemLongClick(position);
-        return true;
-      });
+      checkBox.setOnCheckedChangeListener(
+          (cb, isChecked) -> {
+            if (binding) return;
+            int position = getBindingAdapterPosition();
+            if (position == RecyclerView.NO_POSITION) return;
+            if (isChecked) {
+              checkedPositions.add(position);
+            } else {
+              checkedPositions.remove(position);
+            }
+            if (checkedChangeListener != null && position < items.size()) {
+              checkedChangeListener.onItemCheckedChanged(position, items.get(position), isChecked);
+            }
+            if (clickListener != null) {
+              clickListener.onItemClick(position);
+            }
+          });
+      checkBox.setOnLongClickListener(
+          v -> {
+            int position = getBindingAdapterPosition();
+            if (position == RecyclerView.NO_POSITION || longClickListener == null) return false;
+            longClickListener.onItemLongClick(position);
+            return true;
+          });
     }
 
     void bind(String value, boolean isChecked) {

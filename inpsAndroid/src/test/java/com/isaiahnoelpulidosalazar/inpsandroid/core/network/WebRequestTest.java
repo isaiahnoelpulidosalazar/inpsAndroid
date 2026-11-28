@@ -48,16 +48,17 @@ public class WebRequestTest {
     serverSocket = new ServerSocket(0, 16, InetAddress.getByName("127.0.0.1"));
     running = true;
     serverExecutor = Executors.newCachedThreadPool();
-    serverExecutor.submit(() -> {
-      while (running) {
-        try {
-          Socket client = serverSocket.accept();
-          serverExecutor.submit(() -> handleClient(client));
-        } catch (IOException ignored) {
-          if (!running) break;
-        }
-      }
-    });
+    serverExecutor.submit(
+        () -> {
+          while (running) {
+            try {
+              Socket client = serverSocket.accept();
+              serverExecutor.submit(() -> handleClient(client));
+            } catch (IOException ignored) {
+              if (!running) break;
+            }
+          }
+        });
     baseUrl = "http://127.0.0.1:" + serverSocket.getLocalPort();
   }
 
@@ -240,9 +241,10 @@ public class WebRequestTest {
 
   @Test
   public void testQueueFullRejectionReportsErrorOnMainThread() throws Exception {
-    WebRequest.setExecutor(command -> {
-      throw new RejectedExecutionException("queue full");
-    });
+    WebRequest.setExecutor(
+        command -> {
+          throw new RejectedExecutionException("queue full");
+        });
 
     CountDownLatch latch = new CountDownLatch(1);
     AtomicReference<Exception> errRef = new AtomicReference<>();

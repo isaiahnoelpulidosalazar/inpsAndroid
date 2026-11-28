@@ -115,24 +115,27 @@ public class RoundedBottomSheet {
     dialog.setContentView(rootView);
     dialog.setCancelable(cancelable);
     dialog.setCanceledOnTouchOutside(canceledOnTouchOutside);
-    dialog.setOnDismissListener(d -> {
-      dismissing = false;
-      sheetContainer.setTranslationY(0f);
-      if (externalDismissListener != null) {
-        externalDismissListener.onDismiss(d);
-      }
-    });
-    dialog.setOnCancelListener(d -> {
-      if (externalCancelListener != null) {
-        externalCancelListener.onCancel(d);
-      }
-    });
+    dialog.setOnDismissListener(
+        d -> {
+          dismissing = false;
+          sheetContainer.setTranslationY(0f);
+          if (externalDismissListener != null) {
+            externalDismissListener.onDismiss(d);
+          }
+        });
+    dialog.setOnCancelListener(
+        d -> {
+          if (externalCancelListener != null) {
+            externalCancelListener.onCancel(d);
+          }
+        });
 
-    scrimView.setOnClickListener(v -> {
-      if (cancelable && canceledOnTouchOutside) {
-        animateAndClose(true);
-      }
-    });
+    scrimView.setOnClickListener(
+        v -> {
+          if (cancelable && canceledOnTouchOutside) {
+            animateAndClose(true);
+          }
+        });
 
     attachDragDismissListeners();
   }
@@ -463,18 +466,19 @@ public class RoundedBottomSheet {
       configureWindow();
       dialog.show();
       configureWindow();
-      sheetContainer.post(() -> {
-        int height = sheetContainer.getHeight();
-        if (height > 0 && dialog.isShowing() && !dismissing && areAnimatorsEnabledCompat()) {
-          sheetContainer.setTranslationY(height);
-          sheetContainer
-              .animate()
-              .translationY(0f)
-              .setDuration(ENTER_ANIMATION_MS)
-              .setInterpolator(new DecelerateInterpolator(1.8f))
-              .start();
-        }
-      });
+      sheetContainer.post(
+          () -> {
+            int height = sheetContainer.getHeight();
+            if (height > 0 && dialog.isShowing() && !dismissing && areAnimatorsEnabledCompat()) {
+              sheetContainer.setTranslationY(height);
+              sheetContainer
+                  .animate()
+                  .translationY(0f)
+                  .setDuration(ENTER_ANIMATION_MS)
+                  .setInterpolator(new DecelerateInterpolator(1.8f))
+                  .start();
+            }
+          });
     }
   }
 
@@ -522,16 +526,17 @@ public class RoundedBottomSheet {
         .translationY(height)
         .setDuration(EXIT_ANIMATION_MS)
         .setInterpolator(new AccelerateInterpolator(1.4f))
-        .withEndAction(() -> {
-          dismissing = false;
-          if (dialog.isShowing()) {
-            if (cancel) {
-              dialog.cancel();
-            } else {
-              dialog.dismiss();
-            }
-          }
-        })
+        .withEndAction(
+            () -> {
+              dismissing = false;
+              if (dialog.isShowing()) {
+                if (cancel) {
+                  dialog.cancel();
+                } else {
+                  dialog.dismiss();
+                }
+              }
+            })
         .start();
   }
 

@@ -105,25 +105,28 @@ public class MainActivity extends AppCompatActivity implements DemoHost {
 
   @Override
   public void addNote(String note, Runnable onSaved) {
-    dbExecutor.execute(() -> {
-      easySQL.insert(TABLE_NOTES, Collections.singletonMap(COL_TEXT, note));
-      List<String> updated = queryAllNotes();
-      MainThread.post(() -> {
-        updateNotesCache(updated);
-        if (onSaved != null) {
-          onSaved.run();
-        }
-      });
-    });
+    dbExecutor.execute(
+        () -> {
+          easySQL.insert(TABLE_NOTES, Collections.singletonMap(COL_TEXT, note));
+          List<String> updated = queryAllNotes();
+          MainThread.post(
+              () -> {
+                updateNotesCache(updated);
+                if (onSaved != null) {
+                  onSaved.run();
+                }
+              });
+        });
   }
 
   @Override
   public void deleteNote(String note) {
-    dbExecutor.execute(() -> {
-      easySQL.delete(TABLE_NOTES, COL_TEXT, note);
-      List<String> updated = queryAllNotes();
-      MainThread.post(() -> updateNotesCache(updated));
-    });
+    dbExecutor.execute(
+        () -> {
+          easySQL.delete(TABLE_NOTES, COL_TEXT, note);
+          List<String> updated = queryAllNotes();
+          MainThread.post(() -> updateNotesCache(updated));
+        });
   }
 
   @Override
@@ -180,33 +183,38 @@ public class MainActivity extends AppCompatActivity implements DemoHost {
   }
 
   private void loadNotesFromDb(boolean forceSeed) {
-    dbExecutor.execute(() -> {
-      Map<String, String> cols = new LinkedHashMap<>();
-      cols.put("id", "INTEGER PRIMARY KEY AUTOINCREMENT");
-      cols.put(COL_TEXT, "TEXT NOT NULL");
-      easySQL.createTable(TABLE_NOTES, cols);
+    dbExecutor.execute(
+        () -> {
+          Map<String, String> cols = new LinkedHashMap<>();
+          cols.put("id", "INTEGER PRIMARY KEY AUTOINCREMENT");
+          cols.put(COL_TEXT, "TEXT NOT NULL");
+          easySQL.createTable(TABLE_NOTES, cols);
 
-      if (forceSeed) {
-        easySQL.dropTable(TABLE_NOTES);
-        easySQL.createTable(TABLE_NOTES, cols);
-      }
+          if (forceSeed) {
+            easySQL.dropTable(TABLE_NOTES);
+            easySQL.createTable(TABLE_NOTES, cols);
+          }
 
-      List<String> loaded = queryAllNotes();
-      if (loaded.isEmpty()) {
-        easySQL.inTransaction(() -> {
-          easySQL.insert(
-              TABLE_NOTES, Collections.singletonMap(COL_TEXT, getString(R.string.seed_note_1)));
-          easySQL.insert(
-              TABLE_NOTES, Collections.singletonMap(COL_TEXT, getString(R.string.seed_note_2)));
-          easySQL.insert(
-              TABLE_NOTES, Collections.singletonMap(COL_TEXT, getString(R.string.seed_note_3)));
+          List<String> loaded = queryAllNotes();
+          if (loaded.isEmpty()) {
+            easySQL.inTransaction(
+                () -> {
+                  easySQL.insert(
+                      TABLE_NOTES,
+                      Collections.singletonMap(COL_TEXT, getString(R.string.seed_note_1)));
+                  easySQL.insert(
+                      TABLE_NOTES,
+                      Collections.singletonMap(COL_TEXT, getString(R.string.seed_note_2)));
+                  easySQL.insert(
+                      TABLE_NOTES,
+                      Collections.singletonMap(COL_TEXT, getString(R.string.seed_note_3)));
+                });
+            loaded = queryAllNotes();
+          }
+
+          final List<String> finalNotes = loaded;
+          MainThread.post(() -> updateNotesCache(finalNotes));
         });
-        loaded = queryAllNotes();
-      }
-
-      final List<String> finalNotes = loaded;
-      MainThread.post(() -> updateNotesCache(finalNotes));
-    });
   }
 
   private List<String> queryAllNotes() {

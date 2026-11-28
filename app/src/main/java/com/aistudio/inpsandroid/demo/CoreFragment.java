@@ -89,81 +89,93 @@ public class CoreFragment extends Fragment implements DemoHost.NotesListener {
                 true);
 
     view.findViewById(R.id.btn_base64)
-        .setOnClickListener(v -> {
-          String text = readInputOrDefault(getString(R.string.core_default_input_text));
-          String cap = Converters.capitalize(text);
-          String b64 = Converters.toBase64(text);
-          outputText.setText(getString(R.string.core_output_base64_format, cap, b64));
-        });
+        .setOnClickListener(
+            v -> {
+              String text = readInputOrDefault(getString(R.string.core_default_input_text));
+              String cap = Converters.capitalize(text);
+              String b64 = Converters.toBase64(text);
+              outputText.setText(getString(R.string.core_output_base64_format, cap, b64));
+            });
 
     view.findViewById(R.id.btn_validate_email)
-        .setOnClickListener(v -> {
-          String text = readInputOrDefault(getString(R.string.core_default_email));
-          boolean valid = emailAllowList.isValid(text);
-          boolean hasDigits = StringChecks.hasNumbers(text);
-          outputText.setText(getString(R.string.core_output_email_format, text, valid, hasDigits));
-        });
+        .setOnClickListener(
+            v -> {
+              String text = readInputOrDefault(getString(R.string.core_default_email));
+              boolean valid = emailAllowList.isValid(text);
+              boolean hasDigits = StringChecks.hasNumbers(text);
+              outputText.setText(
+                  getString(R.string.core_output_email_format, text, valid, hasDigits));
+            });
 
     view.findViewById(R.id.btn_add_note)
-        .setOnClickListener(v -> {
-          String defaultNote =
-              getString(R.string.core_default_note_format, Converters.toMonthDayYear(new Date()));
-          String note = readInputOrDefault(defaultNote);
-          inputText.setText("");
-          if (getActivity() instanceof DemoHost) {
-            ((DemoHost) getActivity())
-                .addNote(
-                    note,
-                    () ->
-                        outputText.setText(
-                            getString(R.string.core_output_note_saved_format, note)));
-          }
-        });
+        .setOnClickListener(
+            v -> {
+              String defaultNote =
+                  getString(
+                      R.string.core_default_note_format, Converters.toMonthDayYear(new Date()));
+              String note = readInputOrDefault(defaultNote);
+              inputText.setText("");
+              if (getActivity() instanceof DemoHost) {
+                ((DemoHost) getActivity())
+                    .addNote(
+                        note,
+                        () ->
+                            outputText.setText(
+                                getString(R.string.core_output_note_saved_format, note)));
+              }
+            });
 
     view.findViewById(R.id.btn_time_left)
-        .setOnClickListener(v -> {
-          long now = System.currentTimeMillis();
-          double secs = TimeLeft.seconds(now, now + 90_000L);
-          double mins = TimeLeft.minutes(now, now + 90_000L);
-          double hrs = TimeLeft.hours(now, now + 8_100_000L);
-          timeOutputText.setText(getString(R.string.core_output_time_format, secs, mins, hrs));
-        });
+        .setOnClickListener(
+            v -> {
+              long now = System.currentTimeMillis();
+              double secs = TimeLeft.seconds(now, now + 90_000L);
+              double mins = TimeLeft.minutes(now, now + 90_000L);
+              double hrs = TimeLeft.hours(now, now + 8_100_000L);
+              timeOutputText.setText(getString(R.string.core_output_time_format, secs, mins, hrs));
+            });
 
     view.findViewById(R.id.btn_send_notification)
-        .setOnClickListener(v ->
-            runWithNotificationPermission(() -> {
-              String body = readInputOrDefault(getString(R.string.core_notif_default_body));
-              int id =
-                  easyNotification
-                      .prepare("demo_alerts")
-                      .title(getString(R.string.core_notif_title))
-                      .message(body)
-                      .tapActivity(MainActivity.class)
-                      .show();
-              updateNotificationStatus(id, "demo_alerts");
-            }));
+        .setOnClickListener(
+            v ->
+                runWithNotificationPermission(
+                    () -> {
+                      String body = readInputOrDefault(getString(R.string.core_notif_default_body));
+                      int id =
+                          easyNotification
+                              .prepare("demo_alerts")
+                              .title(getString(R.string.core_notif_title))
+                              .message(body)
+                              .tapActivity(MainActivity.class)
+                              .show();
+                      updateNotificationStatus(id, "demo_alerts");
+                    }));
 
     view.findViewById(R.id.btn_send_big_text_notification)
-        .setOnClickListener(v ->
-            runWithNotificationPermission(() -> {
-              String body = readInputOrDefault(getString(R.string.core_notif_bigtext_default_body));
-              int id =
-                  easyNotification
-                      .prepare("demo_alerts")
-                      .title(getString(R.string.core_notif_bigtext_title))
-                      .message(body)
-                      .bigText(getString(R.string.core_notif_bigtext_expanded_format, body))
-                      .subText(getString(R.string.core_notif_subtext))
-                      .tapActivity(MainActivity.class)
-                      .show();
-              updateNotificationStatus(id, getString(R.string.core_notif_bigtext_label));
-            }));
+        .setOnClickListener(
+            v ->
+                runWithNotificationPermission(
+                    () -> {
+                      String body =
+                          readInputOrDefault(getString(R.string.core_notif_bigtext_default_body));
+                      int id =
+                          easyNotification
+                              .prepare("demo_alerts")
+                              .title(getString(R.string.core_notif_bigtext_title))
+                              .message(body)
+                              .bigText(getString(R.string.core_notif_bigtext_expanded_format, body))
+                              .subText(getString(R.string.core_notif_subtext))
+                              .tapActivity(MainActivity.class)
+                              .show();
+                      updateNotificationStatus(id, getString(R.string.core_notif_bigtext_label));
+                    }));
 
     view.findViewById(R.id.btn_cancel_notifications)
-        .setOnClickListener(v -> {
-          easyNotification.cancelAll();
-          notificationOutputText.setText(R.string.core_notif_cancelled);
-        });
+        .setOnClickListener(
+            v -> {
+              easyNotification.cancelAll();
+              notificationOutputText.setText(R.string.core_notif_cancelled);
+            });
 
     if (getActivity() instanceof DemoHost) {
       DemoHost host = (DemoHost) getActivity();

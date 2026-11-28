@@ -60,129 +60,141 @@ public class UiFragment extends Fragment implements DemoHost.NotesListener {
     RoundedCheckBox minimalSample = view.findViewById(R.id.cb_minimal_sample);
     RoundedCheckBox listModeToggle = view.findViewById(R.id.cb_list_mode);
 
-    bounceToggle.setOnCheckedChangeListener((cb, enabled) -> {
-      bounceToggle.setBounceAnimationEnabled(enabled);
-      cardSample.setBounceAnimationEnabled(enabled);
-      pillSample.setBounceAnimationEnabled(enabled);
-      minimalSample.setBounceAnimationEnabled(enabled);
-      listModeToggle.setBounceAnimationEnabled(enabled);
-      simpleList.setBounceAnimationEnabled(enabled);
-    });
+    bounceToggle.setOnCheckedChangeListener(
+        (cb, enabled) -> {
+          bounceToggle.setBounceAnimationEnabled(enabled);
+          cardSample.setBounceAnimationEnabled(enabled);
+          pillSample.setBounceAnimationEnabled(enabled);
+          minimalSample.setBounceAnimationEnabled(enabled);
+          listModeToggle.setBounceAnimationEnabled(enabled);
+          simpleList.setBounceAnimationEnabled(enabled);
+        });
 
-    listModeToggle.setOnCheckedChangeListener((cb, enabled) -> {
-      simpleList.setCheckboxesEnabled(enabled);
-      updateSelectionSummary();
-    });
+    listModeToggle.setOnCheckedChangeListener(
+        (cb, enabled) -> {
+          simpleList.setCheckboxesEnabled(enabled);
+          updateSelectionSummary();
+        });
 
     flippableCard.setFrontImage(R.drawable.ic_card_front);
     flippableCard.setBackImage(R.drawable.ic_card_back);
-    flippableCard.setOnClickListener(v -> {
-      flippableCard.flip();
-      updateCardStatus();
-    });
-
-    view.findViewById(R.id.btn_flip)
-        .setOnClickListener(v -> {
+    flippableCard.setOnClickListener(
+        v -> {
           flippableCard.flip();
           updateCardStatus();
         });
 
-    speedButton.setOnClickListener(v -> {
-      FlippableImageView.Speed next;
-      int labelRes;
-      switch (flippableCard.getSpeed()) {
-        case NORMAL:
-          next = FlippableImageView.Speed.FAST;
-          labelRes = R.string.speed_fast;
-          break;
-        case FAST:
-          next = FlippableImageView.Speed.SLOW;
-          labelRes = R.string.speed_slow;
-          break;
-        case SLOW:
-        default:
-          next = FlippableImageView.Speed.NORMAL;
-          labelRes = R.string.speed_normal;
-          break;
-      }
-      flippableCard.setSpeed(next);
-      speedButton.setText(labelRes);
-    });
+    view.findViewById(R.id.btn_flip)
+        .setOnClickListener(
+            v -> {
+              flippableCard.flip();
+              updateCardStatus();
+            });
+
+    speedButton.setOnClickListener(
+        v -> {
+          FlippableImageView.Speed next;
+          int labelRes;
+          switch (flippableCard.getSpeed()) {
+            case NORMAL:
+              next = FlippableImageView.Speed.FAST;
+              labelRes = R.string.speed_fast;
+              break;
+            case FAST:
+              next = FlippableImageView.Speed.SLOW;
+              labelRes = R.string.speed_slow;
+              break;
+            case SLOW:
+            default:
+              next = FlippableImageView.Speed.NORMAL;
+              labelRes = R.string.speed_normal;
+              break;
+          }
+          flippableCard.setSpeed(next);
+          speedButton.setText(labelRes);
+        });
 
     view.findViewById(R.id.btn_compare_drawables)
-        .setOnClickListener(v -> {
-          Drawable front = ContextCompat.getDrawable(requireContext(), R.drawable.ic_card_front);
-          int width =
-              front != null && front.getIntrinsicWidth() > 0 ? front.getIntrinsicWidth() : 64;
-          int height =
-              front != null && front.getIntrinsicHeight() > 0 ? front.getIntrinsicHeight() : 64;
-          Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-          try {
-            if (front != null) {
-              Canvas canvas = new Canvas(bmp);
-              front.setBounds(0, 0, width, height);
-              front.draw(canvas);
-            }
-            boolean sameFront =
-                Drawables.equalsBitmap(requireContext(), R.drawable.ic_card_front, bmp);
-            boolean frontVsBack =
-                Drawables.equalsBitmap(requireContext(), R.drawable.ic_card_back, bmp);
-            drawablesOutput.setText(
-                getString(R.string.ui_drawables_result_format, sameFront, frontVsBack));
-          } finally {
-            bmp.recycle();
-          }
-        });
+        .setOnClickListener(
+            v -> {
+              Drawable front =
+                  ContextCompat.getDrawable(requireContext(), R.drawable.ic_card_front);
+              int width =
+                  front != null && front.getIntrinsicWidth() > 0 ? front.getIntrinsicWidth() : 64;
+              int height =
+                  front != null && front.getIntrinsicHeight() > 0 ? front.getIntrinsicHeight() : 64;
+              Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+              try {
+                if (front != null) {
+                  Canvas canvas = new Canvas(bmp);
+                  front.setBounds(0, 0, width, height);
+                  front.draw(canvas);
+                }
+                boolean sameFront =
+                    Drawables.equalsBitmap(requireContext(), R.drawable.ic_card_front, bmp);
+                boolean frontVsBack =
+                    Drawables.equalsBitmap(requireContext(), R.drawable.ic_card_back, bmp);
+                drawablesOutput.setText(
+                    getString(R.string.ui_drawables_result_format, sameFront, frontVsBack));
+              } finally {
+                bmp.recycle();
+              }
+            });
 
     view.findViewById(R.id.btn_dialog)
-        .setOnClickListener(v -> {
-          if (getActivity() instanceof DemoHost) {
-            ((DemoHost) getActivity())
-                .showInfoDialog(
-                    getString(R.string.ui_dialog_title), getString(R.string.ui_dialog_message));
-          }
-        });
+        .setOnClickListener(
+            v -> {
+              if (getActivity() instanceof DemoHost) {
+                ((DemoHost) getActivity())
+                    .showInfoDialog(
+                        getString(R.string.ui_dialog_title), getString(R.string.ui_dialog_message));
+              }
+            });
 
     view.findViewById(R.id.btn_bottom_sheet)
         .setOnClickListener(v -> showInteractiveBottomSheet(bounceToggle.isChecked()));
 
     view.findViewById(R.id.btn_fullscreen)
-        .setOnClickListener(v -> {
-          if (getActivity() instanceof DemoHost) {
-            ((DemoHost) getActivity()).toggleFullscreen();
+        .setOnClickListener(
+            v -> {
+              if (getActivity() instanceof DemoHost) {
+                ((DemoHost) getActivity()).toggleFullscreen();
+              }
+            });
+
+    simpleList.setOnItemClickListener(
+        pos -> {
+          if (!simpleList.isCheckboxesEnabled()) {
+            List<String> items = simpleList.getItems();
+            if (pos >= 0 && pos < items.size() && getActivity() instanceof DemoHost) {
+              ((DemoHost) getActivity())
+                  .showInfoDialog(
+                      getString(R.string.ui_list_row_dialog_title),
+                      getString(R.string.ui_list_row_selected_format, items.get(pos)));
+            }
           }
         });
-
-    simpleList.setOnItemClickListener(pos -> {
-      if (!simpleList.isCheckboxesEnabled()) {
-        List<String> items = simpleList.getItems();
-        if (pos >= 0 && pos < items.size() && getActivity() instanceof DemoHost) {
-          ((DemoHost) getActivity())
-              .showInfoDialog(
-                  getString(R.string.ui_list_row_dialog_title),
-                  getString(R.string.ui_list_row_selected_format, items.get(pos)));
-        }
-      }
-    });
     simpleList.setOnItemCheckedChangeListener((pos, item, isChecked) -> updateSelectionSummary());
-    simpleList.setOnItemLongClickListener(pos -> {
-      List<String> items = simpleList.getItems();
-      if (pos >= 0 && pos < items.size()) {
-        String removed = items.get(pos);
-        simpleList.removeItem(pos);
-        updateSelectionSummary();
-        if (getActivity() instanceof DemoHost) {
-          ((DemoHost) getActivity()).deleteNote(removed);
-        }
-      }
-    });
+    simpleList.setOnItemLongClickListener(
+        pos -> {
+          List<String> items = simpleList.getItems();
+          if (pos >= 0 && pos < items.size()) {
+            String removed = items.get(pos);
+            simpleList.removeItem(pos);
+            updateSelectionSummary();
+            if (getActivity() instanceof DemoHost) {
+              ((DemoHost) getActivity()).deleteNote(removed);
+            }
+          }
+        });
 
     view.findViewById(R.id.btn_reset_notes)
-        .setOnClickListener(v -> {
-          if (getActivity() instanceof DemoHost) {
-            ((DemoHost) getActivity()).resetSampleNotes();
-          }
-        });
+        .setOnClickListener(
+            v -> {
+              if (getActivity() instanceof DemoHost) {
+                ((DemoHost) getActivity()).resetSampleNotes();
+              }
+            });
 
     if (getActivity() instanceof DemoHost) {
       DemoHost host = (DemoHost) getActivity();
@@ -288,13 +300,15 @@ public class UiFragment extends Fragment implements DemoHost.NotesListener {
         .setupSecondaryButtonOnClick(v -> sheet.dismiss());
     sheet
         .setupPrimaryButton(getString(R.string.ui_sheet_apply))
-        .setupPrimaryButtonOnClick(v -> {
-          String note = noteInput.getText() != null ? noteInput.getText().toString().trim() : "";
-          if (!note.isEmpty() && getActivity() instanceof DemoHost) {
-            ((DemoHost) getActivity()).addNote(note, null);
-          }
-          sheet.dismiss();
-        });
+        .setupPrimaryButtonOnClick(
+            v -> {
+              String note =
+                  noteInput.getText() != null ? noteInput.getText().toString().trim() : "";
+              if (!note.isEmpty() && getActivity() instanceof DemoHost) {
+                ((DemoHost) getActivity()).addNote(note, null);
+              }
+              sheet.dismiss();
+            });
     sheet.show();
   }
 }

@@ -262,10 +262,11 @@ public class UiWidgetsTest {
 
     AtomicInteger callbackCount = new AtomicInteger(0);
     AtomicBoolean lastChecked = new AtomicBoolean(false);
-    checkBox.setOnCheckedChangeListener((cb, isChecked) -> {
-      callbackCount.incrementAndGet();
-      lastChecked.set(isChecked);
-    });
+    checkBox.setOnCheckedChangeListener(
+        (cb, isChecked) -> {
+          callbackCount.incrementAndGet();
+          lastChecked.set(isChecked);
+        });
 
     checkBox.performClick();
     assertTrue(checkBox.isChecked());

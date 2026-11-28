@@ -276,36 +276,40 @@ public final class WebRequest {
     Objects.requireNonNull(callback, "callback");
     final CallHandle call = new CallHandle();
     final FutureTask<Void> task =
-        new FutureTask<>(() -> {
-          if (call.isCancelled()) return null;
-          try {
-            final Response response = execute();
-            if (call.isCancelled()) return null;
-            MainThread.post(() -> {
-              if (!call.isCancelled()) {
-                callback.onSuccess(response);
+        new FutureTask<>(
+            () -> {
+              if (call.isCancelled()) return null;
+              try {
+                final Response response = execute();
+                if (call.isCancelled()) return null;
+                MainThread.post(
+                    () -> {
+                      if (!call.isCancelled()) {
+                        callback.onSuccess(response);
+                      }
+                    });
+              } catch (final Exception e) {
+                if (call.isCancelled()) return null;
+                MainThread.post(
+                    () -> {
+                      if (!call.isCancelled()) {
+                        callback.onError(e);
+                      }
+                    });
               }
+              return null;
             });
-          } catch (final Exception e) {
-            if (call.isCancelled()) return null;
-            MainThread.post(() -> {
-              if (!call.isCancelled()) {
-                callback.onError(e);
-              }
-            });
-          }
-          return null;
-        });
     call.setFuture(task);
     try {
       executor.execute(task);
     } catch (final RejectedExecutionException e) {
       if (!call.isCancelled()) {
-        MainThread.post(() -> {
-          if (!call.isCancelled()) {
-            callback.onError(e);
-          }
-        });
+        MainThread.post(
+            () -> {
+              if (!call.isCancelled()) {
+                callback.onError(e);
+              }
+            });
       }
     }
     return call;

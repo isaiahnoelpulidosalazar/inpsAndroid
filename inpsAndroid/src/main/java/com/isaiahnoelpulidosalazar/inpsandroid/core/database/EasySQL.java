@@ -97,7 +97,8 @@ public final class EasySQL implements Closeable {
         helper
             .getReadableDatabase()
             .rawQuery(
-                "SELECT 1 FROM sqlite_master WHERE type IN ('table','view') AND name = ? COLLATE NOCASE",
+                "SELECT 1 FROM sqlite_master WHERE type IN ('table','view') AND name = ? COLLATE"
+                    + " NOCASE",
                 new String[] {table})) {
       return c.moveToFirst();
     }
