@@ -23,11 +23,11 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Run Lint and Checkstyle
-        run: ./gradlew lint checkstyle
+      - name: Run Spotless Format Check and Lint
+        run: ./gradlew spotlessCheck lint
 
-      - name: Run Unit Tests with Coverage
-        run: ./gradlew test :inpsAndroid:createDebugUnitTestCoverageReport
+      - name: Run Unit Tests with JaCoCo Coverage
+        run: ./gradlew test jacocoTestReport
 
       - name: Upload Test Reports
         if: always()
@@ -39,12 +39,12 @@ jobs:
             app/build/reports/tests/
             inpsAndroid/build/reports/lint-results-debug.html
             app/build/reports/lint-results-debug.html
-            inpsAndroid/build/reports/checkstyle/
-            app/build/reports/checkstyle/
 
-      - name: Upload Coverage Report
+      - name: Upload JaCoCo Coverage Reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-report
-          path: inpsAndroid/build/reports/coverage/test/debug/
+          name: jacoco-coverage-reports
+          path: |
+            inpsAndroid/build/reports/jacoco/jacocoTestReport/
+            app/build/reports/jacoco/jacocoTestReport/

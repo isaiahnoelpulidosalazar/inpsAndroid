@@ -67,7 +67,7 @@ implementation 'com.github.isaiahnoelpulidosalazar:inpsAndroid:3.0.4'
 
 ## Migrating from 3.0.3 to 3.0.4
 
-Version `3.0.4` resolves all Android Lint, Checkstyle, and API 36 deprecation warnings and adds JaCoCo unit test coverage reporting. It introduces one source-level breaking change if your code references generated `R.styleable.*` constants directly:
+Version `3.0.4` resolves all Android Lint, formatting, and API 36 deprecation warnings, replaces manual style checks with Spotless (`googleJavaFormat()`), and adds JaCoCo coverage reporting across both modules. It introduces one source-level breaking change if your code references generated `R.styleable.*` constants directly:
 
 ### 1. Prefixed `<declare-styleable>` Names (`Inps*`)
 
@@ -85,8 +85,8 @@ To comply strictly with `resourcePrefix 'inps_'`, every `<declare-styleable>` bl
 
 ### 2. Quality, Build & Runtime Improvements (Non-Breaking)
 - **API 36 Accessibility Compatibility**: `RoundedCheckBox` uses `AccessibilityNodeInfo.setChecked(int)` on API 36+ (`Build.VERSION_CODES.BAKLAVA`) and `AccessibilityNodeInfoCompat.setChecked(boolean)` on earlier APIs.
-- **UI & Lint Hardening**: `SimpleList` replaces full `notifyDataSetChanged()` calls with targeted `notifyItemRangeChanged(...)`, and `RoundedAlertDialog` / `RoundedBottomSheet` supply explicit non-null parent containers during layout inflation.
-- **Tooling & Dependencies**: Added Checkstyle (`config/checkstyle/checkstyle.xml`) and JaCoCo unit test coverage (`:inpsAndroid:createDebugUnitTestCoverageReport`), and updated AndroidX/Material/Robolectric test dependencies in `gradle/libs.versions.toml`.
+- **UI & Lint Hardening**: `SimpleList` replaces full `notifyDataSetChanged()` calls with targeted `notifyItemRangeChanged(...)`, `RoundedAlertDialog` / `RoundedBottomSheet` supply explicit non-null parent containers during layout inflation, and `inpsAndroid` pins `aarMetadata.minCompileSdk = 36`.
+- **Tooling & Dependencies**: Added Spotless (`googleJavaFormat()`) for automated Java formatting, integrated the JaCoCo plugin (`jacocoTestReport` for `:inpsAndroid` and `:app`), and updated AndroidX/Material/Robolectric test dependencies in `gradle/libs.versions.toml`.
 
 ## Migrating from v1 / v2 to 3.0.0
 
@@ -149,11 +149,13 @@ Browse the per-module Markdown reference pages in [`docs/`](./docs/README.md):
 
 ## Testing & Quality Checks
 
-Run the library unit/Robolectric test suite, coverage report, Android Lint, and Checkstyle with:
+Run the library and demo app unit/Robolectric test suite, JaCoCo coverage reports, Android Lint, and Spotless formatting checks with:
 
 ```bash
-gradle :inpsAndroid:testDebugUnitTest :inpsAndroid:createDebugUnitTestCoverageReport
-gradle lint checkstyle
+gradle spotlessCheck lint
+gradle test jacocoTestReport
+# Auto-format Java sources with Google Java Format:
+gradle spotlessApply
 ```
 
 See [TESTING.md](./TESTING.md) for instructions on writing and running JUnit 4 and Robolectric tests, [CONTRIBUTING.md](./CONTRIBUTING.md) for issue and pull request guidelines, [CHANGELOG.md](./CHANGELOG.md) for the complete `3.0.4` changelog and historical v1/v2 notes, and [LICENSE](./LICENSE) for licensing terms.

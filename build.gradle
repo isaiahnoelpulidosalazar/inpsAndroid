@@ -1,32 +1,72 @@
 plugins {
-    id 'com.android.application' version '9.5.3' apply false
-    id 'com.android.library' version '9.5.3' apply false
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.spotless) apply false
 }
 
 subprojects {
-    apply plugin: 'checkstyle'
+    apply plugin: 'com.diffplug.spotless'
+    apply plugin: 'jacoco'
 
-    checkstyle {
-        toolVersion = '10.21.4'
-        configFile = rootProject.file('config/checkstyle/checkstyle.xml')
-        ignoreFailures = false
-        maxWarnings = 0
+    spotless {
+        java {
+            target 'src/*/java/**/*.java'
+            googleJavaFormat()
+            removeUnusedImports()
+            trimTrailingWhitespace()
+            endWithNewline()
+        }
     }
 
-    tasks.register('checkstyle', Checkstyle) {
-        description = 'Runs Checkstyle on Java sources.'
-        group = 'verification'
-        source 'src/main/java'
-        include '**/*.java'
-        classpath = files()
-        reports {
-            xml.required = false
-            html.required = true
+    jacoco {
+        toolVersion = '0.8.14'
+    }
+
+    tasks.withType(Test).configureEach {
+        jacoco {
+            includeNoLocationClasses = true
+            excludes = ['jdk.internal.*']
         }
     }
 
     tasks.withType(JavaCompile).configureEach {
         options.encoding = 'UTF-8'
         options.compilerArgs += ['-Xlint:deprecation', '-Xlint:unchecked']
+    }
+
+    tasks.register('jacocoTestReport', JacocoReport) {
+        dependsOn 'testDebugUnitTest'
+        group = 'verification'
+        description = 'Generates detailed JaCoCo XML, HTML, and CSV coverage reports for debug unit tests.'
+
+        reports {
+            xml.required = true
+            html.required = true
+            csv.required = true
+        }
+
+        def fileFilter = [
+            '**/R.class',
+            '**/R$*.class',
+            '**/BuildConfig.*',
+            '**/Manifest*.*',
+            '**/*Test*.*',
+            'android/**/*.*'
+        ]
+
+        def debugJavaClasses = fileTree(
+            dir: layout.buildDirectory.dir('intermediates/javac/debug/compileDebugJavaWithJavac/classes'),
+            excludes: fileFilter
+        )
+
+        sourceDirectories.setFrom(files("${projectDir}/src/main/java"))
+        classDirectories.setFrom(files([debugJavaClasses]))
+        executionData.setFrom(fileTree(
+            dir: layout.buildDirectory,
+            includes: [
+                'outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec',
+                'jacoco/testDebugUnitTest.exec'
+            ]
+        ))
     }
 }

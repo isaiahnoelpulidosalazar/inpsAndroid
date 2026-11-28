@@ -63,18 +63,20 @@ dependencies {
   --tests "com.isaiahnoelpulidosalazar.inpsandroid.ui.UiWidgetsTest.testSimpleListSetItemsWithGetItemsAndTextViewRows"
 ```
 
-### Run Lint, Checkstyle, and Coverage Reports
+### Run Spotless, Lint, and JaCoCo Coverage Reports
 
 ```bash
-./gradlew lint checkstyle
-./gradlew test :inpsAndroid:createDebugUnitTestCoverageReport
+./gradlew spotlessCheck lint
+./gradlew test jacocoTestReport
+# Format Java files automatically:
+./gradlew spotlessApply
 ```
 
 ### Viewing Reports & CI
 
-- Local HTML test report: `inpsAndroid/build/reports/tests/testDebugUnitTest/index.html`
-- Local HTML coverage report: `inpsAndroid/build/reports/coverage/test/debug/index.html`
-- GitHub Actions workflow ([`.github/workflows/test_inpsAndroid.yml`](./.github/workflows/test_inpsAndroid.yml)) runs `./gradlew lint checkstyle` and `./gradlew test :inpsAndroid:createDebugUnitTestCoverageReport` on every push and pull request, uploading both `test-reports` and `coverage-report` artifacts.
+- Local HTML test reports: `inpsAndroid/build/reports/tests/testDebugUnitTest/index.html`, `app/build/reports/tests/testDebugUnitTest/index.html`
+- Local JaCoCo reports (HTML, XML, CSV): `inpsAndroid/build/reports/jacoco/jacocoTestReport/`, `app/build/reports/jacoco/jacocoTestReport/`
+- GitHub Actions workflow ([`.github/workflows/test_inpsAndroid.yml`](./.github/workflows/test_inpsAndroid.yml)) runs `./gradlew spotlessCheck lint` and `./gradlew test jacocoTestReport` on every push and pull request, uploading both `test-reports` and `jacoco-coverage-reports` artifacts.
 
 ## 3. Test Suite Layout
 
