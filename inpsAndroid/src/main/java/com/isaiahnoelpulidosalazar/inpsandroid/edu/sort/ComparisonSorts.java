@@ -156,8 +156,12 @@ final class ComparisonSorts {
         int i = lo - 1;
         int j = hi + 1;
         while (true) {
-            do { i++; } while (arr[i] < pivot);
-            do { j--; } while (arr[j] > pivot);
+            do {
+                i++;
+            } while (arr[i] < pivot);
+            do {
+                j--;
+            } while (arr[j] > pivot);
             if (i >= j) return j;
             swap(arr, i, j);
         }

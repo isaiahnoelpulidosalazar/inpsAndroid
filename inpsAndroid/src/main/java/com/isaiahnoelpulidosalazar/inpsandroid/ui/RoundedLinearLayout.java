@@ -21,7 +21,9 @@ public class RoundedLinearLayout extends LinearLayout {
      *
      * @param context Android context
      */
-    public RoundedLinearLayout(@NonNull Context context) { this(context, null); }
+    public RoundedLinearLayout(@NonNull Context context) {
+        this(context, null);
+    }
 
     /**
      * XML inflation constructor reading {@code app:inpsCornerRadius} and {@code app:inpsIsTranslucent}.
@@ -29,7 +31,9 @@ public class RoundedLinearLayout extends LinearLayout {
      * @param context Android context
      * @param attrs   XML attribute set
      */
-    public RoundedLinearLayout(@NonNull Context context, @Nullable AttributeSet attrs) { this(context, attrs, 0); }
+    public RoundedLinearLayout(@NonNull Context context, @Nullable AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
 
     /**
      * Styled XML inflation constructor.
@@ -51,7 +55,12 @@ public class RoundedLinearLayout extends LinearLayout {
      * @param defStyleAttr default theme style attribute
      * @param defStyleRes  default style resource
      */
-    public RoundedLinearLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public RoundedLinearLayout(
+            @NonNull Context context,
+            @Nullable AttributeSet attrs,
+            int defStyleAttr,
+            int defStyleRes
+    ) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(attrs, defStyleAttr);
     }
@@ -61,9 +70,9 @@ public class RoundedLinearLayout extends LinearLayout {
                 this,
                 attrs,
                 defStyleAttr,
-                R.styleable.RoundedLinearLayout,
-                R.styleable.RoundedLinearLayout_inpsCornerRadius,
-                R.styleable.RoundedLinearLayout_inpsIsTranslucent,
+                R.styleable.InpsRoundedLinearLayout,
+                R.styleable.InpsRoundedLinearLayout_inpsCornerRadius,
+                R.styleable.InpsRoundedLinearLayout_inpsIsTranslucent,
                 false,
                 RoundedViewHelper.dp(getContext(), RoundedViewHelper.DEFAULT_LAYOUT_RADIUS_DP),
                 true,

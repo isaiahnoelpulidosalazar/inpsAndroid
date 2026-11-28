@@ -14,36 +14,36 @@
     </attr>
 
     <!-- Stylable attributes for RoundedButton. -->
-    <declare-styleable name="RoundedButton">
+    <declare-styleable name="InpsRoundedButton">
         <attr name="inpsCornerRadius" />
     </declare-styleable>
 
     <!-- Stylable attributes for RoundedEditText. -->
-    <declare-styleable name="RoundedEditText">
+    <declare-styleable name="InpsRoundedEditText">
         <attr name="inpsCornerRadius" />
     </declare-styleable>
 
     <!-- Stylable attributes for RoundedConstraintLayout. -->
-    <declare-styleable name="RoundedConstraintLayout">
+    <declare-styleable name="InpsRoundedConstraintLayout">
         <attr name="inpsCornerRadius" />
         <attr name="inpsIsTranslucent" />
     </declare-styleable>
 
     <!-- Stylable attributes for RoundedLinearLayout. -->
-    <declare-styleable name="RoundedLinearLayout">
+    <declare-styleable name="InpsRoundedLinearLayout">
         <attr name="inpsCornerRadius" />
         <attr name="inpsIsTranslucent" />
     </declare-styleable>
 
     <!-- Stylable attributes for RoundedCheckBox. -->
-    <declare-styleable name="RoundedCheckBox">
+    <declare-styleable name="InpsRoundedCheckBox">
         <attr name="inpsCornerRadius" />
         <attr name="inpsBounceAnimation" />
         <attr name="inpsCheckStyle" />
     </declare-styleable>
 
     <!-- Stylable attributes for SimpleList, including optional RoundedCheckBox row mode. -->
-    <declare-styleable name="SimpleList">
+    <declare-styleable name="InpsSimpleList">
         <!-- Switches SimpleList from TextView rows to multi-select RoundedCheckBox rows. -->
         <attr name="inpsCheckboxesEnabled" format="boolean" />
         <attr name="inpsBounceAnimation" />
@@ -52,7 +52,7 @@
     </declare-styleable>
 
     <!-- Stylable attributes for FlippableImageView. -->
-    <declare-styleable name="FlippableImageView">
+    <declare-styleable name="InpsFlippableImageView">
         <!-- Horizontally mirrors the back image so asymmetrical artwork reads naturally after a 180-degree Y flip. -->
         <attr name="inpsReverseBackImage" format="boolean" />
         <!-- Preset flip animation duration (slow=600ms, normal=300ms, fast=150ms). -->

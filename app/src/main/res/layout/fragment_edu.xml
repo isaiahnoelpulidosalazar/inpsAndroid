@@ -29,7 +29,7 @@
                 android:paddingTop="3dp"
                 android:paddingEnd="10dp"
                 android:paddingBottom="3dp"
-                android:text="ALGORITHMS"
+                android:text="@string/badge_algorithms"
                 android:textColor="@color/doc_accent"
                 android:textSize="11sp"
                 android:textStyle="bold" />
@@ -38,7 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Sort (edu.sort.Sort)"
+                android:text="@string/edu_sort_title"
                 android:textColor="@color/doc_ink"
                 android:textSize="17sp"
                 android:textStyle="bold" />
@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:lineSpacingExtra="3dp"
-                android:text="Comparison, non-comparison (negative-supporting countingSort with a 10M range cap), and structure sorts. Throws NullPointerException on null inputs."
+                android:text="@string/edu_sort_desc"
                 android:textColor="@color/doc_ink_muted"
                 android:textSize="14sp" />
 
@@ -65,7 +65,7 @@
                     android:layout_marginEnd="6dp"
                     android:layout_weight="1"
                     android:minHeight="48dp"
-                    android:text="Counting"
+                    android:text="@string/btn_sort_counting"
                     android:textAllCaps="false"
                     app:inpsCornerRadius="12dp" />
 
@@ -76,7 +76,7 @@
                     android:layout_marginEnd="6dp"
                     android:layout_weight="1"
                     android:minHeight="48dp"
-                    android:text="Quick"
+                    android:text="@string/btn_sort_quick"
                     android:textAllCaps="false"
                     app:inpsCornerRadius="12dp" />
 
@@ -87,7 +87,7 @@
                     android:layout_marginEnd="6dp"
                     android:layout_weight="1"
                     android:minHeight="48dp"
-                    android:text="Merge"
+                    android:text="@string/btn_sort_merge"
                     android:textAllCaps="false"
                     app:inpsCornerRadius="12dp" />
 
@@ -97,7 +97,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:minHeight="48dp"
-                    android:text="Heap"
+                    android:text="@string/btn_sort_heap"
                     android:textAllCaps="false"
                     app:inpsCornerRadius="12dp" />
             </LinearLayout>
@@ -110,7 +110,7 @@
                 android:background="@drawable/bg_code_block"
                 android:fontFamily="monospace"
                 android:padding="12dp"
-                android:text="Input: [42, -7, 19, 3, 25, 0, -12]"
+                android:text="@string/edu_sort_placeholder"
                 android:textColor="@color/doc_ink"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -127,7 +127,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="AreaCalculator"
+                android:text="@string/edu_area_title"
                 android:textColor="@color/doc_ink"
                 android:textSize="17sp"
                 android:textStyle="bold" />
@@ -137,7 +137,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:lineSpacingExtra="3dp"
-                android:text="2D area and 3D surface-area formulas with precomputed sqrt(3) and deduplicated geometry helpers."
+                android:text="@string/edu_area_desc"
                 android:textColor="@color/doc_ink_muted"
                 android:textSize="14sp" />
 
@@ -160,7 +160,7 @@
                 android:background="@drawable/bg_code_block"
                 android:fontFamily="monospace"
                 android:padding="12dp"
-                android:text="Tap Run AreaCalculator to evaluate formulas."
+                android:text="@string/edu_area_placeholder"
                 android:textColor="@color/doc_ink"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -177,7 +177,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="SoundSynthesizer"
+                android:text="@string/edu_sound_title"
                 android:textColor="@color/doc_ink"
                 android:textSize="17sp"
                 android:textStyle="bold" />
@@ -187,7 +187,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:lineSpacingExtra="3dp"
-                android:text="Asynchronous MIDI-addressed piano synthesis with prepare(int...), single-thread AudioTrack playback, and low-latency mode on API 26+."
+                android:text="@string/edu_sound_desc"
                 android:textColor="@color/doc_ink_muted"
                 android:textSize="14sp" />
 
@@ -204,7 +204,7 @@
                     android:layout_marginEnd="6dp"
                     android:layout_weight="1"
                     android:minHeight="48dp"
-                    android:text="C4"
+                    android:text="@string/btn_note_c4"
                     android:textAllCaps="false"
                     app:inpsCornerRadius="12dp" />
 
@@ -215,7 +215,7 @@
                     android:layout_marginEnd="6dp"
                     android:layout_weight="1"
                     android:minHeight="48dp"
-                    android:text="E4"
+                    android:text="@string/btn_note_e4"
                     android:textAllCaps="false"
                     app:inpsCornerRadius="12dp" />
 
@@ -226,7 +226,7 @@
                     android:layout_marginEnd="6dp"
                     android:layout_weight="1"
                     android:minHeight="48dp"
-                    android:text="G4"
+                    android:text="@string/btn_note_g4"
                     android:textAllCaps="false"
                     app:inpsCornerRadius="12dp" />
 
@@ -236,7 +236,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:minHeight="48dp"
-                    android:text="C5"
+                    android:text="@string/btn_note_c5"
                     android:textAllCaps="false"
                     app:inpsCornerRadius="12dp" />
             </LinearLayout>
@@ -249,7 +249,7 @@
                 android:background="@drawable/bg_code_block"
                 android:fontFamily="monospace"
                 android:padding="12dp"
-                android:text="Prepared MIDI notes: 60 (C4), 64 (E4), 67 (G4), 72 (C5)"
+                android:text="@string/edu_sound_placeholder"
                 android:textColor="@color/doc_ink"
                 android:textSize="12sp" />
         </LinearLayout>

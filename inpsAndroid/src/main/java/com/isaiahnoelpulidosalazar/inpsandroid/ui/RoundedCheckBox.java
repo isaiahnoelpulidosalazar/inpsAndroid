@@ -1,5 +1,6 @@
 package com.isaiahnoelpulidosalazar.inpsandroid.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
@@ -10,6 +11,7 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.RippleDrawable;
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
@@ -116,6 +118,7 @@ public class RoundedCheckBox extends LinearLayout implements Checkable {
      * @param attrs        XML attribute set
      * @param defStyleAttr default theme style attribute
      */
+    @SuppressLint("CustomViewStyleable")
     public RoundedCheckBox(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setOrientation(HORIZONTAL);
@@ -124,9 +127,9 @@ public class RoundedCheckBox extends LinearLayout implements Checkable {
         setFocusable(true);
         setMinimumHeight(Math.round(RoundedViewHelper.dp(context, 48f)));
 
-        int hPad = Math.round(RoundedViewHelper.dp(context, 14f));
-        int vPad = Math.round(RoundedViewHelper.dp(context, 12f));
-        setPadding(hPad, vPad, hPad, vPad);
+        int horizontalPad = Math.round(RoundedViewHelper.dp(context, 14f));
+        int verticalPad = Math.round(RoundedViewHelper.dp(context, 12f));
+        setPadding(horizontalPad, verticalPad, horizontalPad, verticalPad);
 
         cornerRadiusPx = RoundedViewHelper.dp(context, DEFAULT_CORNER_RADIUS_DP);
 
@@ -162,15 +165,15 @@ public class RoundedCheckBox extends LinearLayout implements Checkable {
                 std.recycle();
             }
 
-            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.RoundedCheckBox, defStyleAttr, 0);
+            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.InpsRoundedCheckBox, defStyleAttr, 0);
             try {
-                bounceAnimationEnabled = a.getBoolean(R.styleable.RoundedCheckBox_inpsBounceAnimation, true);
+                bounceAnimationEnabled = a.getBoolean(R.styleable.InpsRoundedCheckBox_inpsBounceAnimation, true);
                 Style[] styles = Style.values();
-                int idx = a.getInt(R.styleable.RoundedCheckBox_inpsCheckStyle, Style.CARD.ordinal());
+                int idx = a.getInt(R.styleable.InpsRoundedCheckBox_inpsCheckStyle, Style.CARD.ordinal());
                 style = styles[Math.max(0, Math.min(idx, styles.length - 1))];
-                if (a.hasValue(R.styleable.RoundedCheckBox_inpsCornerRadius)) {
+                if (a.hasValue(R.styleable.InpsRoundedCheckBox_inpsCornerRadius)) {
                     hasExplicitCornerRadius = true;
-                    cornerRadiusPx = a.getDimension(R.styleable.RoundedCheckBox_inpsCornerRadius, cornerRadiusPx);
+                    cornerRadiusPx = a.getDimension(R.styleable.InpsRoundedCheckBox_inpsCornerRadius, cornerRadiusPx);
                 }
             } finally {
                 a.recycle();
@@ -338,7 +341,13 @@ public class RoundedCheckBox extends LinearLayout implements Checkable {
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
         super.onInitializeAccessibilityNodeInfo(info);
         info.setCheckable(true);
-        info.setChecked(checked);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) {
+            info.setChecked(checked
+                    ? AccessibilityNodeInfo.CHECKED_STATE_TRUE
+                    : AccessibilityNodeInfo.CHECKED_STATE_FALSE);
+        } else {
+            androidx.core.view.accessibility.AccessibilityNodeInfoCompat.wrap(info).setChecked(checked);
+        }
     }
 
     @Override

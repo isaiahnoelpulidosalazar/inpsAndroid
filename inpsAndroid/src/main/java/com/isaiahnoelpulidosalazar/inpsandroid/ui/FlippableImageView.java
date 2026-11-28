@@ -1,5 +1,6 @@
 package com.isaiahnoelpulidosalazar.inpsandroid.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -39,7 +40,9 @@ public class FlippableImageView extends AppCompatImageView {
 
         final long durationMs;
 
-        Speed(long durationMs) { this.durationMs = durationMs; }
+        Speed(long durationMs) {
+            this.durationMs = durationMs;
+        }
     }
 
     private static final float CAMERA_DISTANCE_FACTOR = 8000f;
@@ -56,7 +59,9 @@ public class FlippableImageView extends AppCompatImageView {
      *
      * @param context Android context
      */
-    public FlippableImageView(@NonNull Context context) { this(context, null); }
+    public FlippableImageView(@NonNull Context context) {
+        this(context, null);
+    }
 
     /**
      * XML inflation constructor reading {@code app:inpsReverseBackImage} and {@code app:inpsFlipSpeed}.
@@ -64,7 +69,9 @@ public class FlippableImageView extends AppCompatImageView {
      * @param context Android context
      * @param attrs   XML attribute set
      */
-    public FlippableImageView(@NonNull Context context, @Nullable AttributeSet attrs) { this(context, attrs, 0); }
+    public FlippableImageView(@NonNull Context context, @Nullable AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
 
     /**
      * Styled XML inflation constructor.
@@ -73,17 +80,18 @@ public class FlippableImageView extends AppCompatImageView {
      * @param attrs        XML attribute set
      * @param defStyleAttr default theme style attribute
      */
+    @SuppressLint("CustomViewStyleable")
     public FlippableImageView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         // Moves the virtual camera back along Z so 3D perspective foreshortening during Y rotation is subtle.
         setCameraDistance(CAMERA_DISTANCE_FACTOR * context.getResources().getDisplayMetrics().density);
         frontImage = getDrawable();
         if (attrs != null) {
-            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FlippableImageView, defStyleAttr, 0);
+            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.InpsFlippableImageView, defStyleAttr, 0);
             try {
-                reverseBackImage = a.getBoolean(R.styleable.FlippableImageView_inpsReverseBackImage, false);
+                reverseBackImage = a.getBoolean(R.styleable.InpsFlippableImageView_inpsReverseBackImage, false);
                 Speed[] speeds = Speed.values();
-                int index = a.getInt(R.styleable.FlippableImageView_inpsFlipSpeed, Speed.NORMAL.ordinal());
+                int index = a.getInt(R.styleable.InpsFlippableImageView_inpsFlipSpeed, Speed.NORMAL.ordinal());
                 speed = speeds[Math.max(0, Math.min(index, speeds.length - 1))];
             } finally {
                 a.recycle();
@@ -107,7 +115,9 @@ public class FlippableImageView extends AppCompatImageView {
      *
      * @return current {@link Speed}
      */
-    public Speed getSpeed() { return speed; }
+    public Speed getSpeed() {
+        return speed;
+    }
 
     /**
      * When {@code true} the back image is mirrored horizontally so it reads correctly after the
@@ -181,14 +191,20 @@ public class FlippableImageView extends AppCompatImageView {
      *
      * @return front drawable, or {@code null}
      */
-    @Nullable public Drawable getFrontDrawable() { return frontImage; }
+    @Nullable
+    public Drawable getFrontDrawable() {
+        return frontImage;
+    }
 
     /**
      * Returns the currently configured back drawable.
      *
      * @return back drawable, or {@code null}
      */
-    @Nullable public Drawable getBackDrawable() { return backImage; }
+    @Nullable
+    public Drawable getBackDrawable() {
+        return backImage;
+    }
 
     // ---- flipping ------------------------------------------------------------------------------
 
@@ -222,7 +238,9 @@ public class FlippableImageView extends AppCompatImageView {
      *
      * @return {@code true} when flipped to the back side
      */
-    public boolean isFlipped() { return flipped; }
+    public boolean isFlipped() {
+        return flipped;
+    }
 
     @Override
     protected Parcelable onSaveInstanceState() {

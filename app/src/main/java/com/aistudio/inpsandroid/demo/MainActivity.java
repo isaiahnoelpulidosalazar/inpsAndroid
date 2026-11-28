@@ -166,8 +166,10 @@ public class MainActivity extends AppCompatActivity implements DemoHost {
         RoundedAlertDialog dialog = new RoundedAlertDialog(this)
                 .setTitle(title)
                 .addView(body);
-        dialog.setupLeftButton("Close").setupLeftButtonOnClick(v -> dialog.dismiss());
-        dialog.setupRightButton("OK").setupRightButtonOnClick(v -> dialog.dismiss());
+        dialog.setupLeftButton(getString(R.string.dialog_btn_close))
+                .setupLeftButtonOnClick(v -> dialog.dismiss());
+        dialog.setupRightButton(getString(R.string.dialog_btn_ok))
+                .setupRightButtonOnClick(v -> dialog.dismiss());
         dialog.show();
     }
 
@@ -192,9 +194,12 @@ public class MainActivity extends AppCompatActivity implements DemoHost {
             List<String> loaded = queryAllNotes();
             if (loaded.isEmpty()) {
                 easySQL.inTransaction(() -> {
-                    easySQL.insert(TABLE_NOTES, Collections.singletonMap(COL_TEXT, "Tap a row to inspect"));
-                    easySQL.insert(TABLE_NOTES, Collections.singletonMap(COL_TEXT, "Long-press to delete"));
-                    easySQL.insert(TABLE_NOTES, Collections.singletonMap(COL_TEXT, "inpsAndroid 3.0.3 ready"));
+                    easySQL.insert(TABLE_NOTES,
+                            Collections.singletonMap(COL_TEXT, getString(R.string.seed_note_1)));
+                    easySQL.insert(TABLE_NOTES,
+                            Collections.singletonMap(COL_TEXT, getString(R.string.seed_note_2)));
+                    easySQL.insert(TABLE_NOTES,
+                            Collections.singletonMap(COL_TEXT, getString(R.string.seed_note_3)));
                 });
                 loaded = queryAllNotes();
             }

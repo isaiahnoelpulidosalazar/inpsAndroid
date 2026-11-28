@@ -1,13 +1,19 @@
 # Testing Guide (`inpsAndroid`)
 
-`inpsAndroid` uses **JUnit 4** (`4.13.2`) and **Robolectric** (`4.15.1`) to run all library tests—including SQLite, HTTP, `Looper`, `View`, and resource-dependent components—directly on the JVM without an Android emulator.
+`inpsAndroid` uses **JUnit 4** (`4.13.2`) and **Robolectric** (`4.18.1`) to run all library tests—including SQLite, HTTP, `Looper`, `View`, and resource-dependent components—directly on the JVM without an Android emulator.
 
 ## 1. Gradle Test Configuration
 
-Configured in [`inpsAndroid/build.gradle`](./inpsAndroid/build.gradle):
+Configured in [`inpsAndroid/build.gradle`](./inpsAndroid/build.gradle) and [`gradle/libs.versions.toml`](./gradle/libs.versions.toml):
 
 ```groovy
 android {
+    buildTypes {
+        debug {
+            enableUnitTestCoverage = true
+        }
+    }
+
     testOptions {
         unitTests {
             includeAndroidResources = true
@@ -21,11 +27,11 @@ android {
 }
 
 dependencies {
-    testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.robolectric:robolectric:4.15.1'
-    testImplementation 'androidx.test:core:1.6.1'
-    testImplementation 'com.google.android.material:material:1.12.0'
-    robolectricSdk 'org.robolectric:android-all-instrumented:15-robolectric-12650502-i7'
+    testImplementation libs.junit
+    testImplementation libs.robolectric
+    testImplementation libs.androidx.test.core
+    testImplementation libs.material
+    robolectricSdk libs.robolectric.android.all
 }
 ```
 
@@ -57,10 +63,18 @@ dependencies {
   --tests "com.isaiahnoelpulidosalazar.inpsandroid.ui.UiWidgetsTest.testSimpleListSetItemsWithGetItemsAndTextViewRows"
 ```
 
+### Run Lint, Checkstyle, and Coverage Reports
+
+```bash
+./gradlew lint checkstyle
+./gradlew test :inpsAndroid:createDebugUnitTestCoverageReport
+```
+
 ### Viewing Reports & CI
 
 - Local HTML test report: `inpsAndroid/build/reports/tests/testDebugUnitTest/index.html`
-- GitHub Actions workflow ([`.github/workflows/test_inpsAndroid.yml`](./.github/workflows/test_inpsAndroid.yml)) runs `./gradlew test` on every push and pull request and uploads the `test-reports` artifact.
+- Local HTML coverage report: `inpsAndroid/build/reports/coverage/test/debug/index.html`
+- GitHub Actions workflow ([`.github/workflows/test_inpsAndroid.yml`](./.github/workflows/test_inpsAndroid.yml)) runs `./gradlew lint checkstyle` and `./gradlew test :inpsAndroid:createDebugUnitTestCoverageReport` on every push and pull request, uploading both `test-reports` and `coverage-report` artifacts.
 
 ## 3. Test Suite Layout
 

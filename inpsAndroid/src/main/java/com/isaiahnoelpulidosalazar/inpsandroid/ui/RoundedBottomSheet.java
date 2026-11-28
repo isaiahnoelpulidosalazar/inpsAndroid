@@ -23,6 +23,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -94,7 +95,7 @@ public class RoundedBottomSheet {
     public RoundedBottomSheet(@NonNull Context context) {
         this.context = Objects.requireNonNull(context, "context");
         View rootView = LayoutInflater.from(context)
-                .inflate(R.layout.inps_rounded_bottom_sheet_layout, null);
+                .inflate(R.layout.inps_rounded_bottom_sheet_layout, new FrameLayout(context), false);
 
         scrimView = rootView.findViewById(R.id.inps_rounded_bottom_sheet_scrim);
         sheetContainer = rootView.findViewById(R.id.inps_rounded_bottom_sheet_container);
@@ -671,18 +672,18 @@ public class RoundedBottomSheet {
 
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL:
-                    float yVelocity = 0f;
+                    float velocityY = 0f;
                     if (velocityTracker != null) {
                         velocityTracker.addMovement(event);
                         velocityTracker.computeCurrentVelocity(1000);
-                        yVelocity = velocityTracker.getYVelocity();
+                        velocityY = velocityTracker.getYVelocity();
                         recycleTracker();
                     }
                     if (isDragging) {
                         int height = sheetContainer.getHeight();
                         boolean pastDistance = height > 0
                                 && sheetContainer.getTranslationY() > height * DISMISS_DRAG_FRACTION;
-                        boolean pastVelocity = yVelocity > DISMISS_VELOCITY_THRESHOLD_PX;
+                        boolean pastVelocity = velocityY > DISMISS_VELOCITY_THRESHOLD_PX;
                         if (cancelable && (pastDistance || pastVelocity)) {
                             animateAndClose(true);
                         } else {

@@ -110,7 +110,8 @@ final class RoundedViewHelper {
         int res = translucent
                 ? R.drawable.inps_rounded_translucent_background
                 : R.drawable.inps_rounded_primary_background;
-        GradientDrawable d = (GradientDrawable) Objects.requireNonNull(ContextCompat.getDrawable(context, res)).mutate();
+        GradientDrawable d = (GradientDrawable) Objects.requireNonNull(
+                ContextCompat.getDrawable(context, res)).mutate();
         if (radiusPx >= 0f) d.setCornerRadius(radiusPx);
         return d;
     }

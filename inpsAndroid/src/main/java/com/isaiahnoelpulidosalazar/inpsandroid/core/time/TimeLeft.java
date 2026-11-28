@@ -27,7 +27,9 @@ public final class TimeLeft {
      * @param untilMs target epoch timestamp in milliseconds
      * @return fractional seconds between {@code nowMs} and {@code untilMs}
      */
-    public static double seconds(long nowMs, long untilMs) { return (untilMs - nowMs) / MS_PER_SECOND; }
+    public static double seconds(long nowMs, long untilMs) {
+        return (untilMs - nowMs) / MS_PER_SECOND;
+    }
 
     /**
      * Calculates remaining minutes from {@code nowMs} to {@code untilMs}.
@@ -36,7 +38,9 @@ public final class TimeLeft {
      * @param untilMs target epoch timestamp in milliseconds
      * @return fractional minutes between {@code nowMs} and {@code untilMs}
      */
-    public static double minutes(long nowMs, long untilMs) { return (untilMs - nowMs) / MS_PER_MINUTE; }
+    public static double minutes(long nowMs, long untilMs) {
+        return (untilMs - nowMs) / MS_PER_MINUTE;
+    }
 
     /**
      * Calculates remaining hours from {@code nowMs} to {@code untilMs}.
@@ -45,7 +49,9 @@ public final class TimeLeft {
      * @param untilMs target epoch timestamp in milliseconds
      * @return fractional hours between {@code nowMs} and {@code untilMs}
      */
-    public static double hours(long nowMs, long untilMs)   { return (untilMs - nowMs) / MS_PER_HOUR; }
+    public static double hours(long nowMs, long untilMs) {
+        return (untilMs - nowMs) / MS_PER_HOUR;
+    }
 
     /**
      * Calculates remaining days from {@code nowMs} to {@code untilMs}.
@@ -54,7 +60,9 @@ public final class TimeLeft {
      * @param untilMs target epoch timestamp in milliseconds
      * @return fractional days between {@code nowMs} and {@code untilMs}
      */
-    public static double days(long nowMs, long untilMs)    { return (untilMs - nowMs) / MS_PER_DAY; }
+    public static double days(long nowMs, long untilMs) {
+        return (untilMs - nowMs) / MS_PER_DAY;
+    }
 
     /**
      * Calculates fractional seconds remaining between two {@link Date} instances.

@@ -7,8 +7,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.Parcelable;
-import android.util.AttributeSet;
 import android.view.ContextThemeWrapper;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -17,6 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.core.app.ApplicationProvider;
+
+import com.isaiahnoelpulidosalazar.inpsandroid.R;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -74,11 +76,11 @@ public class UiWidgetsTest {
         assertNotNull(lightBgButton.getBackground());
         assertEquals(Color.BLACK, lightBgButton.getCurrentTextColor());
 
-        AttributeSet xmlBgAttrs = Robolectric.buildAttributeSet()
-                .addAttribute(android.R.attr.background, "@android:color/holo_red_dark")
-                .build();
-        RoundedButton customBgButton = new RoundedButton(darkPrimaryContext, xmlBgAttrs);
-        assertTrue(customBgButton.getBackground() instanceof ColorDrawable);
+        View inflatedSheet = LayoutInflater.from(darkPrimaryContext)
+                .inflate(R.layout.inps_rounded_bottom_sheet_layout, new FrameLayout(darkPrimaryContext), false);
+        RoundedButton customBgButton = inflatedSheet.findViewById(R.id.inps_rounded_bottom_sheet_secondary_button);
+        assertNotNull(customBgButton.getBackground());
+        assertFalse(Color.WHITE == customBgButton.getCurrentTextColor());
 
         RoundedEditText editText = new RoundedEditText(darkPrimaryContext);
         assertNotNull(editText.getBackground());

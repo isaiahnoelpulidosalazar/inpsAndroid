@@ -93,7 +93,9 @@ public final class WebRequest {
          *
          * @return {@code true} when {@code 200 <= code < 300}
          */
-        public boolean isSuccessful() { return code >= 200 && code < 300; }
+        public boolean isSuccessful() {
+            return code >= 200 && code < 300;
+        }
     }
 
     private static final ThreadPoolExecutor DEFAULT_EXECUTOR = createDefaultExecutor();
@@ -129,7 +131,9 @@ public final class WebRequest {
      * @param url target HTTP/HTTPS URL
      * @return new {@link WebRequest} configured for {@code GET}
      */
-    public static WebRequest get(String url) { return new WebRequest("GET", url); }
+    public static WebRequest get(String url) {
+        return new WebRequest("GET", url);
+    }
 
     /**
      * Creates a {@code POST} request builder for {@code url} with an optional request body.
@@ -138,7 +142,9 @@ public final class WebRequest {
      * @param body UTF-8 request body, or {@code null}
      * @return new {@link WebRequest} configured for {@code POST}
      */
-    public static WebRequest post(String url, String body) { return new WebRequest("POST", url).body(body); }
+    public static WebRequest post(String url, String body) {
+        return new WebRequest("POST", url).body(body);
+    }
 
     /**
      * Creates a request builder for an arbitrary HTTP {@code method}.
@@ -147,7 +153,9 @@ public final class WebRequest {
      * @param url    target HTTP/HTTPS URL
      * @return new {@link WebRequest} configured for {@code method}
      */
-    public static WebRequest of(String method, String url) { return new WebRequest(method, url); }
+    public static WebRequest of(String method, String url) {
+        return new WebRequest(method, url);
+    }
 
     /**
      * Adds or replaces a request header.

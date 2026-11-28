@@ -34,7 +34,9 @@ public final class AreaCalculator {
         }
     }
 
-    private static double sq(double v) { return v * v; }
+    private static double sq(double v) {
+        return v * v;
+    }
 
     // --- 2D shapes ---
 
@@ -44,7 +46,9 @@ public final class AreaCalculator {
      * @param a side length
      * @return area of the square
      */
-    public static double squareArea(double a) { return sq(a); }
+    public static double squareArea(double a) {
+        return sq(a);
+    }
 
     /**
      * Area of a rectangle or parallelogram ({@code a * b}).
@@ -53,7 +57,9 @@ public final class AreaCalculator {
      * @param b height or adjacent side length
      * @return area of the rectangle
      */
-    public static double rectangleArea(double a, double b) { return a * b; }
+    public static double rectangleArea(double a, double b) {
+        return a * b;
+    }
 
     /**
      * Area of a triangle ({@code 0.5 * a * h}).
@@ -62,7 +68,9 @@ public final class AreaCalculator {
      * @param h perpendicular height
      * @return area of the triangle
      */
-    public static double triangleArea(double a, double h) { return 0.5 * a * h; }
+    public static double triangleArea(double a, double h) {
+        return 0.5 * a * h;
+    }
 
     /**
      * Area of an equilateral triangle ({@code (sqrt(3) / 4) * a^2}).
@@ -70,7 +78,9 @@ public final class AreaCalculator {
      * @param a side length
      * @return area of the equilateral triangle
      */
-    public static double equilateralTriangleArea(double a) { return (SQRT_3 / 4.0) * sq(a); }
+    public static double equilateralTriangleArea(double a) {
+        return (SQRT_3 / 4.0) * sq(a);
+    }
 
     /**
      * Area of a trapezoid ({@code ((a + b) / 2) * h}).
@@ -80,7 +90,9 @@ public final class AreaCalculator {
      * @param h perpendicular height
      * @return area of the trapezoid
      */
-    public static double trapezoidArea(double a, double b, double h) { return (a + b) / 2.0 * h; }
+    public static double trapezoidArea(double a, double b, double h) {
+        return (a + b) / 2.0 * h;
+    }
 
     /**
      * Area of a rhombus from its diagonals ({@code d1 * d2 / 2}).
@@ -89,7 +101,9 @@ public final class AreaCalculator {
      * @param d2 length of the second diagonal
      * @return area of the rhombus
      */
-    public static double rhombusArea(double d1, double d2) { return d1 * d2 / 2.0; }
+    public static double rhombusArea(double d1, double d2) {
+        return d1 * d2 / 2.0;
+    }
 
     /**
      * Area of a circle ({@code pi * r^2}).
@@ -97,16 +111,20 @@ public final class AreaCalculator {
      * @param r circle radius
      * @return area of the circle
      */
-    public static double circleArea(double r) { return Math.PI * sq(r); }
+    public static double circleArea(double r) {
+        return Math.PI * sq(r);
+    }
 
     /**
-     * Area of an annulus/ring ({@code pi * (R^2 - r^2)}).
+     * Area of an annulus/ring ({@code pi * (outerRadius^2 - r^2)}).
      *
-     * @param R outer radius
-     * @param r inner radius
+     * @param outerRadius outer radius
+     * @param r           inner radius
      * @return area of the ring
      */
-    public static double annulusArea(double R, double r) { return Math.PI * (sq(R) - sq(r)); }
+    public static double annulusArea(double outerRadius, double r) {
+        return Math.PI * (sq(outerRadius) - sq(r));
+    }
 
     /**
      * Area of an ellipse ({@code pi * a * b}).
@@ -115,7 +133,9 @@ public final class AreaCalculator {
      * @param b semi-minor axis length
      * @return area of the ellipse
      */
-    public static double ellipseArea(double a, double b) { return Math.PI * a * b; }
+    public static double ellipseArea(double a, double b) {
+        return Math.PI * a * b;
+    }
 
     /**
      * Area of a circular sector with central angle in degrees.
@@ -168,7 +188,9 @@ public final class AreaCalculator {
      * @param a edge length
      * @return surface area of the cube
      */
-    public static double cubeSurfaceArea(double a) { return 6.0 * sq(a); }
+    public static double cubeSurfaceArea(double a) {
+        return 6.0 * sq(a);
+    }
 
     /**
      * Total surface area of a rectangular prism ({@code 2 * (ab + ac + bc)}).
@@ -189,7 +211,9 @@ public final class AreaCalculator {
      * @param h height
      * @return total surface area of the cylinder
      */
-    public static double cylinderSurfaceArea(double r, double h) { return 2.0 * Math.PI * r * (r + h); }
+    public static double cylinderSurfaceArea(double r, double h) {
+        return 2.0 * Math.PI * r * (r + h);
+    }
 
     /**
      * Total surface area of a closed right circular cone ({@code pi * r * (r + l)}).
@@ -198,7 +222,9 @@ public final class AreaCalculator {
      * @param l slant height
      * @return total surface area of the cone
      */
-    public static double coneSurfaceArea(double r, double l) { return Math.PI * r * (r + l); }
+    public static double coneSurfaceArea(double r, double l) {
+        return Math.PI * r * (r + l);
+    }
 
     /**
      * Surface area of a sphere ({@code 4 * pi * r^2}).
@@ -206,17 +232,19 @@ public final class AreaCalculator {
      * @param r sphere radius
      * @return surface area of the sphere
      */
-    public static double sphereSurfaceArea(double r) { return 4.0 * Math.PI * sq(r); }
+    public static double sphereSurfaceArea(double r) {
+        return 4.0 * Math.PI * sq(r);
+    }
 
     /**
      * Total surface area of a conical frustum (lateral area plus both circular bases).
      *
-     * @param R bottom base radius
-     * @param r top base radius
-     * @param l slant height
+     * @param outerRadius bottom base radius
+     * @param r           top base radius
+     * @param l           slant height
      * @return total surface area of the frustum
      */
-    public static double frustumSurfaceArea(double R, double r, double l) {
-        return Math.PI * ((R + r) * l + sq(R) + sq(r));
+    public static double frustumSurfaceArea(double outerRadius, double r, double l) {
+        return Math.PI * ((outerRadius + r) * l + sq(outerRadius) + sq(r));
     }
 }

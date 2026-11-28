@@ -24,7 +24,6 @@ import com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedEditText;
 import com.isaiahnoelpulidosalazar.inpsandroid.ui.SimpleList;
 
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Interactive playground tab for {@code ...inpsandroid.ui} widgets: {@link RoundedCheckBox},
@@ -90,24 +89,24 @@ public class UiFragment extends Fragment implements DemoHost.NotesListener {
 
         speedButton.setOnClickListener(v -> {
             FlippableImageView.Speed next;
-            String label;
+            int labelRes;
             switch (flippableCard.getSpeed()) {
                 case NORMAL:
                     next = FlippableImageView.Speed.FAST;
-                    label = "Speed: Fast";
+                    labelRes = R.string.speed_fast;
                     break;
                 case FAST:
                     next = FlippableImageView.Speed.SLOW;
-                    label = "Speed: Slow";
+                    labelRes = R.string.speed_slow;
                     break;
                 case SLOW:
                 default:
                     next = FlippableImageView.Speed.NORMAL;
-                    label = "Speed: Normal";
+                    labelRes = R.string.speed_normal;
                     break;
             }
             flippableCard.setSpeed(next);
-            speedButton.setText(label);
+            speedButton.setText(labelRes);
         });
 
         view.findViewById(R.id.btn_compare_drawables).setOnClickListener(v -> {
@@ -123,11 +122,8 @@ public class UiFragment extends Fragment implements DemoHost.NotesListener {
                 }
                 boolean sameFront = Drawables.equalsBitmap(requireContext(), R.drawable.ic_card_front, bmp);
                 boolean frontVsBack = Drawables.equalsBitmap(requireContext(), R.drawable.ic_card_back, bmp);
-                drawablesOutput.setText(String.format(
-                        Locale.US,
-                        "Drawables.equalsBitmap(ic_card_front, bmp) = %s\nDrawables.equalsBitmap(ic_card_back, bmp)  = %s",
-                        sameFront, frontVsBack
-                ));
+                drawablesOutput.setText(getString(
+                        R.string.ui_drawables_result_format, sameFront, frontVsBack));
             } finally {
                 bmp.recycle();
             }
@@ -136,13 +132,14 @@ public class UiFragment extends Fragment implements DemoHost.NotesListener {
         view.findViewById(R.id.btn_dialog).setOnClickListener(v -> {
             if (getActivity() instanceof DemoHost) {
                 ((DemoHost) getActivity()).showInfoDialog(
-                        "RoundedAlertDialog",
-                        "Theme-aware colors, RoundedButton actions, and parent-detaching addView()."
+                        getString(R.string.ui_dialog_title),
+                        getString(R.string.ui_dialog_message)
                 );
             }
         });
 
-        view.findViewById(R.id.btn_bottom_sheet).setOnClickListener(v -> showInteractiveBottomSheet(bounceToggle.isChecked()));
+        view.findViewById(R.id.btn_bottom_sheet).setOnClickListener(
+                v -> showInteractiveBottomSheet(bounceToggle.isChecked()));
 
         view.findViewById(R.id.btn_fullscreen).setOnClickListener(v -> {
             if (getActivity() instanceof DemoHost) {
@@ -154,7 +151,9 @@ public class UiFragment extends Fragment implements DemoHost.NotesListener {
             if (!simpleList.isCheckboxesEnabled()) {
                 List<String> items = simpleList.getItems();
                 if (pos >= 0 && pos < items.size() && getActivity() instanceof DemoHost) {
-                    ((DemoHost) getActivity()).showInfoDialog("SimpleList Row", "Selected: " + items.get(pos));
+                    ((DemoHost) getActivity()).showInfoDialog(
+                            getString(R.string.ui_list_row_dialog_title),
+                            getString(R.string.ui_list_row_selected_format, items.get(pos)));
                 }
             }
         });
@@ -185,25 +184,22 @@ public class UiFragment extends Fragment implements DemoHost.NotesListener {
     }
 
     private void updateCardStatus() {
-        drawablesOutput.setText(String.format(
-                Locale.US,
-                "FlippableImageView flipped=%s, speed=%s",
-                flippableCard.isFlipped(), flippableCard.getSpeed().name()
+        drawablesOutput.setText(getString(
+                R.string.ui_flippable_status_format,
+                flippableCard.isFlipped(),
+                flippableCard.getSpeed().name()
         ));
     }
 
     private void updateSelectionSummary() {
         if (listSelectionOutput == null || simpleList == null) return;
         if (!simpleList.isCheckboxesEnabled()) {
-            listSelectionOutput.setText("Checkbox mode OFF (tap row to inspect)");
+            listSelectionOutput.setText(R.string.ui_list_checkbox_off);
             return;
         }
         List<String> checked = simpleList.getCheckedItems();
-        listSelectionOutput.setText(String.format(
-                Locale.US,
-                "Checked (%d): %s",
-                checked.size(), checked
-        ));
+        listSelectionOutput.setText(getString(
+                R.string.ui_list_checked_format, checked.size(), checked));
     }
 
     @Override
@@ -234,23 +230,23 @@ public class UiFragment extends Fragment implements DemoHost.NotesListener {
         RoundedCheckBox showHandleCheck = new RoundedCheckBox(requireContext());
         showHandleCheck.setStyle(RoundedCheckBox.Style.CARD);
         showHandleCheck.setBounceAnimationEnabled(bounceEnabled);
-        showHandleCheck.setText("Show drag handle");
+        showHandleCheck.setText(R.string.ui_sheet_show_handle);
         showHandleCheck.setChecked(true);
 
         RoundedCheckBox draggableCheck = new RoundedCheckBox(requireContext());
         draggableCheck.setStyle(RoundedCheckBox.Style.PILL);
         draggableCheck.setBounceAnimationEnabled(bounceEnabled);
-        draggableCheck.setText("Enable swipe-to-dismiss");
+        draggableCheck.setText(R.string.ui_sheet_swipe_dismiss);
         draggableCheck.setChecked(true);
 
         RoundedCheckBox extraRoundedCheck = new RoundedCheckBox(requireContext());
         extraRoundedCheck.setStyle(RoundedCheckBox.Style.MINIMAL);
         extraRoundedCheck.setBounceAnimationEnabled(bounceEnabled);
-        extraRoundedCheck.setText("28dp top corner radius");
+        extraRoundedCheck.setText(R.string.ui_sheet_extra_radius);
         extraRoundedCheck.setChecked(false);
 
         RoundedEditText noteInput = new RoundedEditText(requireContext());
-        noteInput.setHint("Optional: add note to EasySQL & SimpleList");
+        noteInput.setHint(R.string.ui_sheet_note_hint);
         int inputPad = Math.round(14 * density);
         noteInput.setPadding(inputPad, inputPad, inputPad, inputPad);
 
@@ -267,8 +263,8 @@ public class UiFragment extends Fragment implements DemoHost.NotesListener {
         container.addView(noteInput, inputParams);
 
         RoundedBottomSheet sheet = new RoundedBottomSheet(requireContext())
-                .setTitle("RoundedBottomSheet")
-                .setSubtitle("Toggle options live or swipe down on the header to dismiss.")
+                .setTitle(getString(R.string.ui_sheet_title))
+                .setSubtitle(getString(R.string.ui_sheet_subtitle))
                 .addView(container);
 
         showHandleCheck.setOnCheckedChangeListener((cb, checked) -> sheet.setShowDragHandle(checked));
@@ -276,9 +272,9 @@ public class UiFragment extends Fragment implements DemoHost.NotesListener {
         extraRoundedCheck.setOnCheckedChangeListener((cb, checked) ->
                 sheet.setCornerRadiusDp(checked ? 28f : 24f));
 
-        sheet.setupSecondaryButton("Close")
+        sheet.setupSecondaryButton(getString(R.string.ui_sheet_close))
                 .setupSecondaryButtonOnClick(v -> sheet.dismiss());
-        sheet.setupPrimaryButton("Apply")
+        sheet.setupPrimaryButton(getString(R.string.ui_sheet_apply))
                 .setupPrimaryButtonOnClick(v -> {
                     String note = noteInput.getText() != null ? noteInput.getText().toString().trim() : "";
                     if (!note.isEmpty() && getActivity() instanceof DemoHost) {

@@ -10,8 +10,8 @@ android {
         applicationId "com.aistudio.inpsandroid.kxmpzq"
         minSdk 24
         targetSdk 36
-        versionCode 4
-        versionName "3.0.3"
+        versionCode 5
+        versionName "3.0.4"
     }
 
     signingConfigs {
@@ -36,10 +36,17 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
+
+    lint {
+        abortOnError = true
+        warningsAsErrors = true
+        checkReleaseBuilds = true
+        lintConfig = file('lint.xml')
+    }
 }
 
 dependencies {
     implementation project(':inpsAndroid')
-    implementation 'com.google.android.material:material:1.12.0'
-    implementation 'androidx.viewpager2:viewpager2:1.1.0'
+    implementation libs.material
+    implementation libs.viewpager2
 }

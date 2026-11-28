@@ -21,7 +21,9 @@ public class RoundedConstraintLayout extends ConstraintLayout {
      *
      * @param context Android context
      */
-    public RoundedConstraintLayout(@NonNull Context context) { this(context, null); }
+    public RoundedConstraintLayout(@NonNull Context context) {
+        this(context, null);
+    }
 
     /**
      * XML inflation constructor reading {@code app:inpsCornerRadius} and {@code app:inpsIsTranslucent}.
@@ -29,7 +31,9 @@ public class RoundedConstraintLayout extends ConstraintLayout {
      * @param context Android context
      * @param attrs   XML attribute set
      */
-    public RoundedConstraintLayout(@NonNull Context context, @Nullable AttributeSet attrs) { this(context, attrs, 0); }
+    public RoundedConstraintLayout(@NonNull Context context, @Nullable AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
 
     /**
      * Styled XML inflation constructor.
@@ -51,7 +55,12 @@ public class RoundedConstraintLayout extends ConstraintLayout {
      * @param defStyleAttr default theme style attribute
      * @param defStyleRes  default style resource
      */
-    public RoundedConstraintLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public RoundedConstraintLayout(
+            @NonNull Context context,
+            @Nullable AttributeSet attrs,
+            int defStyleAttr,
+            int defStyleRes
+    ) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(attrs, defStyleAttr);
     }
@@ -61,9 +70,9 @@ public class RoundedConstraintLayout extends ConstraintLayout {
                 this,
                 attrs,
                 defStyleAttr,
-                R.styleable.RoundedConstraintLayout,
-                R.styleable.RoundedConstraintLayout_inpsCornerRadius,
-                R.styleable.RoundedConstraintLayout_inpsIsTranslucent,
+                R.styleable.InpsRoundedConstraintLayout,
+                R.styleable.InpsRoundedConstraintLayout_inpsCornerRadius,
+                R.styleable.InpsRoundedConstraintLayout_inpsIsTranslucent,
                 false,
                 RoundedViewHelper.dp(getContext(), RoundedViewHelper.DEFAULT_LAYOUT_RADIUS_DP),
                 true,

@@ -1,9 +1,9 @@
 # inpsAndroid
 
-Welcome to the **inpsAndroid** documentation (version `3.0.3`). This library eliminates boilerplate across Android projects by providing core networking, SQLite, notifications, threading, conversion, and validation utilities alongside drop-in UI widgets and educational algorithm/audio modules.
+Welcome to the **inpsAndroid** documentation (version `3.0.4`). This library eliminates boilerplate across Android projects by providing core networking, SQLite, notifications, threading, conversion, and validation utilities alongside drop-in UI widgets and educational algorithm/audio modules.
 
 ```groovy
-implementation 'com.github.isaiahnoelpulidosalazar:inpsAndroid:3.0.3'
+implementation 'com.github.isaiahnoelpulidosalazar:inpsAndroid:3.0.4'
 ```
 
 ## Purpose & Scope
@@ -14,6 +14,8 @@ implementation 'com.github.isaiahnoelpulidosalazar:inpsAndroid:3.0.3'
 - **`ui`** — Configurable rounded widgets (`Rounded*`), `RoundedAlertDialog`, `RoundedBottomSheet`, `SimpleList`, `FlippableImageView`, `Fullscreen`, and `Drawables`
 - **`edu`** — Sorting algorithm implementations (`Sort`), geometric area/surface-area formulas (`AreaCalculator`), and MIDI-addressed piano synthesis (`SoundSynthesizer`)
 
+> **Breaking changes in `3.0.4`:** All `<declare-styleable>` groups in `inps_attrs.xml` have been prefixed with `Inps*` (`InpsRoundedButton`, `InpsRoundedCheckBox`, etc.) to satisfy `resourcePrefix 'inps_'`. See [Migrating from 3.0.3 to 3.0.4](#migrating-from-303-to-304) below.
+>
 > **Breaking changes in `3.0.0`:** Deprecated v1 wrappers, `crypto` (`ClassicalCiphers`), and `Memory<T>` have been removed, packages have been reorganized under lowercase `com.isaiahnoelpulidosalazar.inpsandroid`, and XML resources/attributes use the `inps_` / `inps` prefix. See [CHANGELOG.md](./CHANGELOG.md) for the complete migration summary.
 
 ### Package Layout
@@ -62,6 +64,29 @@ implementation 'com.github.isaiahnoelpulidosalazar:inpsAndroid:3.0.3'
 - **`Sort`** (`...edu.sort.Sort`) — Comparison, non-comparison (including negative-capable `countingSort`), and structure-based sorting algorithms.
 - **`AreaCalculator`** — 2D area and 3D surface-area formulas.
 - **`SoundSynthesizer`** — Asynchronous MIDI-addressed piano note synthesis (`prepare(int...)`, `playNote`, `frequencyOf`, `release`) using low-latency `AudioTrack` on API 26+.
+
+## Migrating from 3.0.3 to 3.0.4
+
+Version `3.0.4` resolves all Android Lint, Checkstyle, and API 36 deprecation warnings and adds JaCoCo unit test coverage reporting. It introduces one source-level breaking change if your code references generated `R.styleable.*` constants directly:
+
+### 1. Prefixed `<declare-styleable>` Names (`Inps*`)
+
+To comply strictly with `resourcePrefix 'inps_'`, every `<declare-styleable>` block in `inps_attrs.xml` is now prefixed with `Inps`. XML layout attributes (`app:inpsCornerRadius`, `app:inpsIsTranslucent`, `app:inpsCheckStyle`, etc.) remain **unchanged**—only programmatic references to `R.styleable.*` are affected:
+
+| `3.0.3` | `3.0.4` |
+|---|---|
+| `R.styleable.RoundedButton` | `R.styleable.InpsRoundedButton` |
+| `R.styleable.RoundedEditText` | `R.styleable.InpsRoundedEditText` |
+| `R.styleable.RoundedConstraintLayout` | `R.styleable.InpsRoundedConstraintLayout` |
+| `R.styleable.RoundedLinearLayout` | `R.styleable.InpsRoundedLinearLayout` |
+| `R.styleable.RoundedCheckBox` | `R.styleable.InpsRoundedCheckBox` |
+| `R.styleable.SimpleList` | `R.styleable.InpsSimpleList` |
+| `R.styleable.FlippableImageView` | `R.styleable.InpsFlippableImageView` |
+
+### 2. Quality, Build & Runtime Improvements (Non-Breaking)
+- **API 36 Accessibility Compatibility**: `RoundedCheckBox` uses `AccessibilityNodeInfo.setChecked(int)` on API 36+ (`Build.VERSION_CODES.BAKLAVA`) and `AccessibilityNodeInfoCompat.setChecked(boolean)` on earlier APIs.
+- **UI & Lint Hardening**: `SimpleList` replaces full `notifyDataSetChanged()` calls with targeted `notifyItemRangeChanged(...)`, and `RoundedAlertDialog` / `RoundedBottomSheet` supply explicit non-null parent containers during layout inflation.
+- **Tooling & Dependencies**: Added Checkstyle (`config/checkstyle/checkstyle.xml`) and JaCoCo unit test coverage (`:inpsAndroid:createDebugUnitTestCoverageReport`), and updated AndroidX/Material/Robolectric test dependencies in `gradle/libs.versions.toml`.
 
 ## Migrating from v1 / v2 to 3.0.0
 
@@ -122,12 +147,13 @@ Browse the per-module Markdown reference pages in [`docs/`](./docs/README.md):
 - **Edu:** [Sort](./docs/sort.md) · [AreaCalculator](./docs/area-calculator.md) · [SoundSynthesizer](./docs/sound-synthesizer.md)
 - **Upgrading:** [Migrating from v1 / v2 to 3.0.0](./docs/migrating-to-v3.md)
 
-## Testing
+## Testing & Quality Checks
 
-Run the library unit and Robolectric test suite with:
+Run the library unit/Robolectric test suite, coverage report, Android Lint, and Checkstyle with:
 
 ```bash
-gradle :inpsAndroid:testDebugUnitTest
+gradle :inpsAndroid:testDebugUnitTest :inpsAndroid:createDebugUnitTestCoverageReport
+gradle lint checkstyle
 ```
 
-See [TESTING.md](./TESTING.md) for instructions on writing and running JUnit 4 and Robolectric tests, [CONTRIBUTING.md](./CONTRIBUTING.md) for issue and pull request guidelines, [CHANGELOG.md](./CHANGELOG.md) for the complete `3.0.0` changelog and historical v1/v2 notes, and [LICENSE](./LICENSE) for licensing terms.
+See [TESTING.md](./TESTING.md) for instructions on writing and running JUnit 4 and Robolectric tests, [CONTRIBUTING.md](./CONTRIBUTING.md) for issue and pull request guidelines, [CHANGELOG.md](./CHANGELOG.md) for the complete `3.0.4` changelog and historical v1/v2 notes, and [LICENSE](./LICENSE) for licensing terms.

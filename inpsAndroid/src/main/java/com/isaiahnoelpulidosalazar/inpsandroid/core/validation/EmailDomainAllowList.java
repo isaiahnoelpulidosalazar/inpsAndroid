@@ -77,7 +77,10 @@ public final class EmailDomainAllowList {
          * @param name domain label before the dot
          * @return this builder for chaining
          */
-        public Builder addDomainName(String name) { add(names, name); return this; }
+        public Builder addDomainName(String name) {
+            add(names, name);
+            return this;
+        }
 
         /**
          * Adds an accepted top-level domain extension for split mode (e.g. {@code "com"}).
@@ -85,7 +88,10 @@ public final class EmailDomainAllowList {
          * @param extension domain suffix after the dot
          * @return this builder for chaining
          */
-        public Builder addDomainExtension(String extension) { add(extensions, extension); return this; }
+        public Builder addDomainExtension(String extension) {
+            add(extensions, extension);
+            return this;
+        }
 
         /**
          * Adds an accepted complete domain for full-domain mode (e.g. {@code "gmail.com"}).
@@ -93,7 +99,10 @@ public final class EmailDomainAllowList {
          * @param domain full domain host string
          * @return this builder for chaining
          */
-        public Builder addDomain(String domain) { add(domains, domain); return this; }
+        public Builder addDomain(String domain) {
+            add(domains, domain);
+            return this;
+        }
 
         /**
          * Selects whether validation matches full domains ({@code true}) or split
@@ -102,14 +111,19 @@ public final class EmailDomainAllowList {
          * @param useFullDomain {@code true} for full-domain matching, {@code false} for split mode
          * @return this builder for chaining
          */
-        public Builder useFullDomain(boolean useFullDomain) { this.useFullDomain = useFullDomain; return this; }
+        public Builder useFullDomain(boolean useFullDomain) {
+            this.useFullDomain = useFullDomain;
+            return this;
+        }
 
         /**
          * Builds an immutable {@link EmailDomainAllowList} from the configured rules.
          *
          * @return configured allow-list validator
          */
-        public EmailDomainAllowList build() { return new EmailDomainAllowList(this); }
+        public EmailDomainAllowList build() {
+            return new EmailDomainAllowList(this);
+        }
 
         private static void add(Set<String> set, String value) {
             if (value != null && !value.isEmpty()) {

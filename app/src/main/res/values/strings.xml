@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">inpsAndroid</string>
-    <string name="docs_version_badge">v3.0.3</string>
+    <string name="docs_version_badge">v3.0.4</string>
     <string name="docs_subtitle">Android Utility, UI &amp; Edu Library Docs</string>
 
     <string name="tab_overview">Overview</string>
@@ -31,4 +31,145 @@
     <string name="cb_pill_sample">Pill style checkbox</string>
     <string name="cb_minimal_sample">Minimal row checkbox</string>
     <string name="cb_list_mode">Enable SimpleList Checkboxes</string>
+
+    <!-- Overview Tab -->
+    <string name="badge_getting_started">GETTING STARTED</string>
+    <string name="overview_title">Modular Android Boilerplate Killer</string>
+    <string name="overview_description">inpsAndroid 3.0.4 organizes utilities, drop-in UI widgets, and educational algorithm/audio modules under com.isaiahnoelpulidosalazar.inpsandroid.</string>
+    <string name="overview_gradle_snippet">dependencies {\n    implementation \'com.github.isaiahnoelpulidosalazar:inpsAndroid:3.0.4\'\n}</string>
+    <string name="overview_architecture_title">Package Architecture</string>
+    <string name="pkg_core_label">…inpsandroid.core</string>
+    <string name="pkg_core_desc">MainThread, WebRequest, EasySQL, EasyNotification, Converters, EmailDomainAllowList, StringChecks, TimeLeft</string>
+    <string name="pkg_ui_label">…inpsandroid.ui</string>
+    <string name="pkg_ui_desc">RoundedButton, RoundedCheckBox, RoundedEditText, RoundedLinearLayout, RoundedConstraintLayout, RoundedAlertDialog, RoundedBottomSheet, SimpleList, FlippableImageView, Fullscreen, Drawables</string>
+    <string name="pkg_edu_label">…inpsandroid.edu</string>
+    <string name="pkg_edu_desc">edu.sort.Sort, AreaCalculator, SoundSynthesizer</string>
+    <string name="btn_explore_core">Explore Core</string>
+    <string name="btn_explore_ui">Explore UI</string>
+    <string name="btn_explore_edu">Explore Edu</string>
+    <string name="overview_requirements_title">Requirements &amp; Theme Setup</string>
+    <string name="overview_requirements_body">• minSdk 24, compileSdk 36, Java 17\n• AppCompat or Material theme defining colorPrimary, colorControlHighlight, and android:colorBackground\n• No Material dependency required by the library itself\n• Library resources &amp; attributes are prefixed with inps_ / inps / Inps</string>
+
+    <!-- Core Tab -->
+    <string name="badge_converters_validation">CONVERTERS &amp; VALIDATION</string>
+    <string name="core_converters_title">Converters, EmailDomainAllowList &amp; StringChecks</string>
+    <string name="core_converters_desc">Null-safe Base64 encoding, ThreadLocal date formatting, digit/symbol checks, and allow-list email validation requiring a non-empty local part.</string>
+    <string name="core_output_placeholder">Run any action above to inspect live output.</string>
+    <string name="core_easysql_title">EasySQL &amp; MainThread</string>
+    <string name="core_easysql_desc">Parameterized SQLite wrapper with validated identifiers, transactions, and tableExists(). Methods block on disk I/O; dispatch results back to the UI with MainThread.post().</string>
+    <string name="core_easysql_snippet">easySQL.inTransaction(() -&gt; {\n  easySQL.insert(\"notes\", row);\n});\nMainThread.post(() -&gt; refreshUi());</string>
+    <string name="core_db_status_default">EasySQL rows synced with UI tab SimpleList.</string>
+    <string name="core_webrequest_title">WebRequest &amp; TimeLeft</string>
+    <string name="core_webrequest_desc">WebRequest uses a 4-thread pool and a bounded queue of 64, returning a cancellable Call handle with json(), maxResponseBytes(), and charset parsing.</string>
+    <string name="core_webrequest_snippet">WebRequest.Call call = WebRequest.post(url)\n  .json(\"{\\\"hello\\\":\\\"world\\\"}\")\n  .maxResponseBytes(1024 * 1024)\n  .enqueue(callback);</string>
+    <string name="core_time_output_placeholder">TimeLeft.seconds / minutes / hours ready.</string>
+    <string name="badge_notifications">NOTIFICATIONS</string>
+    <string name="core_notifications_title">EasyNotification Dispatcher</string>
+    <string name="core_notifications_desc">Channel-aware notification builder with API 33+ POST_NOTIFICATIONS permission checks, BigText/Inbox/BigPicture styles, and safe PendingIntents.</string>
+    <string name="core_notification_ready">EasyNotification ready.</string>
+
+    <string name="core_default_input_text">hello inpsAndroid</string>
+    <string name="core_default_email">developer@gmail.com</string>
+    <string name="core_default_note_format">Note @ %1$s</string>
+    <string name="core_output_base64_format">Capitalized: %1$s\nBase64: %2$s</string>
+    <string name="core_output_email_format">Email \"%1$s\" allow-listed: %2$b\nContains digit: %3$b</string>
+    <string name="core_output_note_saved_format">Saved \"%1$s\" to EasySQL (check UI -&gt; SimpleList).</string>
+    <string name="core_output_time_format">TimeLeft(+90s): %1$.0f sec / %2$.2f min\nTimeLeft(+2h15m): %3$.2f hours</string>
+    <string name="core_db_status_format">EasySQL active rows: %1$d (synced with UI -&gt; SimpleList).</string>
+    <string name="core_notif_channel_name">Demo Alerts</string>
+    <string name="core_notif_channel_desc">Notifications dispatched from the inpsAndroid Core tab</string>
+    <string name="core_notif_title">inpsAndroid Alert</string>
+    <string name="core_notif_default_body">Hello from EasyNotification v3.0.4!</string>
+    <string name="core_notif_bigtext_title">Expandable Summary</string>
+    <string name="core_notif_bigtext_default_body">Expandable BigText notification dispatched cleanly via EasyNotification.</string>
+    <string name="core_notif_bigtext_expanded_format">%1$s\n\nTap to reopen inpsAndroid 3.0.4.</string>
+    <string name="core_notif_subtext">v3.0.4</string>
+    <string name="core_notif_bigtext_label">demo_alerts (BigText)</string>
+    <string name="core_notif_denied">Blocked: POST_NOTIFICATIONS permission denied.</string>
+    <string name="core_notif_requesting">Requesting POST_NOTIFICATIONS permission…</string>
+    <string name="core_notif_blocked">Blocked: notifications disabled or permission denied.</string>
+    <string name="core_notif_dispatched_format">Dispatched notification id=%1$d on %2$s.</string>
+    <string name="core_notif_cancelled">Cancelled all active app notifications.</string>
+
+    <!-- UI Tab -->
+    <string name="badge_rounded_widgets">ROUNDED WIDGETS</string>
+    <string name="ui_rounded_title">RoundedButton, EditText &amp; Layouts</string>
+    <string name="ui_rounded_desc">Shared RoundedViewHelper setup with app:inpsCornerRadius, app:inpsIsTranslucent, outline clipping on containers, and contrast-aware text color on RoundedButton.</string>
+    <string name="ui_rounded_live_title">Live RoundedLinearLayout (inpsIsTranslucent=\"true\")</string>
+    <string name="badge_checkboxes_motion">CHECKBOXES &amp; MOTION</string>
+    <string name="ui_checkbox_title">RoundedCheckBox &amp; Bounce Toggle</string>
+    <string name="ui_checkbox_desc">Checkable component with CARD, PILL, and MINIMAL styles plus a toggleable overshoot bounce animation (app:inpsBounceAnimation).</string>
+    <string name="ui_flippable_title">FlippableImageView &amp; Drawables</string>
+    <string name="ui_flippable_desc">3D card flip with .withLayer(), state persistence, setFrontBitmap/setBackBitmap, and pixel-level Drawables.equalsBitmap().</string>
+    <string name="ui_drawables_placeholder">Tap Flip Card or Compare Drawables.</string>
+    <string name="ui_simplelist_title">SimpleList (Checkboxes + DiffUtil)</string>
+    <string name="ui_simplelist_desc">Supports classic TextView rows or RoundedCheckBox rows with bounce animation toggle. Long-press any row to remove from EasySQL.</string>
+    <string name="ui_list_selection_placeholder">Checked (0): []</string>
+
+    <string name="speed_normal">Speed: Normal</string>
+    <string name="speed_fast">Speed: Fast</string>
+    <string name="speed_slow">Speed: Slow</string>
+    <string name="ui_drawables_result_format">Drawables.equalsBitmap(ic_card_front, bmp) = %1$b\nDrawables.equalsBitmap(ic_card_back, bmp)  = %2$b</string>
+    <string name="ui_flippable_status_format">FlippableImageView flipped=%1$b, speed=%2$s</string>
+    <string name="ui_dialog_title">RoundedAlertDialog</string>
+    <string name="ui_dialog_message">Theme-aware colors, RoundedButton actions, and parent-detaching addView().</string>
+    <string name="ui_list_row_dialog_title">SimpleList Row</string>
+    <string name="ui_list_row_selected_format">Selected: %1$s</string>
+    <string name="ui_list_checkbox_off">Checkbox mode OFF (tap row to inspect)</string>
+    <string name="ui_list_checked_format">Checked (%1$d): %2$s</string>
+    <string name="ui_sheet_show_handle">Show drag handle</string>
+    <string name="ui_sheet_swipe_dismiss">Enable swipe-to-dismiss</string>
+    <string name="ui_sheet_extra_radius">28dp top corner radius</string>
+    <string name="ui_sheet_note_hint">Optional: add note to EasySQL &amp; SimpleList</string>
+    <string name="ui_sheet_title">RoundedBottomSheet</string>
+    <string name="ui_sheet_subtitle">Toggle options live or swipe down on the header to dismiss.</string>
+    <string name="ui_sheet_close">Close</string>
+    <string name="ui_sheet_apply">Apply</string>
+
+    <!-- Edu Tab -->
+    <string name="badge_algorithms">ALGORITHMS</string>
+    <string name="edu_sort_title">Sort (edu.sort.Sort)</string>
+    <string name="edu_sort_desc">Comparison, non-comparison (negative-supporting countingSort with a 10M range cap), and structure sorts. Throws NullPointerException on null inputs.</string>
+    <string name="btn_sort_counting">Counting</string>
+    <string name="btn_sort_quick">Quick</string>
+    <string name="btn_sort_merge">Merge</string>
+    <string name="btn_sort_heap">Heap</string>
+    <string name="edu_sort_placeholder">Input: [42, -7, 19, 3, 25, 0, -12]</string>
+    <string name="edu_area_title">AreaCalculator</string>
+    <string name="edu_area_desc">2D area and 3D surface-area formulas with precomputed sqrt(3) and deduplicated geometry helpers.</string>
+    <string name="edu_area_placeholder">Tap Run AreaCalculator to evaluate formulas.</string>
+    <string name="edu_sound_title">SoundSynthesizer</string>
+    <string name="edu_sound_desc">Asynchronous MIDI-addressed piano synthesis with prepare(midiNotes), single-thread AudioTrack playback, and low-latency mode on API 26+.</string>
+    <string name="btn_note_c4">C4</string>
+    <string name="btn_note_e4">E4</string>
+    <string name="btn_note_g4">G4</string>
+    <string name="btn_note_c5">C5</string>
+    <string name="edu_sound_placeholder">Prepared MIDI notes: 60 (C4), 64 (E4), 67 (G4), 72 (C5)</string>
+
+    <string name="edu_area_result_format">circleArea(r=5)       = %1$.2f\ntriangleArea(8, 6)    = %2$.2f\nrectangleArea(12,4.5) = %3$.2f\nsphereSurfaceArea(3)  = %4$.2f</string>
+    <string name="edu_sort_result_format">%1$s\nIn:  %2$s\nOut: %3$s</string>
+    <string name="edu_sound_playing_format">Playing %1$s (MIDI %2$d -&gt; %3$.2f Hz)</string>
+
+    <!-- Migration Tab -->
+    <string name="badge_upgrading_304">UPGRADING TO 3.0.4</string>
+    <string name="migration_304_title">Migrating from 3.0.3 to 3.0.4</string>
+    <string name="migration_304_desc">Version 3.0.4 prefixes all &lt;declare-styleable&gt; definitions with Inps* to satisfy resourcePrefix \'inps_\', enables Checkstyle and JaCoCo unit test coverage, and resolves Android Lint / API 36 deprecations. XML layout attributes (app:inps*) are unchanged.</string>
+    <string name="migration_304_code">R.styleable.RoundedButton           -&gt; R.styleable.InpsRoundedButton\nR.styleable.RoundedEditText         -&gt; R.styleable.InpsRoundedEditText\nR.styleable.RoundedConstraintLayout -&gt; R.styleable.InpsRoundedConstraintLayout\nR.styleable.RoundedLinearLayout     -&gt; R.styleable.InpsRoundedLinearLayout\nR.styleable.RoundedCheckBox         -&gt; R.styleable.InpsRoundedCheckBox\nR.styleable.SimpleList              -&gt; R.styleable.InpsSimpleList\nR.styleable.FlippableImageView      -&gt; R.styleable.InpsFlippableImageView</string>
+
+    <string name="badge_upgrading_300">UPGRADING TO 3.0.0</string>
+    <string name="migration_300_title">Migrating from v1 &amp; v2</string>
+    <string name="migration_300_desc">inpsAndroid 3.0.0 removes all deprecated v1 shims and reorganizes classes into lowercase core, ui, and edu packages under com.isaiahnoelpulidosalazar.inpsandroid.</string>
+    <string name="migration_section_1_title">1. Class &amp; Package Mapping</string>
+    <string name="migration_section_1_code">URLRequest / HttpRequest  -&gt; core.network.WebRequest\nEasySQL (v1) / Database   -&gt; core.database.EasySQL\nConvert / Converters      -&gt; core.convert.Converters\nCheck / EmailValidator    -&gt; core.validation.EmailDomainAllowList\nCheck / StringChecks      -&gt; core.validation.StringChecks\nActions / MainThread      -&gt; core.concurrent.MainThread\nActions / Fullscreen      -&gt; ui.Fullscreen\nDrawables                 -&gt; ui.Drawables\nSort                      -&gt; edu.sort.Sort\nCipher / ClassicalCiphers -&gt; Removed (use javax.crypto)\nMemory&lt;T&gt;                 -&gt; Removed (use ArrayList&lt;T&gt;)</string>
+    <string name="migration_section_2_title">2. API &amp; Behavior Changes</string>
+    <string name="migration_section_2_body">• Sort: pigeonholeSort merged into countingSort (supports negatives); timsort removed; null input throws NullPointerException.\n• AreaCalculator: removed parallelogramArea, rightTriangleArea, and squareAsRhombusArea.\n• FlippableImageView: removed toBitmap(); bitmap setters renamed to setFrontBitmap / setBackBitmap.\n• SimpleList: now extends FrameLayout wrapping a RecyclerView with ListAdapter + DiffUtil.</string>
+    <string name="migration_section_3_title">3. Prefixed XML Attributes &amp; Resources</string>
+    <string name="migration_section_3_code">app:cornerRadius      -&gt; app:inpsCornerRadius\napp:isTranslucent     -&gt; app:inpsIsTranslucent\napp:reverseBackImage  -&gt; app:inpsReverseBackImage\napp:flipSpeed         -&gt; app:inpsFlipSpeed\n@color/black, @color/white -&gt; Removed\ndrawables &amp; layouts   -&gt; inps_* prefix</string>
+
+    <!-- MainActivity -->
+    <string name="dialog_btn_close">Close</string>
+    <string name="dialog_btn_ok">OK</string>
+    <string name="seed_note_1">Tap a row to inspect</string>
+    <string name="seed_note_2">Long-press to delete</string>
+    <string name="seed_note_3">inpsAndroid 3.0.4 ready</string>
 </resources>

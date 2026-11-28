@@ -29,7 +29,7 @@
                 android:paddingTop="3dp"
                 android:paddingEnd="10dp"
                 android:paddingBottom="3dp"
-                android:text="CONVERTERS &amp; VALIDATION"
+                android:text="@string/badge_converters_validation"
                 android:textColor="@color/doc_primary_ink"
                 android:textSize="11sp"
                 android:textStyle="bold" />
@@ -38,7 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Converters, EmailDomainAllowList &amp; StringChecks"
+                android:text="@string/core_converters_title"
                 android:textColor="@color/doc_ink"
                 android:textSize="17sp"
                 android:textStyle="bold" />
@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:lineSpacingExtra="3dp"
-                android:text="Null-safe Base64 encoding, ThreadLocal date formatting, digit/symbol checks, and allow-list email validation requiring a non-empty local part."
+                android:text="@string/core_converters_desc"
                 android:textColor="@color/doc_ink_muted"
                 android:textSize="14sp" />
 
@@ -115,7 +115,7 @@
                 android:background="@drawable/bg_code_block"
                 android:fontFamily="monospace"
                 android:padding="12dp"
-                android:text="Run any action above to inspect live output."
+                android:text="@string/core_output_placeholder"
                 android:textColor="@color/doc_ink"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -132,7 +132,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="EasySQL &amp; MainThread"
+                android:text="@string/core_easysql_title"
                 android:textColor="@color/doc_ink"
                 android:textSize="17sp"
                 android:textStyle="bold" />
@@ -142,7 +142,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:lineSpacingExtra="3dp"
-                android:text="Parameterized SQLite wrapper with validated identifiers, transactions, and tableExists(). Methods block on disk I/O; dispatch results back to the UI with MainThread.post()."
+                android:text="@string/core_easysql_desc"
                 android:textColor="@color/doc_ink_muted"
                 android:textSize="14sp" />
 
@@ -153,7 +153,7 @@
                 android:background="@drawable/bg_code_block"
                 android:fontFamily="monospace"
                 android:padding="12dp"
-                android:text="easySQL.inTransaction(() -> {\n  easySQL.insert(&quot;notes&quot;, row);\n});\nMainThread.post(() -> refreshUi());"
+                android:text="@string/core_easysql_snippet"
                 android:textColor="@color/doc_ink"
                 android:textSize="12sp" />
 
@@ -162,7 +162,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="EasySQL rows synced with UI tab SimpleList."
+                android:text="@string/core_db_status_default"
                 android:textColor="@color/doc_accent"
                 android:textSize="13sp"
                 android:textStyle="bold" />
@@ -180,7 +180,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="WebRequest &amp; TimeLeft"
+                android:text="@string/core_webrequest_title"
                 android:textColor="@color/doc_ink"
                 android:textSize="17sp"
                 android:textStyle="bold" />
@@ -190,7 +190,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:lineSpacingExtra="3dp"
-                android:text="WebRequest uses a 4-thread pool and a bounded queue of 64, returning a cancellable Call handle with json(), maxResponseBytes(), and charset parsing."
+                android:text="@string/core_webrequest_desc"
                 android:textColor="@color/doc_ink_muted"
                 android:textSize="14sp" />
 
@@ -201,7 +201,7 @@
                 android:background="@drawable/bg_code_block"
                 android:fontFamily="monospace"
                 android:padding="12dp"
-                android:text="WebRequest.Call call = WebRequest.post(url)\n  .json(&quot;{\&quot;hello\&quot;:\&quot;world\&quot;}&quot;)\n  .maxResponseBytes(1024 * 1024)\n  .enqueue(callback);"
+                android:text="@string/core_webrequest_snippet"
                 android:textColor="@color/doc_ink"
                 android:textSize="12sp" />
 
@@ -224,7 +224,7 @@
                 android:background="@drawable/bg_code_block"
                 android:fontFamily="monospace"
                 android:padding="12dp"
-                android:text="TimeLeft.seconds / minutes / hours ready."
+                android:text="@string/core_time_output_placeholder"
                 android:textColor="@color/doc_ink"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -246,7 +246,7 @@
                 android:paddingTop="3dp"
                 android:paddingEnd="10dp"
                 android:paddingBottom="3dp"
-                android:text="NOTIFICATIONS"
+                android:text="@string/badge_notifications"
                 android:textColor="@color/doc_accent"
                 android:textSize="11sp"
                 android:textStyle="bold" />
@@ -255,7 +255,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="EasyNotification Dispatcher"
+                android:text="@string/core_notifications_title"
                 android:textColor="@color/doc_ink"
                 android:textSize="17sp"
                 android:textStyle="bold" />
@@ -265,7 +265,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:lineSpacingExtra="3dp"
-                android:text="Channel-aware notification builder with API 33+ POST_NOTIFICATIONS permission checks, BigText/Inbox/BigPicture styles, and safe PendingIntents."
+                android:text="@string/core_notifications_desc"
                 android:textColor="@color/doc_ink_muted"
                 android:textSize="14sp" />
 
@@ -319,7 +319,7 @@
                 android:background="@drawable/bg_code_block"
                 android:fontFamily="monospace"
                 android:padding="12dp"
-                android:text="EasyNotification ready."
+                android:text="@string/core_notification_ready"
                 android:textColor="@color/doc_ink"
                 android:textSize="12sp" />
         </LinearLayout>

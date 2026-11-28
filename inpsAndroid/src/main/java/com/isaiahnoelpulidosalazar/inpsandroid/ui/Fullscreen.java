@@ -121,6 +121,10 @@ public final class Fullscreen {
         if (!(activity instanceof AppCompatActivity)) return;
         ActionBar bar = ((AppCompatActivity) activity).getSupportActionBar();
         if (bar == null) return;
-        if (visible) bar.show(); else bar.hide();
+        if (visible) {
+            bar.show();
+        } else {
+            bar.hide();
+        }
     }
 }

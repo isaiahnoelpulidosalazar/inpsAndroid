@@ -1,5 +1,18 @@
 # Changelog
 
+## 3.0.4
+
+Quality, tooling, and resource-prefix hardening release introducing Checkstyle, JaCoCo test coverage reporting, updated dependencies, and zero-warning Lint/javac compliance.
+
+### Breaking Changes
+- **Prefixed `<declare-styleable>` Groups (`inps_attrs.xml`)**: Renamed all 7 styleable declarations to satisfy `resourcePrefix 'inps_'`: `InpsRoundedButton`, `InpsRoundedEditText`, `InpsRoundedConstraintLayout`, `InpsRoundedLinearLayout`, `InpsRoundedCheckBox`, `InpsSimpleList`, and `InpsFlippableImageView`. XML attributes (`app:inps*`) are unchanged; only direct `R.styleable.*` references require updating.
+
+### Quality, Tooling & Fixes
+- **Checkstyle Enforcement**: Added `config/checkstyle/checkstyle.xml` (Google-based 4-space ruleset) and a manually registered `checkstyle` verification task across modules with `maxWarnings = 0` and `-Xlint:deprecation -Xlint:unchecked`.
+- **Unit Test Coverage & CI**: Enabled `enableUnitTestCoverage = true` for `:inpsAndroid` debug builds and updated `.github/workflows/test_inpsAndroid.yml` to run `./gradlew lint checkstyle`, `./gradlew test :inpsAndroid:createDebugUnitTestCoverageReport`, and upload both test/lint/checkstyle reports and coverage artifacts.
+- **API 36 & Lint Cleanup**: Updated `RoundedCheckBox` accessibility state handling for API 36 (`BAKLAVA`), replaced `SimpleList` `notifyDataSetChanged()` calls with `notifyItemRangeChanged(...)`, fixed `[InflateParams]` in `RoundedAlertDialog` / `RoundedBottomSheet`, and cleared all `:app` Lint and `UiWidgetsTest` Robolectric `4.18.1` issues.
+- **Dependency Updates**: Centralized dependencies in `gradle/libs.versions.toml` and updated AndroidX (`appcompat:1.8.0`, `recyclerview:1.4.0`, `constraintlayout:2.2.2`, `viewpager2:1.1.0`), Material (`1.14.0`), AndroidX Test Core (`1.7.0`), and Robolectric (`4.18.1` / `15-robolectric-14663667-2-i7`).
+
 ## 3.0.3
 
 Maintenance release fixing Robolectric test runtime artifact fetching in CI and offline environments.

@@ -14,7 +14,6 @@ import com.isaiahnoelpulidosalazar.inpsandroid.edu.AreaCalculator;
 import com.isaiahnoelpulidosalazar.inpsandroid.edu.sort.Sort;
 
 import java.util.Arrays;
-import java.util.Locale;
 
 /**
  * Interactive playground tab for {@code ...inpsandroid.edu} modules: {@link Sort},
@@ -60,23 +59,23 @@ public class EduFragment extends Fragment {
             double triangle = AreaCalculator.triangleArea(8.0, 6.0);
             double rect = AreaCalculator.rectangleArea(12.0, 4.5);
             double sphere = AreaCalculator.sphereSurfaceArea(3.0);
-            areaOutput.setText(String.format(
-                    Locale.US,
-                    "circleArea(r=5)       = %.2f\ntriangleArea(8, 6)    = %.2f\nrectangleArea(12,4.5) = %.2f\nsphereSurfaceArea(3)  = %.2f",
-                    circle, triangle, rect, sphere
-            ));
+            areaOutput.setText(getString(
+                    R.string.edu_area_result_format, circle, triangle, rect, sphere));
         });
 
-        view.findViewById(R.id.btn_note_c4).setOnClickListener(v -> playNote(60, "C4"));
-        view.findViewById(R.id.btn_note_e4).setOnClickListener(v -> playNote(64, "E4"));
-        view.findViewById(R.id.btn_note_g4).setOnClickListener(v -> playNote(67, "G4"));
-        view.findViewById(R.id.btn_note_c5).setOnClickListener(v -> playNote(72, "C5"));
+        view.findViewById(R.id.btn_note_c4).setOnClickListener(
+                v -> playNote(60, getString(R.string.btn_note_c4)));
+        view.findViewById(R.id.btn_note_e4).setOnClickListener(
+                v -> playNote(64, getString(R.string.btn_note_e4)));
+        view.findViewById(R.id.btn_note_g4).setOnClickListener(
+                v -> playNote(67, getString(R.string.btn_note_g4)));
+        view.findViewById(R.id.btn_note_c5).setOnClickListener(
+                v -> playNote(72, getString(R.string.btn_note_c5)));
     }
 
     private void showSorted(String algorithm, int[] result) {
-        sortOutput.setText(String.format(
-                Locale.US,
-                "%s\nIn:  %s\nOut: %s",
+        sortOutput.setText(getString(
+                R.string.edu_sort_result_format,
                 algorithm,
                 Arrays.toString(SAMPLE_ARRAY),
                 Arrays.toString(result)
@@ -86,11 +85,8 @@ public class EduFragment extends Fragment {
     private void playNote(int midi, String label) {
         if (getActivity() instanceof DemoHost) {
             double hz = ((DemoHost) getActivity()).playMidiNote(midi);
-            soundOutput.setText(String.format(
-                    Locale.US,
-                    "Playing %s (MIDI %d -> %.2f Hz)",
-                    label, midi, hz
-            ));
+            soundOutput.setText(getString(
+                    R.string.edu_sound_playing_format, label, midi, hz));
         }
     }
 }

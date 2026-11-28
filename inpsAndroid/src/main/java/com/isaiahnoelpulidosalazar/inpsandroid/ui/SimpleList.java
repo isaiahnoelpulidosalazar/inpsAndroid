@@ -1,5 +1,6 @@
 package com.isaiahnoelpulidosalazar.inpsandroid.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
@@ -72,7 +73,10 @@ public class SimpleList extends FrameLayout {
     private float checkboxCornerRadiusDp = 12f;
     private boolean hasCustomCornerRadius;
     private boolean customPaddingSet;
-    private int padLeftPx, padTopPx, padRightPx, padBottomPx;
+    private int padLeftPx;
+    private int padTopPx;
+    private int padRightPx;
+    private int padBottomPx;
 
     /**
      * Programmatic constructor creating a vertical {@link SimpleList}.
@@ -114,18 +118,19 @@ public class SimpleList extends FrameLayout {
         init(context, attrs, defStyle);
     }
 
+    @SuppressLint("CustomViewStyleable")
     private void init(Context context, @Nullable AttributeSet attrs, int defStyle) {
         if (attrs != null) {
-            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SimpleList, defStyle, 0);
+            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.InpsSimpleList, defStyle, 0);
             try {
-                checkboxesEnabled = a.getBoolean(R.styleable.SimpleList_inpsCheckboxesEnabled, false);
-                bounceAnimationEnabled = a.getBoolean(R.styleable.SimpleList_inpsBounceAnimation, true);
+                checkboxesEnabled = a.getBoolean(R.styleable.InpsSimpleList_inpsCheckboxesEnabled, false);
+                bounceAnimationEnabled = a.getBoolean(R.styleable.InpsSimpleList_inpsBounceAnimation, true);
                 RoundedCheckBox.Style[] styles = RoundedCheckBox.Style.values();
-                int idx = a.getInt(R.styleable.SimpleList_inpsCheckStyle, RoundedCheckBox.Style.CARD.ordinal());
+                int idx = a.getInt(R.styleable.InpsSimpleList_inpsCheckStyle, RoundedCheckBox.Style.CARD.ordinal());
                 checkStyle = styles[Math.max(0, Math.min(idx, styles.length - 1))];
-                if (a.hasValue(R.styleable.SimpleList_inpsCornerRadius)) {
+                if (a.hasValue(R.styleable.InpsSimpleList_inpsCornerRadius)) {
                     hasCustomCornerRadius = true;
-                    float px = a.getDimension(R.styleable.SimpleList_inpsCornerRadius,
+                    float px = a.getDimension(R.styleable.InpsSimpleList_inpsCornerRadius,
                             RoundedViewHelper.dp(context, 12f));
                     checkboxCornerRadiusDp = px / context.getResources().getDisplayMetrics().density;
                 }
@@ -144,14 +149,18 @@ public class SimpleList extends FrameLayout {
      *
      * @param listener click callback, or {@code null}
      */
-    public void setOnItemClickListener(@Nullable OnItemClickListener listener) { this.clickListener = listener; }
+    public void setOnItemClickListener(@Nullable OnItemClickListener listener) {
+        this.clickListener = listener;
+    }
 
     /**
      * Registers a listener invoked when a row is long-pressed.
      *
      * @param listener long-click callback, or {@code null}
      */
-    public void setOnItemLongClickListener(@Nullable OnItemLongClickListener listener) { this.longClickListener = listener; }
+    public void setOnItemLongClickListener(@Nullable OnItemLongClickListener listener) {
+        this.longClickListener = listener;
+    }
 
     /**
      * Registers a listener invoked when a row's checkbox is toggled while checkbox mode is enabled.
@@ -170,7 +179,7 @@ public class SimpleList extends FrameLayout {
     public void setCheckboxesEnabled(boolean enabled) {
         if (this.checkboxesEnabled != enabled) {
             this.checkboxesEnabled = enabled;
-            adapter.notifyDataSetChanged();
+            notifyAllItemsChanged();
         }
     }
 
@@ -192,7 +201,7 @@ public class SimpleList extends FrameLayout {
         if (this.bounceAnimationEnabled != enabled) {
             this.bounceAnimationEnabled = enabled;
             if (checkboxesEnabled) {
-                adapter.notifyDataSetChanged();
+                notifyAllItemsChanged();
             }
         }
     }
@@ -214,7 +223,7 @@ public class SimpleList extends FrameLayout {
     public void setCheckStyle(@NonNull RoundedCheckBox.Style style) {
         this.checkStyle = Objects.requireNonNull(style, "style");
         if (checkboxesEnabled) {
-            adapter.notifyDataSetChanged();
+            notifyAllItemsChanged();
         }
     }
 
@@ -236,7 +245,7 @@ public class SimpleList extends FrameLayout {
         this.hasCustomCornerRadius = true;
         this.checkboxCornerRadiusDp = dp;
         if (checkboxesEnabled) {
-            adapter.notifyDataSetChanged();
+            notifyAllItemsChanged();
         }
     }
 
@@ -367,7 +376,7 @@ public class SimpleList extends FrameLayout {
             }
         }
         if (checkboxesEnabled) {
-            adapter.notifyDataSetChanged();
+            notifyAllItemsChanged();
         }
     }
 
@@ -407,7 +416,7 @@ public class SimpleList extends FrameLayout {
             checkedPositions.add(i);
         }
         if (checkboxesEnabled) {
-            adapter.notifyDataSetChanged();
+            notifyAllItemsChanged();
         }
     }
 
@@ -416,7 +425,7 @@ public class SimpleList extends FrameLayout {
         if (checkedPositions.isEmpty()) return;
         checkedPositions.clear();
         if (checkboxesEnabled) {
-            adapter.notifyDataSetChanged();
+            notifyAllItemsChanged();
         }
     }
 
@@ -444,12 +453,18 @@ public class SimpleList extends FrameLayout {
         padTopPx = Math.round(RoundedViewHelper.dp(c, top));
         padRightPx = Math.round(RoundedViewHelper.dp(c, right));
         padBottomPx = Math.round(RoundedViewHelper.dp(c, bottom));
-        adapter.notifyDataSetChanged();
+        notifyAllItemsChanged();
     }
 
     /** Package-private accessor for tests needing to inspect or lay out the internal RecyclerView. */
     RecyclerView getRecyclerView() {
         return recyclerView;
+    }
+
+    private void notifyAllItemsChanged() {
+        if (!items.isEmpty()) {
+            adapter.notifyItemRangeChanged(0, items.size());
+        }
     }
 
     private void submitSnapshot() {

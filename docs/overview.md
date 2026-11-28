@@ -1,9 +1,9 @@
 # Project Overview
 
-Welcome to the **inpsAndroid** documentation (version `3.0.3`). This library eliminates boilerplate across Android projects by providing core networking, SQLite, notification, threading, conversion, and validation utilities alongside drop-in UI widgets and educational algorithm/audio modules.
+Welcome to the **inpsAndroid** documentation (version `3.0.4`). This library eliminates boilerplate across Android projects by providing core networking, SQLite, notification, threading, conversion, and validation utilities alongside drop-in UI widgets and educational algorithm/audio modules.
 
 ```groovy
-implementation 'com.github.isaiahnoelpulidosalazar:inpsAndroid:3.0.3'
+implementation 'com.github.isaiahnoelpulidosalazar:inpsAndroid:3.0.4'
 ```
 
 ## Purpose & Scope

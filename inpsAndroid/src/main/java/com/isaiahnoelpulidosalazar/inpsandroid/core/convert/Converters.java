@@ -121,7 +121,9 @@ public final class Converters {
      * @param str string to parse, may be {@code null}
      * @return parsed integer or {@code 0}
      */
-    public static int toInt(String str) { return toInt(str, 0); }
+    public static int toInt(String str) {
+        return toInt(str, 0);
+    }
 
     /**
      * Parses a trimmed string to {@code float}, defaulting to {@code 0f} on invalid input.
@@ -129,7 +131,9 @@ public final class Converters {
      * @param str string to parse, may be {@code null}
      * @return parsed float or {@code 0f}
      */
-    public static float toFloat(String str) { return toFloat(str, 0f); }
+    public static float toFloat(String str) {
+        return toFloat(str, 0f);
+    }
 
     /**
      * Parses a trimmed string to {@code double}, defaulting to {@code 0.0} on invalid input.
@@ -137,7 +141,9 @@ public final class Converters {
      * @param str string to parse, may be {@code null}
      * @return parsed double or {@code 0.0}
      */
-    public static double toDouble(String str) { return toDouble(str, 0.0); }
+    public static double toDouble(String str) {
+        return toDouble(str, 0.0);
+    }
 
     /**
      * Formats {@code date} using {@code pattern} ({@link Locale#US}) in the current default time
@@ -166,7 +172,9 @@ public final class Converters {
      * @param date date instant to format, may be {@code null}
      * @return formatted date string, or {@code null} if {@code date} is {@code null}
      */
-    public static String toMonthDayYear(Date date) { return formatDate(date, "M/d/yyyy"); }
+    public static String toMonthDayYear(Date date) {
+        return formatDate(date, "M/d/yyyy");
+    }
 
     /**
      * Formats {@code date} as unpadded {@code d/M/yyyy} (e.g. {@code 4/5/2026}).
@@ -174,7 +182,9 @@ public final class Converters {
      * @param date date instant to format, may be {@code null}
      * @return formatted date string, or {@code null} if {@code date} is {@code null}
      */
-    public static String toDayMonthYear(Date date) { return formatDate(date, "d/M/yyyy"); }
+    public static String toDayMonthYear(Date date) {
+        return formatDate(date, "d/M/yyyy");
+    }
 
     /**
      * Formats {@code date} as unpadded {@code yyyy/M/d} (e.g. {@code 2026/5/4}).
@@ -182,5 +192,7 @@ public final class Converters {
      * @param date date instant to format, may be {@code null}
      * @return formatted date string, or {@code null} if {@code date} is {@code null}
      */
-    public static String toYearMonthDay(Date date) { return formatDate(date, "yyyy/M/d"); }
+    public static String toYearMonthDay(Date date) {
+        return formatDate(date, "yyyy/M/d");
+    }
 }

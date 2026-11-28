@@ -24,7 +24,6 @@ import com.isaiahnoelpulidosalazar.inpsandroid.ui.RoundedEditText;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Interactive playground tab for {@code ...inpsandroid.core} utilities: {@link Converters},
@@ -49,7 +48,7 @@ public class CoreFragment extends Fragment implements DemoHost.NotesListener {
                     action.run();
                 } else if (!granted && notificationOutputText != null) {
                     pendingNotificationAction = null;
-                    notificationOutputText.setText("Blocked: POST_NOTIFICATIONS permission denied.");
+                    notificationOutputText.setText(R.string.core_notif_denied);
                 }
             });
 
@@ -80,37 +79,36 @@ public class CoreFragment extends Fragment implements DemoHost.NotesListener {
         easyNotification = new EasyNotification(requireContext())
                 .createChannel(
                         "demo_alerts",
-                        "Demo Alerts",
-                        "Notifications dispatched from the inpsAndroid Core tab",
+                        getString(R.string.core_notif_channel_name),
+                        getString(R.string.core_notif_channel_desc),
                         NotificationManagerCompat.IMPORTANCE_HIGH,
                         true,
                         true
                 );
 
         view.findViewById(R.id.btn_base64).setOnClickListener(v -> {
-            String text = readInputOrDefault("hello inpsAndroid");
+            String text = readInputOrDefault(getString(R.string.core_default_input_text));
             String cap = Converters.capitalize(text);
             String b64 = Converters.toBase64(text);
-            outputText.setText("Capitalized: " + cap + "\nBase64: " + b64);
+            outputText.setText(getString(R.string.core_output_base64_format, cap, b64));
         });
 
         view.findViewById(R.id.btn_validate_email).setOnClickListener(v -> {
-            String text = readInputOrDefault("developer@gmail.com");
+            String text = readInputOrDefault(getString(R.string.core_default_email));
             boolean valid = emailAllowList.isValid(text);
             boolean hasDigits = StringChecks.hasNumbers(text);
-            outputText.setText(String.format(
-                    Locale.US,
-                    "Email \"%s\" allow-listed: %s\nContains digit: %s",
-                    text, valid, hasDigits
-            ));
+            outputText.setText(getString(
+                    R.string.core_output_email_format, text, valid, hasDigits));
         });
 
         view.findViewById(R.id.btn_add_note).setOnClickListener(v -> {
-            String note = readInputOrDefault("Note @ " + Converters.toMonthDayYear(new Date()));
+            String defaultNote = getString(
+                    R.string.core_default_note_format, Converters.toMonthDayYear(new Date()));
+            String note = readInputOrDefault(defaultNote);
             inputText.setText("");
             if (getActivity() instanceof DemoHost) {
-                ((DemoHost) getActivity()).addNote(note, () ->
-                        outputText.setText("Saved \"" + note + "\" to EasySQL (check UI -> SimpleList)."));
+                ((DemoHost) getActivity()).addNote(note, () -> outputText.setText(
+                        getString(R.string.core_output_note_saved_format, note)));
             }
         });
 
@@ -119,18 +117,15 @@ public class CoreFragment extends Fragment implements DemoHost.NotesListener {
             double secs = TimeLeft.seconds(now, now + 90_000L);
             double mins = TimeLeft.minutes(now, now + 90_000L);
             double hrs = TimeLeft.hours(now, now + 8_100_000L);
-            timeOutputText.setText(String.format(
-                    Locale.US,
-                    "TimeLeft(+90s): %.0f sec / %.2f min\nTimeLeft(+2h15m): %.2f hours",
-                    secs, mins, hrs
-            ));
+            timeOutputText.setText(getString(
+                    R.string.core_output_time_format, secs, mins, hrs));
         });
 
         view.findViewById(R.id.btn_send_notification).setOnClickListener(v ->
                 runWithNotificationPermission(() -> {
-                    String body = readInputOrDefault("Hello from EasyNotification v3.0.3!");
+                    String body = readInputOrDefault(getString(R.string.core_notif_default_body));
                     int id = easyNotification.prepare("demo_alerts")
-                            .title("inpsAndroid Alert")
+                            .title(getString(R.string.core_notif_title))
                             .message(body)
                             .tapActivity(MainActivity.class)
                             .show();
@@ -139,20 +134,21 @@ public class CoreFragment extends Fragment implements DemoHost.NotesListener {
 
         view.findViewById(R.id.btn_send_big_text_notification).setOnClickListener(v ->
                 runWithNotificationPermission(() -> {
-                    String body = readInputOrDefault("Expandable BigText notification dispatched cleanly via EasyNotification.");
+                    String body = readInputOrDefault(
+                            getString(R.string.core_notif_bigtext_default_body));
                     int id = easyNotification.prepare("demo_alerts")
-                            .title("Expandable Summary")
+                            .title(getString(R.string.core_notif_bigtext_title))
                             .message(body)
-                            .bigText(body + "\n\nTap to reopen inpsAndroid 3.0.3.")
-                            .subText("v3.0.3")
+                            .bigText(getString(R.string.core_notif_bigtext_expanded_format, body))
+                            .subText(getString(R.string.core_notif_subtext))
                             .tapActivity(MainActivity.class)
                             .show();
-                    updateNotificationStatus(id, "demo_alerts (BigText)");
+                    updateNotificationStatus(id, getString(R.string.core_notif_bigtext_label));
                 }));
 
         view.findViewById(R.id.btn_cancel_notifications).setOnClickListener(v -> {
             easyNotification.cancelAll();
-            notificationOutputText.setText("Cancelled all active app notifications.");
+            notificationOutputText.setText(R.string.core_notif_cancelled);
         });
 
         if (getActivity() instanceof DemoHost) {
@@ -173,11 +169,7 @@ public class CoreFragment extends Fragment implements DemoHost.NotesListener {
     @Override
     public void onNotesUpdated(List<String> notes) {
         if (dbStatusText != null) {
-            dbStatusText.setText(String.format(
-                    Locale.US,
-                    "EasySQL active rows: %d (synced with UI -> SimpleList).",
-                    notes.size()
-            ));
+            dbStatusText.setText(getString(R.string.core_db_status_format, notes.size()));
         }
     }
 
@@ -185,7 +177,7 @@ public class CoreFragment extends Fragment implements DemoHost.NotesListener {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
                 && !easyNotification.hasPostNotificationPermission()) {
             pendingNotificationAction = action;
-            notificationOutputText.setText("Requesting POST_NOTIFICATIONS permission...");
+            notificationOutputText.setText(R.string.core_notif_requesting);
             notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
             return;
         }
@@ -194,13 +186,10 @@ public class CoreFragment extends Fragment implements DemoHost.NotesListener {
 
     private void updateNotificationStatus(int id, String channelLabel) {
         if (id == EasyNotification.RESULT_BLOCKED) {
-            notificationOutputText.setText("Blocked: notifications disabled or permission denied.");
+            notificationOutputText.setText(R.string.core_notif_blocked);
         } else {
-            notificationOutputText.setText(String.format(
-                    Locale.US,
-                    "Dispatched notification id=%d on %s.",
-                    id, channelLabel
-            ));
+            notificationOutputText.setText(getString(
+                    R.string.core_notif_dispatched_format, id, channelLabel));
         }
     }
 

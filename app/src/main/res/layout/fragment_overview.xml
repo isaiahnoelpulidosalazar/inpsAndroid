@@ -29,7 +29,7 @@
                 android:paddingTop="3dp"
                 android:paddingEnd="10dp"
                 android:paddingBottom="3dp"
-                android:text="GETTING STARTED"
+                android:text="@string/badge_getting_started"
                 android:textColor="@color/doc_accent"
                 android:textSize="11sp"
                 android:textStyle="bold" />
@@ -38,7 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Modular Android Boilerplate Killer"
+                android:text="@string/overview_title"
                 android:textColor="@color/doc_ink"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:lineSpacingExtra="3dp"
-                android:text="inpsAndroid 3.0.3 organizes utilities, drop-in UI widgets, and educational algorithm/audio modules under com.isaiahnoelpulidosalazar.inpsandroid."
+                android:text="@string/overview_description"
                 android:textColor="@color/doc_ink_muted"
                 android:textSize="14sp" />
 
@@ -59,7 +59,7 @@
                 android:background="@drawable/bg_code_block"
                 android:fontFamily="monospace"
                 android:padding="12dp"
-                android:text="dependencies {\n    implementation 'com.github.isaiahnoelpulidosalazar:inpsAndroid:3.0.3'\n}"
+                android:text="@string/overview_gradle_snippet"
                 android:textColor="@color/doc_ink"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -76,7 +76,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Package Architecture"
+                android:text="@string/overview_architecture_title"
                 android:textColor="@color/doc_ink"
                 android:textSize="17sp"
                 android:textStyle="bold" />
@@ -94,7 +94,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="monospace"
-                    android:text="...inpsandroid.core"
+                    android:text="@string/pkg_core_label"
                     android:textColor="@color/doc_primary"
                     android:textSize="13sp"
                     android:textStyle="bold" />
@@ -103,7 +103,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="MainThread, WebRequest, EasySQL, EasyNotification, Converters, EmailDomainAllowList, StringChecks, TimeLeft"
+                    android:text="@string/pkg_core_desc"
                     android:textColor="@color/doc_ink_muted"
                     android:textSize="13sp" />
             </LinearLayout>
@@ -121,7 +121,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="monospace"
-                    android:text="...inpsandroid.ui"
+                    android:text="@string/pkg_ui_label"
                     android:textColor="@color/doc_primary"
                     android:textSize="13sp"
                     android:textStyle="bold" />
@@ -130,7 +130,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="RoundedButton, RoundedCheckBox, RoundedEditText, RoundedLinearLayout, RoundedConstraintLayout, RoundedAlertDialog, RoundedBottomSheet, SimpleList, FlippableImageView, Fullscreen, Drawables"
+                    android:text="@string/pkg_ui_desc"
                     android:textColor="@color/doc_ink_muted"
                     android:textSize="13sp" />
             </LinearLayout>
@@ -148,7 +148,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="monospace"
-                    android:text="...inpsandroid.edu"
+                    android:text="@string/pkg_edu_label"
                     android:textColor="@color/doc_primary"
                     android:textSize="13sp"
                     android:textStyle="bold" />
@@ -157,7 +157,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="edu.sort.Sort, AreaCalculator, SoundSynthesizer"
+                    android:text="@string/pkg_edu_desc"
                     android:textColor="@color/doc_ink_muted"
                     android:textSize="13sp" />
             </LinearLayout>
@@ -175,7 +175,7 @@
                     android:layout_marginEnd="6dp"
                     android:layout_weight="1"
                     android:minHeight="48dp"
-                    android:text="Explore Core"
+                    android:text="@string/btn_explore_core"
                     android:textAllCaps="false"
                     app:inpsCornerRadius="12dp" />
 
@@ -186,7 +186,7 @@
                     android:layout_marginEnd="6dp"
                     android:layout_weight="1"
                     android:minHeight="48dp"
-                    android:text="Explore UI"
+                    android:text="@string/btn_explore_ui"
                     android:textAllCaps="false"
                     app:inpsCornerRadius="12dp" />
 
@@ -196,7 +196,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:minHeight="48dp"
-                    android:text="Explore Edu"
+                    android:text="@string/btn_explore_edu"
                     android:textAllCaps="false"
                     app:inpsCornerRadius="12dp" />
             </LinearLayout>
@@ -214,7 +214,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Requirements &amp; Theme Setup"
+                android:text="@string/overview_requirements_title"
                 android:textColor="@color/doc_ink"
                 android:textSize="17sp"
                 android:textStyle="bold" />
@@ -224,7 +224,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:lineSpacingExtra="4dp"
-                android:text="• minSdk 24, compileSdk 36, Java 17\n• AppCompat or Material theme defining colorPrimary, colorControlHighlight, and android:colorBackground\n• No Material dependency required by the library itself\n• Library resources &amp; attributes are prefixed with inps_ / inps"
+                android:text="@string/overview_requirements_body"
                 android:textColor="@color/doc_ink_muted"
                 android:textSize="14sp" />
         </LinearLayout>

@@ -166,11 +166,20 @@ public final class EasySQL implements Closeable {
                 Map<String, Object> row = new LinkedHashMap<>(names.length * 2);
                 for (int i = 0; i < names.length; i++) {
                     switch (c.getType(i)) {
-                        case Cursor.FIELD_TYPE_INTEGER: row.put(names[i], c.getLong(i)); break;
-                        case Cursor.FIELD_TYPE_FLOAT:   row.put(names[i], c.getDouble(i)); break;
-                        case Cursor.FIELD_TYPE_BLOB:    row.put(names[i], c.getBlob(i)); break;
-                        case Cursor.FIELD_TYPE_NULL:    row.put(names[i], null); break;
-                        default:                        row.put(names[i], c.getString(i));
+                        case Cursor.FIELD_TYPE_INTEGER:
+                            row.put(names[i], c.getLong(i));
+                            break;
+                        case Cursor.FIELD_TYPE_FLOAT:
+                            row.put(names[i], c.getDouble(i));
+                            break;
+                        case Cursor.FIELD_TYPE_BLOB:
+                            row.put(names[i], c.getBlob(i));
+                            break;
+                        case Cursor.FIELD_TYPE_NULL:
+                            row.put(names[i], null);
+                            break;
+                        default:
+                            row.put(names[i], c.getString(i));
                     }
                 }
                 rows.add(row);

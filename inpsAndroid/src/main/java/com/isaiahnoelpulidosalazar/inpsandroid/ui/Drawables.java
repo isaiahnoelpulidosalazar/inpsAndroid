@@ -38,7 +38,8 @@ public final class Drawables {
         Bitmap copied = null;
         try {
             Bitmap.Config config = bitmap.getConfig();
-            if (config == null || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && config == Bitmap.Config.HARDWARE)) {
+            if (config == null || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+                    && config == Bitmap.Config.HARDWARE)) {
                 copied = bitmap.copy(Bitmap.Config.ARGB_8888, false);
                 if (copied == null) return false;
                 comparable = copied;

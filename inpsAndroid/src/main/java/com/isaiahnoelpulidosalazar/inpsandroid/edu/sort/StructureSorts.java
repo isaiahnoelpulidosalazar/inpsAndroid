@@ -36,9 +36,12 @@ final class StructureSorts {
 
     private static final class Node {
         final int value;
-        Node left, right;
+        Node left;
+        Node right;
 
-        Node(int value) { this.value = value; }
+        Node(int value) {
+            this.value = value;
+        }
     }
 
     private static Node insert(Node root, int val) {
@@ -47,10 +50,16 @@ final class StructureSorts {
         Node cur = root;
         while (true) {
             if (val < cur.value) {
-                if (cur.left == null) { cur.left = node; return root; }
+                if (cur.left == null) {
+                    cur.left = node;
+                    return root;
+                }
                 cur = cur.left;
             } else {
-                if (cur.right == null) { cur.right = node; return root; }
+                if (cur.right == null) {
+                    cur.right = node;
+                    return root;
+                }
                 cur = cur.right;
             }
         }
@@ -70,7 +79,11 @@ final class StructureSorts {
             int hi = piles;
             while (lo < hi) {
                 int mid = (lo + hi) >>> 1;
-                if (arr[top[mid]] >= x) hi = mid; else lo = mid + 1;
+                if (arr[top[mid]] >= x) {
+                    hi = mid;
+                } else {
+                    lo = mid + 1;
+                }
             }
             prev[i] = lo < piles ? top[lo] : -1;
             top[lo] = i;

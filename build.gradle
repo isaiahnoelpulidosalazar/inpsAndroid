@@ -2,3 +2,31 @@ plugins {
     id 'com.android.application' version '9.1.1' apply false
     id 'com.android.library' version '9.1.1' apply false
 }
+
+subprojects {
+    apply plugin: 'checkstyle'
+
+    checkstyle {
+        toolVersion = '10.21.4'
+        configFile = rootProject.file('config/checkstyle/checkstyle.xml')
+        ignoreFailures = false
+        maxWarnings = 0
+    }
+
+    tasks.register('checkstyle', Checkstyle) {
+        description = 'Runs Checkstyle on Java sources.'
+        group = 'verification'
+        source 'src/main/java'
+        include '**/*.java'
+        classpath = files()
+        reports {
+            xml.required = false
+            html.required = true
+        }
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+        options.compilerArgs += ['-Xlint:deprecation', '-Xlint:unchecked']
+    }
+}

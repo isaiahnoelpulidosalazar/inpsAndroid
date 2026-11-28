@@ -41,7 +41,11 @@ public class RoundedAlertDialog {
      * @param context themed Activity or ContextThemeWrapper context
      */
     public RoundedAlertDialog(Context context) {
-        View dialogView = LayoutInflater.from(context).inflate(R.layout.inps_rounded_alert_dialog_layout, null);
+        View dialogView = LayoutInflater.from(context).inflate(
+                R.layout.inps_rounded_alert_dialog_layout,
+                new android.widget.FrameLayout(context),
+                false
+        );
         titleView = dialogView.findViewById(R.id.inps_rounded_alert_dialog_title);
         scrollView = dialogView.findViewById(R.id.inps_rounded_alert_dialog_view);
         leftButton = dialogView.findViewById(R.id.inps_rounded_alert_dialog_left_button);
@@ -99,7 +103,9 @@ public class RoundedAlertDialog {
      * @param text button caption
      * @return this dialog builder for chaining
      */
-    public RoundedAlertDialog setupLeftButton(String text) { return setup(leftButton, text, null); }
+    public RoundedAlertDialog setupLeftButton(String text) {
+        return setup(leftButton, text, null);
+    }
 
     /**
      * Shows and labels the left action button with a custom text color.
@@ -108,7 +114,9 @@ public class RoundedAlertDialog {
      * @param color ARGB text color integer
      * @return this dialog builder for chaining
      */
-    public RoundedAlertDialog setupLeftButton(String text, int color) { return setup(leftButton, text, color); }
+    public RoundedAlertDialog setupLeftButton(String text, int color) {
+        return setup(leftButton, text, color);
+    }
 
     /**
      * Shows and labels the right action button using the default contrast text color.
@@ -116,7 +124,9 @@ public class RoundedAlertDialog {
      * @param text button caption
      * @return this dialog builder for chaining
      */
-    public RoundedAlertDialog setupRightButton(String text) { return setup(rightButton, text, null); }
+    public RoundedAlertDialog setupRightButton(String text) {
+        return setup(rightButton, text, null);
+    }
 
     /**
      * Shows and labels the right action button with a custom text color.
@@ -125,7 +135,9 @@ public class RoundedAlertDialog {
      * @param color ARGB text color integer
      * @return this dialog builder for chaining
      */
-    public RoundedAlertDialog setupRightButton(String text, int color) { return setup(rightButton, text, color); }
+    public RoundedAlertDialog setupRightButton(String text, int color) {
+        return setup(rightButton, text, color);
+    }
 
     /**
      * Attaches a click listener to the left action button.
