@@ -1,9 +1,9 @@
 # Project Overview
 
-Welcome to the **inpsAndroid** documentation (version `3.0.3`). This library eliminates boilerplate across Android projects by providing core networking, SQLite, notification, threading, conversion, and validation utilities alongside drop-in UI widgets and educational algorithm/audio modules.
+Welcome to the **inpsAndroid** documentation (version `3.0.4`). This library eliminates boilerplate across Android projects by providing core networking, SQLite, notification, threading, conversion, and validation utilities alongside drop-in UI widgets and educational algorithm/audio modules.
 
 ```groovy
-implementation 'com.github.isaiahnoelpulidosalazar:inpsAndroid:3.0.3'
+implementation 'com.github.isaiahnoelpulidosalazar:inpsAndroid:3.0.4'
 ```
 
 ## Purpose & Scope
@@ -38,7 +38,7 @@ The purpose of this architecture is to provide:
 
 ### Requirements
 
-- `minSdk` 24, `compileSdk` 36, Java 17
+- `minSdk` 24, `compileSdk` 37, Java 17
 - Your app theme must inherit from an AppCompat (or Material) theme defining `colorPrimary`, `colorControlHighlight`, and `android:colorBackground`
 - `appcompat`, `recyclerview`, and `constraintlayout` are exposed as `api` dependencies (`com.google.android.material:material` is not required by the library)
 

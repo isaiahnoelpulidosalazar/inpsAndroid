@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
     <!-- Project-specific Android Lint configuration for :inpsAndroid -->
+    <!-- AGP 9.1.1 is pinned for container toolchain compatibility (Gradle 9.3.1). -->
+    <issue id="AndroidGradlePluginVersion" severity="ignore" />
 </lint>

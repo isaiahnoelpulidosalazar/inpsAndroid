@@ -29,7 +29,7 @@
                 android:paddingTop="3dp"
                 android:paddingEnd="10dp"
                 android:paddingBottom="3dp"
-                android:text="ROUNDED WIDGETS"
+                android:text="@string/badge_rounded_widgets"
                 android:textColor="@color/doc_primary_ink"
                 android:textSize="11sp"
                 android:textStyle="bold" />
@@ -38,7 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="RoundedButton, EditText &amp; Layouts"
+                android:text="@string/ui_rounded_title"
                 android:textColor="@color/doc_ink"
                 android:textSize="17sp"
                 android:textStyle="bold" />
@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:lineSpacingExtra="3dp"
-                android:text="Shared RoundedViewHelper setup with app:inpsCornerRadius, app:inpsIsTranslucent, outline clipping on containers, and contrast-aware text color on RoundedButton."
+                android:text="@string/ui_rounded_desc"
                 android:textColor="@color/doc_ink_muted"
                 android:textSize="14sp" />
 
@@ -64,7 +64,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Live RoundedLinearLayout (inpsIsTranslucent=&quot;true&quot;)"
+                    android:text="@string/ui_rounded_live_title"
                     android:textColor="@color/doc_ink"
                     android:textSize="13sp"
                     android:textStyle="bold" />
@@ -129,7 +129,7 @@
                 android:paddingTop="3dp"
                 android:paddingEnd="10dp"
                 android:paddingBottom="3dp"
-                android:text="CHECKBOXES &amp; MOTION"
+                android:text="@string/badge_checkboxes_motion"
                 android:textColor="@color/doc_accent"
                 android:textSize="11sp"
                 android:textStyle="bold" />
@@ -138,7 +138,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="RoundedCheckBox &amp; Bounce Toggle"
+                android:text="@string/ui_checkbox_title"
                 android:textColor="@color/doc_ink"
                 android:textSize="17sp"
                 android:textStyle="bold" />
@@ -148,7 +148,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:lineSpacingExtra="3dp"
-                android:text="Checkable component with CARD, PILL, and MINIMAL styles plus a toggleable overshoot bounce animation (app:inpsBounceAnimation)."
+                android:text="@string/ui_checkbox_desc"
                 android:textColor="@color/doc_ink_muted"
                 android:textSize="14sp" />
 
@@ -206,7 +206,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="FlippableImageView &amp; Drawables"
+                android:text="@string/ui_flippable_title"
                 android:textColor="@color/doc_ink"
                 android:textSize="17sp"
                 android:textStyle="bold" />
@@ -216,7 +216,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:lineSpacingExtra="3dp"
-                android:text="3D card flip with .withLayer(), state persistence, setFrontBitmap/setBackBitmap, and pixel-level Drawables.equalsBitmap()."
+                android:text="@string/ui_flippable_desc"
                 android:textColor="@color/doc_ink_muted"
                 android:textSize="14sp" />
 
@@ -285,7 +285,7 @@
                 android:background="@drawable/bg_code_block"
                 android:fontFamily="monospace"
                 android:padding="12dp"
-                android:text="Tap Flip Card or Compare Drawables."
+                android:text="@string/ui_drawables_placeholder"
                 android:textColor="@color/doc_ink"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -302,7 +302,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="SimpleList (Checkboxes + DiffUtil)"
+                android:text="@string/ui_simplelist_title"
                 android:textColor="@color/doc_ink"
                 android:textSize="17sp"
                 android:textStyle="bold" />
@@ -311,7 +311,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Supports classic TextView rows or RoundedCheckBox rows with bounce animation toggle. Long-press any row to remove from EasySQL."
+                android:text="@string/ui_simplelist_desc"
                 android:textColor="@color/doc_ink_muted"
                 android:textSize="14sp" />
 
@@ -343,7 +343,7 @@
                 android:background="@drawable/bg_code_block"
                 android:fontFamily="monospace"
                 android:padding="10dp"
-                android:text="Checked (0): []"
+                android:text="@string/ui_list_selection_placeholder"
                 android:textColor="@color/doc_ink"
                 android:textSize="12sp" />
 

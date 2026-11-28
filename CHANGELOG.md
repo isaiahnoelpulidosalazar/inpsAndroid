@@ -1,5 +1,18 @@
 # Changelog
 
+## 3.0.4
+
+Quality, tooling, and resource-prefix hardening release introducing Spotless automated formatting, JaCoCo coverage reporting across modules, updated dependencies, and zero-warning Lint/`javac` compliance.
+
+### Breaking Changes
+- **Prefixed `<declare-styleable>` Groups (`inps_attrs.xml`)**: Renamed all 7 styleable declarations to satisfy `resourcePrefix 'inps_'`: `InpsRoundedButton`, `InpsRoundedEditText`, `InpsRoundedConstraintLayout`, `InpsRoundedLinearLayout`, `InpsRoundedCheckBox`, `InpsSimpleList`, and `InpsFlippableImageView`. XML attributes (`app:inps*`) are unchanged; only direct `R.styleable.*` references require updating.
+
+### Quality, Tooling & Fixes
+- **Automated Formatting with Spotless**: Configured `com.diffplug.spotless` with `googleJavaFormat()`, `removeUnusedImports()`, `trimTrailingWhitespace()`, and `endWithNewline()` across `:inpsAndroid` and `:app` Java sources, plus `-Xlint:deprecation -Xlint:unchecked`.
+- **JaCoCo Code Coverage & CI**: Integrated the `jacoco` plugin (`0.8.14`) with a unified `jacocoTestReport` task generating XML, HTML, and CSV reports for both `:inpsAndroid` and `:app` (including `DemoAppTest`), and updated `.github/workflows/test_inpsAndroid.yml` to run `./gradlew spotlessCheck lint` and `./gradlew test jacocoTestReport` and upload both `test-reports` and `jacoco-coverage-reports` artifacts.
+- **API 36, AAR Metadata & Lint Cleanup**: Pinned `aarMetadata.minCompileSdk = 36` in `inpsAndroid/build.gradle` to match `:app`, updated `RoundedCheckBox` accessibility state handling for API 36 (`BAKLAVA`), replaced `SimpleList` `notifyDataSetChanged()` calls with `notifyItemRangeChanged(...)`, fixed `[InflateParams]` in `RoundedAlertDialog` / `RoundedBottomSheet`, and cleared all `:app` Lint and `UiWidgetsTest` Robolectric `4.18.1` issues.
+- **Dependency Updates**: Centralized dependencies in `gradle/libs.versions.toml` and updated AndroidX (`appcompat:1.8.0`, `recyclerview:1.4.0`, `constraintlayout:2.2.2`, `viewpager2:1.1.0`), Material (`1.14.0`), AndroidX Test Core (`1.7.0`), and Robolectric (`4.18.1` / `15-robolectric-14663667-2-i7`).
+
 ## 3.0.3
 
 Maintenance release fixing Robolectric test runtime artifact fetching in CI and offline environments.
