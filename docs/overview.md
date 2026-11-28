@@ -38,7 +38,7 @@ The purpose of this architecture is to provide:
 
 ### Requirements
 
-- `minSdk` 24, `compileSdk` 36, Java 17
+- `minSdk` 24, `compileSdk` 37, Java 17
 - Your app theme must inherit from an AppCompat (or Material) theme defining `colorPrimary`, `colorControlHighlight`, and `android:colorBackground`
 - `appcompat`, `recyclerview`, and `constraintlayout` are exposed as `api` dependencies (`com.google.android.material:material` is not required by the library)
 

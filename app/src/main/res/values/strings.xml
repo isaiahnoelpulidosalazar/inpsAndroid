@@ -48,7 +48,7 @@
     <string name="btn_explore_ui">Explore UI</string>
     <string name="btn_explore_edu">Explore Edu</string>
     <string name="overview_requirements_title">Requirements &amp; Theme Setup</string>
-    <string name="overview_requirements_body">• minSdk 24, compileSdk 36, Java 17\n• AppCompat or Material theme defining colorPrimary, colorControlHighlight, and android:colorBackground\n• No Material dependency required by the library itself\n• Library resources &amp; attributes are prefixed with inps_ / inps / Inps</string>
+    <string name="overview_requirements_body">• minSdk 24, compileSdk 37, Java 17\n• AppCompat or Material theme defining colorPrimary, colorControlHighlight, and android:colorBackground\n• No Material dependency required by the library itself\n• Library resources &amp; attributes are prefixed with inps_ / inps / Inps</string>
 
     <!-- Core Tab -->
     <string name="badge_converters_validation">CONVERTERS &amp; VALIDATION</string>
@@ -153,7 +153,7 @@
     <!-- Migration Tab -->
     <string name="badge_upgrading_304">UPGRADING TO 3.0.4</string>
     <string name="migration_304_title">Migrating from 3.0.3 to 3.0.4</string>
-    <string name="migration_304_desc">Version 3.0.4 prefixes all &lt;declare-styleable&gt; definitions with Inps* to satisfy resourcePrefix \'inps_\', enables Checkstyle and JaCoCo unit test coverage, and resolves Android Lint / API 36 deprecations. XML layout attributes (app:inps*) are unchanged.</string>
+    <string name="migration_304_desc">Version 3.0.4 prefixes all &lt;declare-styleable&gt; definitions with Inps* to satisfy resourcePrefix \'inps_\', enables Spotless and JaCoCo unit test coverage, and resolves Android Lint / API 36+ deprecations. XML layout attributes (app:inps*) are unchanged.</string>
     <string name="migration_304_code">R.styleable.RoundedButton           -&gt; R.styleable.InpsRoundedButton\nR.styleable.RoundedEditText         -&gt; R.styleable.InpsRoundedEditText\nR.styleable.RoundedConstraintLayout -&gt; R.styleable.InpsRoundedConstraintLayout\nR.styleable.RoundedLinearLayout     -&gt; R.styleable.InpsRoundedLinearLayout\nR.styleable.RoundedCheckBox         -&gt; R.styleable.InpsRoundedCheckBox\nR.styleable.SimpleList              -&gt; R.styleable.InpsSimpleList\nR.styleable.FlippableImageView      -&gt; R.styleable.InpsFlippableImageView</string>
 
     <string name="badge_upgrading_300">UPGRADING TO 3.0.0</string>

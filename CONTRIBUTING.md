@@ -20,7 +20,7 @@ Include as much detail as possible so maintainers can reproduce and fix the issu
 ## 2. Development Setup
 
 - **JDK:** Java 17 (Temurin or OpenJDK 17)
-- **Android SDK:** `compileSdk 36`, `minSdk 24`
+- **Android SDK:** `compileSdk 37`, `minSdk 24`
 - **Modules:**
   - `:inpsAndroid` — the Android library module (`com.isaiahnoelpulidosalazar.inpsandroid`)
   - `:app` — the light-themed, tabbed docs & interactive playground demo app
